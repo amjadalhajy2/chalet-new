@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+    async function submitBooking() {
+      const payload = {
+        date: dateInput.value,
+        resort: resortInput.value,
+        bookingType: bookingTypeInput.value,
+        name: nameInput.value.trim(),
+        phone: phoneInput.value.trim(),
+        notes: notesInput.value.trim()
+      };
+
+      if (!payload.date || !payload.resort || !payload.bookingType || !payload.name || !payload.phone) {
+        showStatus('يرجى تعبئة التاريخ والاستراحة ونوع الحجز والاسم ورقم الجوال.', 'error');
+        return;
+      }
+
+      const existing = bookingData.find(item =>
+        String(item['التاريخ']).trim() === payload.date &&
+        String(item['الاستراحة']).trim() === payload.resort &&
+        String(item['الحالة']).trim() === 'محجوز'
+      );
+
+      if (existing) {
+        showStatus('لا يمكن إتمام الحجز لأن الاستراحة محجوزة بالفعل في هذا التاريخ.', 'error');
+        return;
+      }
+
+      try {
+        bookBtn.disabled = true;
+        bookBtn.textContent = 'جارٍ إرسال الحجز...';
+
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const json = await res.json();
+
+        if (!json.success) {
+          showStatus(json.message || 'تعذر تنفيذ الحجز', 'error');
+          return;
+        }
+
+        showStatus('تم تسجيل الحجز بنجاح.', 'success');
+        nameInput.value = '';
+        phoneInput.value = '';
+        notesInput.value = '';
+
+        await loadBookings();
+      } catch (err) {
+        showStatus('حدث خطأ أثناء إرسال الحجز.', 'error');
+        console.error(err);
+      } finally {
+        bookBtn.disabled = false;
+        bookBtn.textContent = 'تأكيد الحجز';
+      }
+    }
+
+    function showStatus(message, type) {
+      statusBox.textContent = message;
+      statusBox.className = `status-box ${type}`;
+    }
+
+    bookBtn.addEventListener('click', submitBooking);
+    loadBookings();
+  </script>
+</body>
+</html>
