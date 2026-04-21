@@ -1,4 +1,454 @@
 <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>حجز الاستراحات الفاخرة</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/locales-all.global.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: rgba(15, 23, 42, 0.78);
+      --panel-2: rgba(30, 41, 59, 0.72);
+      --gold: #d4af37;
+      --gold-soft: rgba(212, 175, 55, 0.15);
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --green: #16a34a;
+      --red: #dc2626;
+      --border: rgba(255, 255, 255, 0.09);
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(212, 175, 55, 0.15), transparent 20%),
+        radial-gradient(circle at left bottom, rgba(30, 64, 175, 0.18), transparent 25%),
+        linear-gradient(135deg, #020617, #0f172a 45%, #111827);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .container {
+      width: min(1400px, 92%);
+      margin: 32px auto;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(30, 41, 59, 0.78));
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(30px, 4vw, 54px);
+      color: #fff;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.9;
+      max-width: 900px;
+    }
+
+    .hero .badge {
+      display: inline-block;
+      padding: 8px 14px;
+      margin-bottom: 16px;
+      border-radius: 999px;
+      background: var(--gold-soft);
+      color: #f5d77a;
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .calendar-card {
+      padding: 22px;
+    }
+
+    .form-card {
+      padding: 24px;
+      position: sticky;
+      top: 20px;
+      height: fit-content;
+    }
+
+    .section-title {
+      font-size: 22px;
+      margin: 0 0 16px;
+      color: #fff;
+    }
+
+    .legend {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 14px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot.green { background: var(--green); }
+    .dot.red { background: var(--red); }
+
+    .fc {
+      --fc-border-color: rgba(255,255,255,0.07);
+      --fc-page-bg-color: transparent;
+      --fc-neutral-bg-color: rgba(255,255,255,0.02);
+      --fc-list-event-hover-bg-color: rgba(255,255,255,0.04);
+      --fc-today-bg-color: rgba(212, 175, 55, 0.10);
+      color: white;
+    }
+
+    .fc .fc-toolbar-title {
+      font-size: 1.5rem;
+      color: #fff;
+    }
+
+    .fc .fc-button {
+      background: linear-gradient(135deg, #1e293b, #334155);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: white;
+      border-radius: 12px;
+      padding: 8px 14px;
+    }
+
+    .fc .fc-button-primary:not(:disabled).fc-button-active,
+    .fc .fc-button-primary:not(:disabled):active,
+    .fc .fc-button:hover {
+      background: linear-gradient(135deg, #b99226, #d4af37);
+      color: #111827;
+      border-color: transparent;
+    }
+
+    .fc-daygrid-event {
+      border: 0;
+      border-radius: 10px;
+      padding: 4px 6px;
+      margin-top: 4px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .fc-daygrid-day-number,
+    .fc-col-header-cell-cushion {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .resort-status {
+      display: block;
+      width: 100%;
+      white-space: normal;
+      line-height: 1.4;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      color: #e2e8f0;
+      margin-bottom: 7px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff;
+      padding: 14px 16px;
+      border-radius: 14px;
+      outline: none;
+      font-size: 15px;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #94a3b8;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .btn {
+      width: 100%;
+      border: none;
+      border-radius: 16px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      background: linear-gradient(135deg, #b99226, #f0cf67);
+      color: #111827;
+      box-shadow: 0 12px 35px rgba(212, 175, 55, 0.28);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .note, .status-box {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .note {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--muted);
+    }
+
+    .status-box {
+      display: none;
+      border: 1px solid transparent;
+    }
+
+    .status-box.success {
+      display: block;
+      background: rgba(22, 163, 74, 0.14);
+      border-color: rgba(22, 163, 74, 0.25);
+      color: #bbf7d0;
+    }
+
+    .status-box.error {
+      display: block;
+      background: rgba(220, 38, 38, 0.14);
+      border-color: rgba(220, 38, 38, 0.24);
+      color: #fecaca;
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .form-card {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <div class="badge">حجز فاخر وسريع</div>
+      <h1>منصة حجز الاستراحات</h1>
+      <p>
+        استعرض التقويم لمعرفة توفر الاستراحات بشكل مباشر. كل يوم يعرض أسماء الاستراحات الملونة حسب الحالة:
+        الأخضر يعني متاح، والأحمر يعني محجوز. عند اختيار التاريخ والاستراحة يمكنك إتمام الحجز مباشرة.
+      </p>
+    </section>
+
+    <div class="layout">
+      <section class="card calendar-card">
+        <h2 class="section-title">التقويم والتوفر</h2>
+
+        <div class="legend">
+          <span><i class="dot green"></i> متاح</span>
+          <span><i class="dot red"></i> محجوز</span>
+        </div>
+
+        <div id="calendar"></div>
+      </section>
+
+      <aside class="card form-card">
+        <h2 class="section-title">إتمام الحجز</h2>
+
+        <div class="form-grid">
+          <div>
+            <label for="date">التاريخ</label>
+            <input type="date" id="date" />
+          </div>
+
+          <div>
+            <label for="resort">الاستراحة</label>
+            <select id="resort">
+              <option value="">اختر الاستراحة</option>
+              <option value="استراحة النخيل">استراحة النخيل</option>
+              <option value="استراحة الوادي">استراحة الوادي</option>
+              <option value="استراحة الريف">استراحة الريف</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="bookingType">نوع الحجز</label>
+            <select id="bookingType">
+              <option value="مع مبيت">مع مبيت</option>
+              <option value="بدون مبيت">بدون مبيت</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="name">الاسم</label>
+            <input type="text" id="name" placeholder="اسم العميل" />
+          </div>
+
+          <div>
+            <label for="phone">رقم الجوال</label>
+            <input type="text" id="phone" placeholder="05xxxxxxxx" />
+          </div>
+
+          <div>
+            <label for="notes">ملاحظات</label>
+            <textarea id="notes" placeholder="أي تفاصيل إضافية"></textarea>
+          </div>
+
+          <button class="btn" id="bookBtn">تأكيد الحجز</button>
+        </div>
+
+        <div class="note">
+          يمكنك اختيار التاريخ بالضغط على اليوم داخل التقويم، أو الضغط على اسم الاستراحة داخل التاريخ لتعبئة التاريخ واسم الاستراحة تلقائيًا.
+        </div>
+
+        <div id="statusBox" class="status-box"></div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'PUT_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+
+    const calendarEl = document.getElementById('calendar');
+    const dateInput = document.getElementById('date');
+    const resortInput = document.getElementById('resort');
+    const bookingTypeInput = document.getElementById('bookingType');
+    const nameInput = document.getElementById('name');
+    const phoneInput = document.getElementById('phone');
+    const notesInput = document.getElementById('notes');
+    const bookBtn = document.getElementById('bookBtn');
+    const statusBox = document.getElementById('statusBox');
+
+    let calendar;
+    let bookingData = [];
+
+    async function loadBookings() {
+      try {
+        const res = await fetch(API_URL);
+        const json = await res.json();
+
+        if (!json.success) throw new Error('تعذر تحميل البيانات');
+
+        bookingData = json.data || [];
+        renderCalendar();
+      } catch (err) {
+        showStatus('تعذر تحميل بيانات الاستراحات. تأكد من رابط Apps Script وصلاحيات النشر.', 'error');
+        console.error(err);
+      }
+    }
+
+    function renderCalendar() {
+      const events = bookingData.map(item => {
+        const status = String(item['الحالة'] || '').trim();
+        const isBooked = status === 'محجوز';
+        const resortName = item['الاستراحة'] || 'استراحة';
+        const bookingType = item['نوع الحجز'] || '';
+
+        return {
+          title: bookingType ? `${resortName} - ${bookingType}` : resortName,
+          start: item['التاريخ'],
+          allDay: true,
+          backgroundColor: isBooked ? '#dc2626' : '#16a34a',
+          borderColor: isBooked ? '#dc2626' : '#16a34a',
+          textColor: '#ffffff',
+          extendedProps: {
+            resort: resortName,
+            status,
+            bookingType
+          }
+        };
+      });
+
+      if (calendar) calendar.destroy();
+
+      calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'ar',
+        direction: 'rtl',
+        initialView: 'dayGridMonth',
+        height: 'auto',
+        headerToolbar: {
+          right: 'prev,next today',
+          center: 'title',
+          left: ''
+        },
+        buttonText: {
+          today: 'اليوم'
+        },
+        events,
+        dateClick(info) {
+          dateInput.value = info.dateStr;
+        },
+        eventClick(info) {
+          dateInput.value = info.event.startStr.slice(0, 10);
+          resortInput.value = info.event.extendedProps.resort;
+          bookingTypeInput.value = info.event.extendedProps.bookingType || 'مع مبيت';
+
+          if (info.event.extendedProps.status === 'محجوز') {
+            showStatus('هذه الاستراحة محجوزة في التاريخ المحدد. اختر استراحة أو تاريخًا آخر.', 'error');
+          } else {
+            showStatus(`تم اختيار ${info.event.extendedProps.resort} بتاريخ ${info.event.startStr.slice(0, 10)}.`, 'success');
+          }
+        }
+      });
+
+      calendar.render();
+    }
+
     async function submitBooking() {
       const payload = {
         date: dateInput.value,
