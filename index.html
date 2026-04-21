@@ -80,7 +80,7 @@
 
     .layout {
       display: grid;
-      grid-template-columns: 2fr 1fr;
+      grid-template-columns: 1fr;
       gap: 24px;
     }
 
@@ -94,13 +94,6 @@
 
     .calendar-card {
       padding: 22px;
-    }
-
-    .form-card {
-      padding: 24px;
-      position: sticky;
-      top: 20px;
-      height: fit-content;
     }
 
     .section-title {
@@ -175,6 +168,7 @@
       margin-top: 4px;
       font-size: 12px;
       font-weight: 700;
+      cursor: default;
     }
 
     .fc-daygrid-day-number,
@@ -183,16 +177,70 @@
       text-decoration: none;
     }
 
-    .resort-status {
-      display: block;
-      width: 100%;
-      white-space: normal;
-      line-height: 1.4;
+    .booking-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.72);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 999;
+    }
+
+    .booking-modal.active {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(680px, 100%);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.96));
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 26px;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .close-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .modal-subtitle {
+      color: var(--muted);
+      margin: 0 0 18px;
+      line-height: 1.8;
+      font-size: 15px;
     }
 
     .form-grid {
       display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 14px;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
     }
 
     label {
@@ -223,39 +271,43 @@
       resize: vertical;
     }
 
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
     .btn {
-      width: 100%;
       border: none;
       border-radius: 16px;
-      padding: 16px;
+      padding: 15px 20px;
       font-size: 16px;
       font-weight: 800;
       cursor: pointer;
+    }
+
+    .btn-primary {
       background: linear-gradient(135deg, #b99226, #f0cf67);
       color: #111827;
       box-shadow: 0 12px 35px rgba(212, 175, 55, 0.28);
+      flex: 1;
     }
 
-    .btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .note, .status-box {
-      margin-top: 14px;
-      padding: 14px;
-      border-radius: 14px;
-      font-size: 14px;
-      line-height: 1.7;
-    }
-
-    .note {
-      background: rgba(255,255,255,0.05);
+    .btn-secondary {
+      background: rgba(255,255,255,0.06);
+      color: #fff;
       border: 1px solid rgba(255,255,255,0.08);
-      color: var(--muted);
+      min-width: 120px;
     }
 
     .status-box {
       display: none;
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      line-height: 1.7;
       border: 1px solid transparent;
     }
 
@@ -273,13 +325,13 @@
       color: #fecaca;
     }
 
-    @media (max-width: 980px) {
-      .layout {
+    @media (max-width: 760px) {
+      .form-grid {
         grid-template-columns: 1fr;
       }
 
-      .form-card {
-        position: static;
+      .modal-card {
+        padding: 20px;
       }
     }
   </style>
@@ -291,7 +343,7 @@
       <h1>منصة حجز الاستراحات</h1>
       <p>
         استعرض التقويم لمعرفة توفر الاستراحات بشكل مباشر. كل يوم يعرض أسماء الاستراحات الملونة حسب الحالة:
-        الأخضر يعني متاح، والأحمر يعني محجوز. عند اختيار التاريخ والاستراحة يمكنك إتمام الحجز مباشرة.
+        الأخضر يعني متاح، والأحمر يعني محجوز. للحجز اضغط على التاريخ لفتح صفحة فرعية وإدخال بيانات الحجز.
       </p>
     </section>
 
@@ -306,65 +358,74 @@
 
         <div id="calendar"></div>
       </section>
+    </div>
+  </div>
 
-      <aside class="card form-card">
-        <h2 class="section-title">إتمام الحجز</h2>
+  <div class="booking-modal" id="bookingModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>إتمام الحجز</h3>
+        <button class="close-btn" id="closeModal">×</button>
+      </div>
 
-        <div class="form-grid">
-          <div>
-            <label for="date">التاريخ</label>
-            <input type="date" id="date" />
-          </div>
+      <p class="modal-subtitle">
+        اختر الاستراحة المناسبة في التاريخ المحدد، ثم أدخل بيانات الحجز لإتمام العملية.
+      </p>
 
-          <div>
-            <label for="resort">الاستراحة</label>
-            <select id="resort">
-              <option value="">اختر الاستراحة</option>
-              <option value="استراحة النخيل">استراحة النخيل</option>
-              <option value="استراحة الوادي">استراحة الوادي</option>
-              <option value="استراحة الريف">استراحة الريف</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="bookingType">نوع الحجز</label>
-            <select id="bookingType">
-              <option value="مع مبيت">مع مبيت</option>
-              <option value="بدون مبيت">بدون مبيت</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="name">الاسم</label>
-            <input type="text" id="name" placeholder="اسم العميل" />
-          </div>
-
-          <div>
-            <label for="phone">رقم الجوال</label>
-            <input type="text" id="phone" placeholder="05xxxxxxxx" />
-          </div>
-
-          <div>
-            <label for="notes">ملاحظات</label>
-            <textarea id="notes" placeholder="أي تفاصيل إضافية"></textarea>
-          </div>
-
-          <button class="btn" id="bookBtn">تأكيد الحجز</button>
+      <div class="form-grid">
+        <div>
+          <label for="date">التاريخ</label>
+          <input type="date" id="date" readonly />
         </div>
 
-        <div class="note">
-          يمكنك اختيار التاريخ بالضغط على اليوم داخل التقويم، أو الضغط على اسم الاستراحة داخل التاريخ لتعبئة التاريخ واسم الاستراحة تلقائيًا.
+        <div>
+          <label for="resort">الاستراحة</label>
+          <select id="resort">
+            <option value="">اختر الاستراحة</option>
+          </select>
         </div>
 
-        <div id="statusBox" class="status-box"></div>
-      </aside>
+        <div>
+          <label for="bookingType">نوع الحجز</label>
+          <select id="bookingType">
+            <option value="مع مبيت">مع مبيت</option>
+            <option value="بدون مبيت">بدون مبيت</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="name">الاسم</label>
+          <input type="text" id="name" placeholder="اسم العميل" />
+        </div>
+
+        <div>
+          <label for="phone">رقم الجوال</label>
+          <input type="text" id="phone" placeholder="05xxxxxxxx" />
+        </div>
+
+        <div class="full-width">
+          <label for="notes">ملاحظات</label>
+          <textarea id="notes" placeholder="أي تفاصيل إضافية"></textarea>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="bookBtn">تأكيد الحجز</button>
+        <button class="btn btn-secondary" id="cancelBtn">إلغاء</button>
+      </div>
+
+      <div id="statusBox" class="status-box"></div>
     </div>
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyPtRa2tBQnKfat0jCRroXL_oHdQQ8a2H4Lvwor_KSNV1mxpa9o2ZQaWUAXpRkrwcOF5w/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxYbBW8X65GcjTSlhdi60ZWXg7EUkfVKndC1juOg4Wpu85DPAJNwNk3XRFeMVBOqt1x9A/exec';
+    const ALL_RESORTS = ['استراحة النخيل', 'استراحة الوادي', 'استراحة الريف'];
 
     const calendarEl = document.getElementById('calendar');
+    const bookingModal = document.getElementById('bookingModal');
+    const closeModal = document.getElementById('closeModal');
+    const cancelBtn = document.getElementById('cancelBtn');
     const dateInput = document.getElementById('date');
     const resortInput = document.getElementById('resort');
     const bookingTypeInput = document.getElementById('bookingType');
@@ -387,7 +448,6 @@
         bookingData = json.data || [];
         renderCalendar();
       } catch (err) {
-        showStatus('تعذر تحميل بيانات الاستراحات. تأكد من رابط Apps Script وصلاحيات النشر.', 'error');
         console.error(err);
       }
     }
@@ -397,20 +457,15 @@
         const status = String(item['الحالة'] || '').trim();
         const isBooked = status === 'محجوز';
         const resortName = item['الاستراحة'] || 'استراحة';
-        const bookingType = item['نوع الحجز'] || '';
 
         return {
-          title: bookingType ? `${resortName} - ${bookingType}` : resortName,
+          title: resortName,
           start: item['التاريخ'],
           allDay: true,
           backgroundColor: isBooked ? '#dc2626' : '#16a34a',
           borderColor: isBooked ? '#dc2626' : '#16a34a',
           textColor: '#ffffff',
-          extendedProps: {
-            resort: resortName,
-            status,
-            bookingType
-          }
+          display: 'block'
         };
       });
 
@@ -431,22 +486,55 @@
         },
         events,
         dateClick(info) {
-          dateInput.value = info.dateStr;
-        },
-        eventClick(info) {
-          dateInput.value = info.event.startStr.slice(0, 10);
-          resortInput.value = info.event.extendedProps.resort;
-          bookingTypeInput.value = info.event.extendedProps.bookingType || 'مع مبيت';
-
-          if (info.event.extendedProps.status === 'محجوز') {
-            showStatus('هذه الاستراحة محجوزة في التاريخ المحدد. اختر استراحة أو تاريخًا آخر.', 'error');
-          } else {
-            showStatus(`تم اختيار ${info.event.extendedProps.resort} بتاريخ ${info.event.startStr.slice(0, 10)}.`, 'success');
-          }
+          openBookingModal(info.dateStr);
         }
       });
 
       calendar.render();
+    }
+
+    function openBookingModal(dateStr) {
+      dateInput.value = dateStr;
+      nameInput.value = '';
+      phoneInput.value = '';
+      notesInput.value = '';
+      bookingTypeInput.value = 'مع مبيت';
+      statusBox.className = 'status-box';
+      statusBox.textContent = '';
+
+      populateAvailableResorts(dateStr);
+      bookingModal.classList.add('active');
+    }
+
+    function populateAvailableResorts(dateStr) {
+      const bookedResorts = bookingData
+        .filter(item => String(item['التاريخ']).trim() === dateStr && String(item['الحالة']).trim() === 'محجوز')
+        .map(item => String(item['الاستراحة']).trim());
+
+      const availableResorts = ALL_RESORTS.filter(resort => !bookedResorts.includes(resort));
+
+      resortInput.innerHTML = '';
+
+      if (availableResorts.length === 0) {
+        const option = document.createElement('option');
+        option.value = '';
+        option.textContent = 'لا توجد استراحات متاحة في هذا التاريخ';
+        resortInput.appendChild(option);
+        showStatus('جميع الاستراحات محجوزة في هذا التاريخ.', 'error');
+        return;
+      }
+
+      const defaultOption = document.createElement('option');
+      defaultOption.value = '';
+      defaultOption.textContent = 'اختر الاستراحة';
+      resortInput.appendChild(defaultOption);
+
+      availableResorts.forEach(resort => {
+        const option = document.createElement('option');
+        option.value = resort;
+        option.textContent = resort;
+        resortInput.appendChild(option);
+      });
     }
 
     async function submitBooking() {
@@ -460,7 +548,7 @@
       };
 
       if (!payload.date || !payload.resort || !payload.bookingType || !payload.name || !payload.phone) {
-        showStatus('يرجى تعبئة التاريخ والاستراحة ونوع الحجز والاسم ورقم الجوال.', 'error');
+        showStatus('يرجى تعبئة جميع الحقول المطلوبة.', 'error');
         return;
       }
 
@@ -471,7 +559,7 @@
       );
 
       if (existing) {
-        showStatus('لا يمكن إتمام الحجز لأن الاستراحة محجوزة بالفعل في هذا التاريخ.', 'error');
+        showStatus('هذه الاستراحة محجوزة بالفعل في هذا التاريخ.', 'error');
         return;
       }
 
@@ -495,11 +583,11 @@
         }
 
         showStatus('تم تسجيل الحجز بنجاح.', 'success');
-        nameInput.value = '';
-        phoneInput.value = '';
-        notesInput.value = '';
-
         await loadBookings();
+
+        setTimeout(() => {
+          bookingModal.classList.remove('active');
+        }, 800);
       } catch (err) {
         showStatus('حدث خطأ أثناء إرسال الحجز.', 'error');
         console.error(err);
@@ -514,7 +602,17 @@
       statusBox.className = `status-box ${type}`;
     }
 
+    function closeBookingModal() {
+      bookingModal.classList.remove('active');
+    }
+
+    closeModal.addEventListener('click', closeBookingModal);
+    cancelBtn.addEventListener('click', closeBookingModal);
+    bookingModal.addEventListener('click', (e) => {
+      if (e.target === bookingModal) closeBookingModal();
+    });
     bookBtn.addEventListener('click', submitBooking);
+
     loadBookings();
   </script>
 </body>
