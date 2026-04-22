@@ -748,8 +748,8 @@
 
       <div class="badge">واجهة حيوية ومناسبة للجوال</div>
       <p class="main-copy">
-        استعرض التقويم لمعرفة توفر الاستراحات بشكل مباشر. كل يوم يعرض أسماء الاستراحات الملونة حسب الحالة:
-        الأخضر يعني متاح، والأحمر يعني محجوز. للحجز اضغط على التاريخ لفتح صفحة فرعية وإدخال بيانات الحجز.
+        استعرض التقويم لمعرفة توفر الاستراحات بشكل مباشر. الحروف داخل التقويم تمثل الاستراحات:
+        A و B و C. اللون الأخضر يعني متاح، والأحمر يعني بانتظار التأكيد أو محجوز. يتم عرض بيانات اليوم وما بعده فقط داخل التقويم.
       </p>
     </section>
 
@@ -1133,7 +1133,11 @@
     }
 
     function renderCalendar() {
-      const events = bookingData.map(item => {
+      const todayStr = getTodayLocalString();
+
+      const events = bookingData
+        .filter(item => normalizeDate(item['التاريخ']) >= todayStr)
+        .map(item => {
         const status = String(item['الحالة'] || '').trim();
         const isBooked = status === 'محجوز';
         const resortName = String(item['الاستراحة'] || '').trim();
@@ -1295,7 +1299,15 @@
         }
 
         showStatus('تم تسجيل الحجز بنجاح.', 'success');
-        await loadBookings();
+        await function getTodayLocalString() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    loadBookings();
 
         setTimeout(() => {
           bookingModal.classList.remove('active');
