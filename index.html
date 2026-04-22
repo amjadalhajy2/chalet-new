@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>استراحاتنا الثلاث</title>
+  <title>حجز الاستراحات الفاخرة</title>
 
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
@@ -14,6 +14,7 @@
       --bg: #fcfaf7;
       --bg-soft: #f7f1e8;
       --panel: rgba(255, 255, 255, 0.97);
+      --panel-2: rgba(255, 250, 244, 0.94);
       --brown-1: #5c3b24;
       --brown-2: #7a5230;
       --brown-3: #9a6b43;
@@ -48,14 +49,20 @@
       min-height: 100vh;
     }
 
+    .calendar-wrapper {
+      position: relative;
+      min-height: 320px;
+    }
+
     .loading-screen {
-      position: fixed;
+      position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(252,246,238,0.98));
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(252,246,238,0.96));
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 2000;
+      z-index: 20;
+      border-radius: 18px;
       transition: opacity 0.35s ease, visibility 0.35s ease;
     }
 
@@ -120,6 +127,7 @@
 
     @keyframes spin {
       to { transform: rotate(360deg); }
+    }
     }
 
     .container {
@@ -286,6 +294,8 @@
 
     #calendar {
       min-height: 300px;
+      position: relative;
+      z-index: 1;
     }
 
     .fc {
@@ -394,6 +404,14 @@
       border-radius: 22px 22px 0 0;
       box-shadow: 0 -18px 40px rgba(92, 59, 36, 0.14);
       padding: 16px 14px calc(18px + env(safe-area-inset-bottom));
+    }
+
+    .modal-handle {
+      width: 54px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(92, 59, 36, 0.16);
+      margin: 0 auto 12px;
     }
 
     .modal-header {
@@ -706,67 +724,76 @@
       .loading-subtext {
         font-size: 13px;
       }
+
+      .calendar-wrapper {
+        min-height: 280px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="loading-screen" id="loadingScreen">
-    <div class="loading-box">
-      <div class="loading-logo">
-        <img src="logo.png" alt="شعار استراحاتنا الثلاث" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>🏡</span>'">
-      </div>
-      <div class="loading-spinner"></div>
-      <div class="loading-text">جاري تحميل التقويم</div>
-      <div class="loading-subtext">يرجى الانتظار لحظات...</div>
-    </div>
-  </div>
-
   <div class="container">
     <section class="hero">
-      <div class="brand-wrap">
-        <div class="logo-box">
-          <img src="logo.png" alt="شعار استراحاتنا الثلاث" onerror="this.style.display='none'; this.parentNode.innerHTML='<span class=\'logo-placeholder\'>🏡</span>'">
-        </div>
-        <div class="brand-text">
-          <h1>استراحاتنا الثلاث</h1>
-          <p>حجز أنيق وسهل لاستراحاتك المفضلة في تجربة سريعة ومريحة</p>
+      <div class="brand-bar">
+        <div class="brand-wrap">
+          <div class="logo-box">
+            <img src="logo.png" alt="شعار استراحاتنا الثلاث" onerror="this.style.display='none'; this.parentNode.innerHTML='<span class=\'logo-placeholder\'>🏡</span>'">
+          </div>
+          <div class="brand-text">
+            <h1>استراحاتنا الثلاث</h1>
+            <p>حجز أنيق وسهل لاستراحاتك المفضلة في تجربة سريعة ومريحة</p>
+          </div>
         </div>
       </div>
 
       <div class="badge">واجهة حيوية ومناسبة للجوال</div>
       <p class="main-copy">
-        استعرض التقويم لمعرفة توفر الاستراحات بشكل مباشر. الحروف داخل التقويم تمثل الاستراحات:
-        A و B و C. اللون الأخضر يعني متاح، والأحمر يعني بانتظار التأكيد أو محجوز.
+        استعرض التقويم لمعرفة توفر الاستراحات بشكل مباشر. كل يوم يعرض أسماء الاستراحات الملونة حسب الحالة:
+        الأخضر يعني متاح، والأحمر يعني محجوز. للحجز اضغط على التاريخ لفتح صفحة فرعية وإدخال بيانات الحجز.
       </p>
     </section>
 
-    <section class="card">
-      <h2 class="section-title">التقويم والتوفر</h2>
+    <div class="layout">
+      <section class="card calendar-card">
+        <h2 class="section-title">التقويم والتوفر</h2>
 
-      <div class="legend">
-        <span><i class="dot green"></i> متاح</span>
-        <span><i class="dot red"></i> بانتظار التأكيد / محجوز</span>
-      </div>
+        <div class="legend">
+          <span><i class="dot green"></i> متاح</span>
+          <span><i class="dot red"></i> محجوز</span>
+        </div>
 
-      <div class="legend" style="margin-bottom:10px">
-        <span><strong>A</strong> = استراحة النخيل</span>
-        <span><strong>B</strong> = استراحة الوادي</span>
-        <span><strong>C</strong> = استراحة الريف</span>
-      </div>
+        <div class="legend" style="margin-bottom:10px">
+          <span><strong>A</strong> = استراحة النخيل</span>
+          <span><strong>B</strong> = استراحة الوادي</span>
+          <span><strong>C</strong> = استراحة الريف</span>
+        </div>
 
-      <div id="calendar"></div>
-    </section>
+        <div class="calendar-wrapper">
+          <div class="loading-screen" id="loadingScreen">
+            <div class="loading-box">
+              <div class="loading-logo">
+                <img src="logo.png" alt="شعار استراحاتنا الثلاث" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>🏡</span>'">
+              </div>
+              <div class="loading-spinner"></div>
+              <div class="loading-text">جاري تحميل التقويم</div>
+              <div class="loading-subtext">يرجى الانتظار لحظات...</div>
+            </div>
+          </div>
+          <div id="calendar"></div>
+        </div>
+      </section>
+    </div>
   </div>
 
   <div class="booking-modal" id="bookingModal">
     <div class="modal-card">
       <div class="modal-header">
         <h3>إتمام الحجز</h3>
-        <button class="close-btn" id="closeModal" type="button">×</button>
+        <button class="close-btn" id="closeModal">×</button>
       </div>
 
       <p class="modal-subtitle">
-        اختر الاستراحة المناسبة في التاريخ المحدد، ثم أدخل بيانات الحجز لإرسال الطلب.
+        اختر الاستراحة المناسبة في التاريخ المحدد، ثم أدخل بيانات الحجز لإتمام العملية.
       </p>
 
       <div class="form-grid">
@@ -1051,8 +1078,8 @@
       </div>
 
       <div class="btn-row">
-        <button class="btn btn-primary" id="bookBtn" type="button">تأكيد الحجز</button>
-        <button class="btn btn-secondary" id="cancelBtn" type="button">إلغاء</button>
+        <button class="btn btn-primary" id="bookBtn">تأكيد الحجز</button>
+        <button class="btn btn-secondary" id="cancelBtn">إلغاء</button>
       </div>
 
       <div id="statusBox" class="status-box"></div>
@@ -1061,7 +1088,6 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbwGyhLeVf3TjLnGHpbcs0FHnijwJDzd-jv-FlplandFZy3xGqPMeex6Mq5O5rYI9YXbIA/exec';
-
     const ALL_RESORTS = ['استراحة النخيل', 'استراحة الوادي', 'استراحة الريف'];
     const RESORT_MAP = {
       'استراحة النخيل': 'A',
@@ -1109,7 +1135,7 @@
     function renderCalendar() {
       const events = bookingData.map(item => {
         const status = String(item['الحالة'] || '').trim();
-        const isBlocked = status === 'محجوز' || status === 'بانتظار التأكيد';
+        const isBooked = status === 'محجوز';
         const resortName = String(item['الاستراحة'] || '').trim();
         const shortName = RESORT_MAP[resortName] || resortName;
         const dateValue = normalizeDate(item['التاريخ']);
@@ -1118,8 +1144,8 @@
           title: shortName,
           start: dateValue,
           allDay: true,
-          backgroundColor: isBlocked ? '#ef4444' : '#16a34a',
-          borderColor: isBlocked ? '#ef4444' : '#16a34a',
+          backgroundColor: isBooked ? '#ef4444' : '#16a34a',
+          borderColor: isBooked ? '#ef4444' : '#16a34a',
           textColor: '#ffffff',
           extendedProps: {
             resort: resortName,
@@ -1145,7 +1171,7 @@
         buttonText: {
           today: 'اليوم'
         },
-        events,
+        events: events,
         dateClick(info) {
           openBookingModal(info.dateStr);
         },
@@ -1188,15 +1214,11 @@
     }
 
     function populateAvailableResorts(dateStr, selectedResort = '') {
-      const unavailableResorts = bookingData
-        .filter(item => {
-          const itemStatus = String(item['الحالة'] || '').trim();
-          return normalizeDate(item['التاريخ']) === dateStr &&
-            (itemStatus === 'محجوز' || itemStatus === 'بانتظار التأكيد');
-        })
-        .map(item => String(item['الاستراحة'] || '').trim());
+      const bookedResorts = bookingData
+        .filter(item => normalizeDate(item['التاريخ']) === dateStr && String(item['الحالة']).trim() === 'محجوز')
+        .map(item => String(item['الاستراحة']).trim());
 
-      const availableResorts = ALL_RESORTS.filter(resort => !unavailableResorts.includes(resort));
+      const availableResorts = ALL_RESORTS.filter(resort => !bookedResorts.includes(resort));
 
       resortInput.innerHTML = '';
 
@@ -1205,7 +1227,7 @@
         option.value = '';
         option.textContent = 'لا توجد استراحات متاحة في هذا التاريخ';
         resortInput.appendChild(option);
-        showStatus('جميع الاستراحات غير متاحة في هذا التاريخ.', 'error');
+        showStatus('جميع الاستراحات محجوزة في هذا التاريخ.', 'error');
         return;
       }
 
@@ -1228,7 +1250,6 @@
 
     async function submitBooking() {
       const rawPhone = phoneInput.value.trim();
-
       const payload = {
         date: dateInput.value,
         resort: resortInput.value,
@@ -1245,18 +1266,18 @@
 
       const existing = bookingData.find(item =>
         normalizeDate(item['التاريخ']) === payload.date &&
-        String(item['الاستراحة'] || '').trim() === payload.resort &&
-        ['محجوز', 'بانتظار التأكيد'].includes(String(item['الحالة'] || '').trim())
+        String(item['الاستراحة']).trim() === payload.resort &&
+        String(item['الحالة']).trim() === 'محجوز'
       );
 
       if (existing) {
-        showStatus('هذه الاستراحة غير متاحة حاليًا في هذا التاريخ.', 'error');
+        showStatus('هذه الاستراحة محجوزة بالفعل في هذا التاريخ.', 'error');
         return;
       }
 
       try {
         bookBtn.disabled = true;
-        bookBtn.textContent = 'جارٍ إرسال الطلب...';
+        bookBtn.textContent = 'جارٍ إرسال الحجز...';
 
         const res = await fetch(API_URL, {
           method: 'POST',
@@ -1273,12 +1294,12 @@
           return;
         }
 
-        showStatus('تم إرسال طلب الحجز بنجاح، وتم تسجيل الحالة: بانتظار التأكيد.', 'success');
+        showStatus('تم تسجيل الحجز بنجاح.', 'success');
         await loadBookings();
 
         setTimeout(() => {
           bookingModal.classList.remove('active');
-        }, 900);
+        }, 800);
       } catch (err) {
         console.error('Submit error:', err);
         showStatus('حدث خطأ أثناء إرسال الحجز.', 'error');
@@ -1307,11 +1328,9 @@
 
     closeModal.addEventListener('click', closeBookingModal);
     cancelBtn.addEventListener('click', closeBookingModal);
-
     bookingModal.addEventListener('click', (e) => {
       if (e.target === bookingModal) closeBookingModal();
     });
-
     bookBtn.addEventListener('click', submitBooking);
 
     loadBookings();
