@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>استراحاتنا الثلاث</title>
+  <title>حجز الاستراحات الفاخرة</title>
 
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
@@ -13,13 +13,14 @@
     :root {
       --bg: #fcfaf7;
       --bg-soft: #f7f1e8;
-      --panel: rgba(255, 255, 255, 0.97);
-      --panel-2: rgba(255, 250, 244, 0.94);
+      --panel: rgba(255, 255, 255, 0.96);
+      --panel-2: rgba(255, 250, 244, 0.92);
       --brown-1: #5c3b24;
       --brown-2: #7a5230;
       --brown-3: #9a6b43;
       --brown-4: #c08b5a;
       --brown-5: #e6c7a7;
+      --brown-soft: rgba(154, 107, 67, 0.12);
       --text: #3b2819;
       --muted: #6f5a49;
       --green: #16a34a;
@@ -29,17 +30,14 @@
       --radius: 22px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     html, body {
-      margin: 0;
-      padding: 0;
       overflow-x: hidden;
     }
 
     body {
+      margin: 0;
       font-family: "Segoe UI", Tahoma, Arial, sans-serif;
       background:
         radial-gradient(circle at top right, rgba(192, 139, 90, 0.14), transparent 22%),
@@ -50,7 +48,7 @@
     }
 
     .container {
-      width: 100%;
+      width: min(100%, 100%);
       max-width: 1180px;
       margin: 12px auto 24px;
       padding: 0 12px;
@@ -58,11 +56,12 @@
 
     .hero {
       position: relative;
-      background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(250,242,232,0.96));
+      background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(250, 242, 232, 0.96));
       border: 1px solid rgba(192, 139, 90, 0.18);
       border-radius: 26px;
       padding: 18px;
       box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
       margin-bottom: 16px;
       overflow: hidden;
     }
@@ -89,13 +88,20 @@
       pointer-events: none;
     }
 
+    .brand-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+      position: relative;
+      z-index: 1;
+    }
+
     .brand-wrap {
       display: flex;
       align-items: center;
       gap: 12px;
-      position: relative;
-      z-index: 1;
-      margin-bottom: 14px;
       min-width: 0;
     }
 
@@ -138,7 +144,17 @@
       line-height: 1.7;
     }
 
-    .badge {
+    .hero p.main-copy {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.9;
+      max-width: 920px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero .badge {
       display: inline-block;
       padding: 8px 14px;
       margin-bottom: 12px;
@@ -152,14 +168,10 @@
       z-index: 1;
     }
 
-    .main-copy {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.9;
-      max-width: 920px;
-      position: relative;
-      z-index: 1;
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
     }
 
     .card {
@@ -167,6 +179,10 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .calendar-card {
       padding: 12px;
     }
 
@@ -203,17 +219,8 @@
       display: inline-block;
     }
 
-    .dot.green {
-      background: var(--green);
-    }
-
-    .dot.red {
-      background: var(--red);
-    }
-
-    #calendar {
-      min-height: 300px;
-    }
+    .dot.green { background: var(--green); }
+    .dot.red { background: var(--red); }
 
     .fc {
       --fc-border-color: rgba(92, 59, 36, 0.08);
@@ -280,7 +287,6 @@
       cursor: pointer;
       box-shadow: 0 8px 16px rgba(92, 59, 36, 0.07);
       white-space: normal;
-      text-align: center;
     }
 
     .fc-daygrid-day-number,
@@ -366,21 +372,15 @@
 
     .form-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1fr);
+      grid-template-columns: 1fr;
       gap: 10px;
-      width: 100%;
-    }
-
-    .full-width {
-      width: 100%;
     }
 
     .double-field {
       display: grid;
-      grid-template-columns: minmax(92px, 108px) minmax(0, 1fr);
+      grid-template-columns: 108px 1fr;
       gap: 8px;
       align-items: end;
-      width: 100%;
     }
 
     label {
@@ -393,8 +393,6 @@
 
     input, select, textarea {
       width: 100%;
-      max-width: 100%;
-      min-width: 0;
       background: rgba(255,255,255,0.96);
       border: 1px solid rgba(92,59,36,0.1);
       color: var(--text);
@@ -417,11 +415,10 @@
     }
 
     .btn-row {
-      display: grid;
-      grid-template-columns: 1.5fr 1fr;
+      display: flex;
+      flex-direction: column;
       gap: 9px;
       margin-top: 14px;
-      width: 100%;
     }
 
     .btn {
@@ -433,7 +430,6 @@
       cursor: pointer;
       width: 100%;
       min-height: 50px;
-      white-space: nowrap;
     }
 
     .btn-primary {
@@ -491,11 +487,11 @@
         font-size: 14px;
       }
 
-      .main-copy {
+      .hero p.main-copy {
         font-size: 15px;
       }
 
-      .card {
+      .calendar-card {
         padding: 16px;
       }
 
@@ -516,7 +512,7 @@
       }
 
       .form-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: 1fr 1fr;
         gap: 12px;
       }
 
@@ -525,12 +521,68 @@
       }
 
       .double-field {
-        grid-template-columns: 120px minmax(0, 1fr);
+        grid-template-columns: 120px 1fr;
         gap: 10px;
       }
 
       .btn-row {
-        grid-template-columns: 1.7fr 1fr;
+        flex-direction: row;
+      }
+
+      .btn-primary {
+        flex: 1;
+      }
+    }
+
+      .hero {
+        padding: 22px;
+      }
+
+      .logo-box {
+        width: 72px;
+        height: 72px;
+      }
+
+      .brand-text p {
+        font-size: 14px;
+      }
+
+      .hero p.main-copy {
+        font-size: 15px;
+      }
+
+      .calendar-card {
+        padding: 16px;
+      }
+
+      .fc .fc-daygrid-day-frame {
+        min-height: 104px;
+      }
+
+      .booking-modal {
+        align-items: center;
+        padding: 16px;
+      }
+
+      .modal-card {
+        border-radius: 28px;
+        padding: 22px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .full-width {
+        grid-column: 1 / -1;
+      }
+
+      .btn-row {
+        flex-direction: row;
+      }
+
+      .btn-primary {
+        flex: 1;
       }
     }
 
@@ -542,6 +594,10 @@
       .hero {
         border-radius: 22px;
         padding: 16px;
+      }
+
+      .brand-wrap {
+        align-items: center;
       }
 
       .logo-box {
@@ -558,7 +614,7 @@
         font-size: 12px;
       }
 
-      .main-copy {
+      .hero p.main-copy {
         font-size: 13px;
       }
 
@@ -606,7 +662,7 @@
       }
 
       .double-field {
-        grid-template-columns: minmax(88px, 96px) minmax(0, 1fr);
+        grid-template-columns: 96px 1fr;
         gap: 7px;
       }
 
@@ -624,9 +680,67 @@
         min-height: 48px;
         font-size: 14px;
       }
+    }
 
-      .btn-row {
-        grid-template-columns: 1.45fr 1fr;
+      .hero {
+        border-radius: 22px;
+        padding: 16px;
+      }
+
+      .brand-wrap {
+        align-items: center;
+      }
+
+      .logo-box {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+      }
+
+      .brand-text h1 {
+        font-size: 22px;
+      }
+
+      .brand-text p {
+        font-size: 12px;
+      }
+
+      .hero p.main-copy {
+        font-size: 13px;
+      }
+
+      .section-title {
+        font-size: 18px;
+      }
+
+      .legend span {
+        font-size: 11px;
+      }
+
+      .fc .fc-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .fc .fc-toolbar-chunk {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .fc .fc-daygrid-day-frame {
+        min-height: 78px;
+      }
+
+      .fc-daygrid-event {
+        font-size: 10px;
+        padding: 3px 5px;
+      }
+
+      .double-field {
+        grid-template-columns: 104px 1fr;
+        gap: 8px;
       }
     }
   </style>
@@ -634,52 +748,54 @@
 <body>
   <div class="container">
     <section class="hero">
-      <div class="brand-wrap">
-        <div class="logo-box">
-          <img src="logo.png" alt="شعار استراحاتنا الثلاث" onerror="this.style.display='none'; this.parentNode.innerHTML='<span class=\'logo-placeholder\'>🏡</span>'">
-        </div>
-        <div class="brand-text">
-          <h1>استراحاتنا الثلاث</h1>
-          <p>حجز أنيق وسهل لاستراحاتك المفضلة في تجربة سريعة ومريحة</p>
+      <div class="brand-bar">
+        <div class="brand-wrap">
+          <div class="logo-box">
+            <img src="logo.png" alt="شعار استراحاتنا الثلاث" onerror="this.style.display='none'; this.parentNode.innerHTML='<span class=\'logo-placeholder\'>🏡</span>'">
+          </div>
+          <div class="brand-text">
+            <h1>استراحاتنا الثلاث</h1>
+            <p>حجز أنيق وسهل لاستراحاتك المفضلة في تجربة سريعة ومريحة</p>
+          </div>
         </div>
       </div>
 
       <div class="badge">واجهة حيوية ومناسبة للجوال</div>
       <p class="main-copy">
-        استعرض التقويم لمعرفة توفر الاستراحات بشكل مباشر. الحروف داخل التقويم تمثل الاستراحات:
-        A و B و C. اللون الأخضر يعني متاح، والأحمر يعني محجوز أو بانتظار التأكيد.
+        استعرض التقويم لمعرفة توفر الاستراحات بشكل مباشر. كل يوم يعرض أسماء الاستراحات الملونة حسب الحالة:
+        الأخضر يعني متاح، والأحمر يعني محجوز. للحجز اضغط على التاريخ لفتح صفحة فرعية وإدخال بيانات الحجز.
       </p>
     </section>
 
-    <section class="card">
-      <h2 class="section-title">التقويم والتوفر</h2>
+    <div class="layout">
+      <section class="card calendar-card">
+        <h2 class="section-title">التقويم والتوفر</h2>
 
-      <div class="legend">
-        <span><i class="dot green"></i> متاح</span>
-        <span><i class="dot red"></i> محجوز / بانتظار التأكيد</span>
-      </div>
+        <div class="legend">
+          <span><i class="dot green"></i> متاح</span>
+          <span><i class="dot red"></i> محجوز</span>
+        </div>
 
-      <div class="legend" style="margin-bottom:10px">
-        <span><strong>A</strong> = استراحة النخيل</span>
-        <span><strong>B</strong> = استراحة الوادي</span>
-        <span><strong>C</strong> = استراحة الريف</span>
-      </div>
+        <div class="legend" style="margin-bottom:10px">
+          <span><strong>A</strong> = استراحة النخيل</span>
+          <span><strong>B</strong> = استراحة الوادي</span>
+          <span><strong>C</strong> = استراحة الريف</span>
+        </div>
 
-      <div id="calendar"></div>
-    </section>
+        <div id="calendar"></div>
+      </section>
+    </div>
   </div>
 
   <div class="booking-modal" id="bookingModal">
     <div class="modal-card">
-      <div class="modal-handle"></div>
-
       <div class="modal-header">
         <h3>إتمام الحجز</h3>
-        <button class="close-btn" id="closeModal" type="button">×</button>
+        <button class="close-btn" id="closeModal">×</button>
       </div>
 
       <p class="modal-subtitle">
-        اختر الاستراحة المناسبة في التاريخ المحدد، ثم أدخل بيانات الحجز لإرسال الطلب.
+        اختر الاستراحة المناسبة في التاريخ المحدد، ثم أدخل بيانات الحجز لإتمام العملية.
       </p>
 
       <div class="form-grid">
@@ -736,8 +852,8 @@
       </div>
 
       <div class="btn-row">
-        <button class="btn btn-primary" id="bookBtn" type="button">تأكيد الحجز</button>
-        <button class="btn btn-secondary" id="cancelBtn" type="button">إلغاء</button>
+        <button class="btn btn-primary" id="bookBtn">تأكيد الحجز</button>
+        <button class="btn btn-secondary" id="cancelBtn">إلغاء</button>
       </div>
 
       <div id="statusBox" class="status-box"></div>
@@ -745,8 +861,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxPYps4gVMgYmobLRPkhcDrOsaeJPofzE4zmLEN13CK0ngTwdiH7ohVVFfdCjNdu1vpVA/exec';
-
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxQho9wy5CZy3tnYsUL-sa0ohm1IRIAv__CRyTqdhzRCRO05Ms4PXqqcNIeqZjLbWvoUg/exec';
     const ALL_RESORTS = ['استراحة النخيل', 'استراحة الوادي', 'استراحة الريف'];
     const RESORT_MAP = {
       'استراحة النخيل': 'A',
@@ -784,13 +899,14 @@
         renderCalendar();
       } catch (err) {
         console.error('Load error:', err);
+        showStatus('تعذر تحميل بيانات التقويم. تأكد من رابط Apps Script وصلاحية النشر.', 'error');
       }
     }
 
     function renderCalendar() {
       const events = bookingData.map(item => {
         const status = String(item['الحالة'] || '').trim();
-        const isBlocked = status === 'محجوز' || status === 'بانتظار التأكيد';
+        const isBooked = status === 'محجوز';
         const resortName = String(item['الاستراحة'] || '').trim();
         const shortName = RESORT_MAP[resortName] || resortName;
         const dateValue = normalizeDate(item['التاريخ']);
@@ -799,8 +915,8 @@
           title: shortName,
           start: dateValue,
           allDay: true,
-          backgroundColor: isBlocked ? '#ef4444' : '#16a34a',
-          borderColor: isBlocked ? '#ef4444' : '#16a34a',
+          backgroundColor: isBooked ? '#ef4444' : '#16a34a',
+          borderColor: isBooked ? '#ef4444' : '#16a34a',
           textColor: '#ffffff',
           extendedProps: {
             resort: resortName,
@@ -826,7 +942,7 @@
         buttonText: {
           today: 'اليوم'
         },
-        events,
+        events: events,
         dateClick(info) {
           openBookingModal(info.dateStr);
         },
@@ -840,10 +956,18 @@
 
     function normalizeDate(value) {
       if (!value) return '';
-      if (typeof value === 'string') return value.trim().slice(0, 10);
+
+      if (typeof value === 'string') {
+        return value.trim().slice(0, 10);
+      }
+
       const date = new Date(value);
       if (isNaN(date.getTime())) return '';
-      return date.toISOString().slice(0, 10);
+
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
     }
 
     function openBookingModal(dateStr, selectedResort = '') {
@@ -861,15 +985,11 @@
     }
 
     function populateAvailableResorts(dateStr, selectedResort = '') {
-      const unavailableResorts = bookingData
-        .filter(item => {
-          const itemStatus = String(item['الحالة'] || '').trim();
-          return normalizeDate(item['التاريخ']) === dateStr &&
-            (itemStatus === 'محجوز' || itemStatus === 'بانتظار التأكيد');
-        })
-        .map(item => String(item['الاستراحة'] || '').trim());
+      const bookedResorts = bookingData
+        .filter(item => normalizeDate(item['التاريخ']) === dateStr && String(item['الحالة']).trim() === 'محجوز')
+        .map(item => String(item['الاستراحة']).trim());
 
-      const availableResorts = ALL_RESORTS.filter(resort => !unavailableResorts.includes(resort));
+      const availableResorts = ALL_RESORTS.filter(resort => !bookedResorts.includes(resort));
 
       resortInput.innerHTML = '';
 
@@ -878,7 +998,7 @@
         option.value = '';
         option.textContent = 'لا توجد استراحات متاحة في هذا التاريخ';
         resortInput.appendChild(option);
-        showStatus('جميع الاستراحات غير متاحة في هذا التاريخ.', 'error');
+        showStatus('جميع الاستراحات محجوزة في هذا التاريخ.', 'error');
         return;
       }
 
@@ -901,7 +1021,6 @@
 
     async function submitBooking() {
       const rawPhone = phoneInput.value.trim();
-
       const payload = {
         date: dateInput.value,
         resort: resortInput.value,
@@ -918,18 +1037,18 @@
 
       const existing = bookingData.find(item =>
         normalizeDate(item['التاريخ']) === payload.date &&
-        String(item['الاستراحة'] || '').trim() === payload.resort &&
-        ['محجوز', 'بانتظار التأكيد'].includes(String(item['الحالة'] || '').trim())
+        String(item['الاستراحة']).trim() === payload.resort &&
+        String(item['الحالة']).trim() === 'محجوز'
       );
 
       if (existing) {
-        showStatus('هذه الاستراحة غير متاحة حاليًا في هذا التاريخ.', 'error');
+        showStatus('هذه الاستراحة محجوزة بالفعل في هذا التاريخ.', 'error');
         return;
       }
 
       try {
         bookBtn.disabled = true;
-        bookBtn.textContent = 'جارٍ إرسال الطلب...';
+        bookBtn.textContent = 'جارٍ إرسال الحجز...';
 
         const res = await fetch(API_URL, {
           method: 'POST',
@@ -946,12 +1065,12 @@
           return;
         }
 
-        showStatus('تم إرسال طلب الحجز بنجاح، وهو الآن بانتظار تأكيد الإدارة.', 'success');
+        showStatus('تم تسجيل الحجز بنجاح.', 'success');
         await loadBookings();
 
         setTimeout(() => {
           bookingModal.classList.remove('active');
-        }, 900);
+        }, 800);
       } catch (err) {
         console.error('Submit error:', err);
         showStatus('حدث خطأ أثناء إرسال الحجز.', 'error');
@@ -972,11 +1091,9 @@
 
     closeModal.addEventListener('click', closeBookingModal);
     cancelBtn.addEventListener('click', closeBookingModal);
-
     bookingModal.addEventListener('click', (e) => {
       if (e.target === bookingModal) closeBookingModal();
     });
-
     bookBtn.addEventListener('click', submitBooking);
 
     loadBookings();
