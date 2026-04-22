@@ -11,243 +11,269 @@
 
   <style>
     :root {
-      --bg: #fcfaf7;
-      --panel: rgba(255, 255, 255, 0.97);
-      --brown-1: #5c3b24;
-      --brown-2: #7a5230;
-      --brown-3: #9a6b43;
-      --brown-4: #c08b5a;
-      --brown-5: #e6c7a7;
-      --text: #3b2819;
-      --muted: #6f5a49;
-      --green: #16a34a;
-      --red: #ef4444;
-      --border: rgba(92, 59, 36, 0.12);
-      --shadow: 0 16px 40px rgba(92, 59, 36, 0.12);
-      --radius: 22px;
+      --bg: #f6f1ea;
+      --surface: rgba(255,255,255,.88);
+      --surface-strong: rgba(255,255,255,.96);
+      --line: rgba(92, 59, 36, 0.1);
+      --text: #2e2118;
+      --muted: #756253;
+      --brand-1: #4f3422;
+      --brand-2: #8a6040;
+      --brand-3: #d5b08b;
+      --brand-4: #efe2d3;
+      --success: #16a34a;
+      --danger: #ef4444;
+      --shadow: 0 20px 50px rgba(79, 52, 34, 0.12);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
     }
 
     * { box-sizing: border-box; }
-
-    html, body {
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-    }
+    html, body { margin: 0; padding: 0; overflow-x: hidden; }
 
     body {
       font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-      background:
-        radial-gradient(circle at top right, rgba(192, 139, 90, 0.14), transparent 22%),
-        radial-gradient(circle at left center, rgba(230, 199, 167, 0.18), transparent 24%),
-        linear-gradient(180deg, #ffffff, #fcfaf7 40%, #f7f1e8);
       color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(213,176,139,0.18), transparent 18%),
+        radial-gradient(circle at left center, rgba(138,96,64,0.10), transparent 22%),
+        linear-gradient(180deg, #fffdfa, #f7f1ea 42%, #f3ece3);
       min-height: 100vh;
     }
 
-    .container {
-      width: 100%;
-      max-width: 1180px;
-      margin: 12px auto 24px;
-      padding: 0 12px;
+    .shell {
+      width: min(1280px, 100%);
+      margin: 0 auto;
+      padding: 18px 12px 28px;
     }
 
     .hero {
       position: relative;
-      background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(250,242,232,0.96));
-      border: 1px solid rgba(192, 139, 90, 0.18);
-      border-radius: 26px;
-      padding: 18px;
-      box-shadow: var(--shadow);
-      margin-bottom: 16px;
       overflow: hidden;
+      border: 1px solid rgba(138,96,64,.12);
+      border-radius: 32px;
+      background:
+        linear-gradient(140deg, rgba(255,255,255,.98), rgba(248,241,232,.95)),
+        linear-gradient(45deg, rgba(213,176,139,.10), transparent 45%);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      margin-bottom: 16px;
     }
 
-    .hero::before {
-      content: "";
-      position: absolute;
-      top: -50px;
-      left: -40px;
-      width: 170px;
-      height: 170px;
-      background: radial-gradient(circle, rgba(230, 199, 167, 0.32), transparent 70%);
-      pointer-events: none;
-    }
-
+    .hero::before,
     .hero::after {
       content: "";
       position: absolute;
-      bottom: -55px;
-      right: -35px;
-      width: 180px;
-      height: 180px;
-      background: radial-gradient(circle, rgba(192, 139, 90, 0.22), transparent 72%);
+      border-radius: 50%;
       pointer-events: none;
     }
 
-    .brand-wrap {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      position: relative;
-      z-index: 1;
-      margin-bottom: 14px;
-      min-width: 0;
+    .hero::before {
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(213,176,139,.20), transparent 68%);
+      inset: -70px auto auto -70px;
     }
 
-    .logo-box {
-      width: 62px;
-      height: 62px;
-      border-radius: 18px;
-      background: linear-gradient(135deg, #fffaf5, #ffffff);
-      border: 1px solid rgba(192, 139, 90, 0.24);
+    .hero::after {
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(138,96,64,.12), transparent 70%);
+      inset: auto -80px -90px auto;
+    }
+
+    .hero-top {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .logo-card {
+      width: 68px;
+      height: 68px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #fff, #f5ede3);
+      border: 1px solid rgba(138,96,64,.14);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 10px 24px rgba(154, 107, 67, 0.12);
-      flex-shrink: 0;
+      box-shadow: 0 10px 26px rgba(79, 52, 34, 0.08);
       overflow: hidden;
+      flex-shrink: 0;
     }
 
-    .logo-box img {
+    .logo-card img {
       width: 100%;
       height: 100%;
       object-fit: contain;
       display: block;
     }
 
-    .logo-placeholder {
-      font-size: 24px;
-    }
+    .logo-fallback { font-size: 28px; }
 
-    .brand-text h1 {
+    .hero-title h1 {
       margin: 0 0 4px;
-      font-size: clamp(24px, 5vw, 44px);
+      font-size: clamp(26px, 4vw, 42px);
+      color: var(--brand-1);
       line-height: 1.1;
-      color: var(--brown-1);
     }
 
-    .brand-text p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.7;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 8px 14px;
-      margin-bottom: 12px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, rgba(192, 139, 90, 0.15), rgba(230, 199, 167, 0.22));
-      color: var(--brown-1);
-      border: 1px solid rgba(192, 139, 90, 0.16);
-      font-size: 13px;
-      font-weight: 700;
-      position: relative;
-      z-index: 1;
-    }
-
-    .main-copy {
+    .hero-title p {
       margin: 0;
       color: var(--muted);
       font-size: 14px;
-      line-height: 1.9;
-      max-width: 920px;
-      position: relative;
-      z-index: 1;
     }
 
-    .action-bar {
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 14px;
+    }
+
+    .hero-main {
+      display: grid;
+      gap: 12px;
+    }
+
+    .hero-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(138,96,64,.12);
+      background: rgba(255,255,255,.8);
+      color: var(--brand-1);
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .hero-main p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.9;
+      font-size: 14px;
+      max-width: 880px;
+    }
+
+    .quick-actions {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
-      margin-top: 16px;
-      position: relative;
-      z-index: 1;
     }
 
-    .action-btn {
-      border: 1px solid rgba(92,59,36,0.1);
-      background: linear-gradient(135deg, #ffffff, #f9f4ed);
-      color: var(--brown-1);
-      border-radius: 14px;
-      padding: 12px 14px;
-      min-height: 48px;
+    .quick-btn {
+      border: 1px solid rgba(138,96,64,.10);
+      background: linear-gradient(135deg, rgba(255,255,255,.96), rgba(245,237,227,.92));
+      color: var(--brand-1);
+      border-radius: 16px;
+      padding: 14px 12px;
+      min-height: 52px;
       font-size: 14px;
       font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 8px 18px rgba(92, 59, 36, 0.05);
+      box-shadow: 0 10px 22px rgba(79, 52, 34, 0.05);
+    }
+
+    .board {
+      display: grid;
+      gap: 16px;
     }
 
     .card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
       box-shadow: var(--shadow);
-      padding: 12px;
+      backdrop-filter: blur(12px);
     }
 
-    .section-title {
-      font-size: 20px;
-      margin: 0 0 14px;
-      color: var(--brown-1);
+    .calendar-card { padding: 16px; }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      color: var(--brand-1);
+      font-size: 22px;
+    }
+
+    .section-head span {
+      color: var(--muted);
+      font-size: 13px;
     }
 
     .legend {
       display: flex;
-      gap: 8px;
       flex-wrap: wrap;
+      gap: 8px;
       margin-bottom: 12px;
     }
 
-    .legend span {
+    .legend-item {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(250,244,238,0.96));
-      border: 1px solid rgba(92, 59, 36, 0.08);
-      color: var(--muted);
-      padding: 8px 10px;
+      padding: 9px 12px;
       border-radius: 999px;
+      border: 1px solid rgba(138,96,64,.08);
+      background: rgba(255,255,255,.82);
+      color: var(--muted);
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
     }
 
-    .dot {
+    .legend-dot {
       width: 10px;
       height: 10px;
       border-radius: 50%;
       display: inline-block;
     }
 
-    .dot.green { background: var(--green); }
-    .dot.red { background: var(--red); }
+    .legend-dot.success { background: var(--success); }
+    .legend-dot.danger { background: var(--danger); }
 
     .calendar-wrapper {
       position: relative;
-      min-height: 320px;
+      min-height: 350px;
+      border-radius: 22px;
+      overflow: hidden;
+      background: rgba(255,255,255,.45);
+      border: 1px solid rgba(138,96,64,.06);
     }
 
     #calendar {
-      min-height: 300px;
+      min-height: 320px;
       position: relative;
       z-index: 1;
+      padding: 6px;
     }
 
-    .loading-screen {
+    .loading-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(252,246,238,0.96));
       display: flex;
       align-items: center;
       justify-content: center;
+      background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(248,241,232,.96));
       z-index: 20;
-      border-radius: 18px;
-      transition: opacity 0.35s ease, visibility 0.35s ease;
+      transition: opacity .35s ease, visibility .35s ease;
     }
 
-    .loading-screen.hidden {
+    .loading-overlay.hidden {
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
@@ -257,22 +283,22 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       text-align: center;
       padding: 24px;
     }
 
     .loading-logo {
-      width: 84px;
-      height: 84px;
+      width: 78px;
+      height: 78px;
       border-radius: 24px;
-      background: linear-gradient(135deg, #fffaf5, #ffffff);
-      border: 1px solid rgba(192, 139, 90, 0.24);
+      background: linear-gradient(135deg, #fff, #f5ede3);
+      border: 1px solid rgba(138,96,64,.12);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 10px 24px rgba(154, 107, 67, 0.12);
       overflow: hidden;
+      box-shadow: 0 10px 24px rgba(79,52,34,.08);
     }
 
     .loading-logo img {
@@ -282,34 +308,27 @@
       display: block;
     }
 
-    .loading-logo span { font-size: 30px; }
-    .loading-text { color: var(--brown-1); font-size: 18px; font-weight: 800; }
-    .loading-subtext { color: var(--muted); font-size: 14px; }
-
     .loading-spinner {
-      width: 40px;
-      height: 40px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
-      border: 3px solid rgba(192, 139, 90, 0.22);
-      border-top-color: var(--brown-3);
-      animation: spin 0.9s linear infinite;
+      border: 3px solid rgba(138,96,64,.18);
+      border-top-color: var(--brand-2);
+      animation: spin .9s linear infinite;
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
     .fc {
-      --fc-border-color: rgba(92, 59, 36, 0.08);
+      --fc-border-color: rgba(92,59,36,.08);
       --fc-page-bg-color: transparent;
-      --fc-neutral-bg-color: rgba(255,255,255,0.42);
-      --fc-list-event-hover-bg-color: rgba(192, 139, 90, 0.08);
-      --fc-today-bg-color: rgba(230, 199, 167, 0.28);
+      --fc-neutral-bg-color: rgba(255,255,255,.35);
+      --fc-today-bg-color: rgba(213,176,139,.18);
       color: var(--text);
     }
 
     .fc-theme-standard td,
-    .fc-theme-standard th {
-      border-color: rgba(92, 59, 36, 0.08);
-    }
+    .fc-theme-standard th { border-color: rgba(92,59,36,.08); }
 
     .fc .fc-toolbar {
       gap: 8px;
@@ -318,29 +337,27 @@
     }
 
     .fc .fc-toolbar-title {
-      font-size: clamp(1rem, 4vw, 1.35rem);
-      color: var(--brown-1);
+      font-size: clamp(1.05rem, 3vw, 1.45rem);
+      color: var(--brand-1);
       font-weight: 800;
-      text-align: center;
     }
 
     .fc .fc-button {
-      background: linear-gradient(135deg, #ffffff, #f9f4ed);
-      border: 1px solid rgba(92, 59, 36, 0.08);
-      color: var(--brown-1);
-      border-radius: 10px;
-      padding: 7px 12px;
-      box-shadow: 0 8px 18px rgba(92, 59, 36, 0.05);
       min-height: 40px;
+      border-radius: 12px;
+      border: 1px solid rgba(92,59,36,.08);
+      background: linear-gradient(135deg, #fff, #f8f1e8);
+      color: var(--brand-1);
+      box-shadow: 0 8px 18px rgba(79, 52, 34, 0.04);
       font-weight: 700;
     }
 
     .fc .fc-button-primary:not(:disabled).fc-button-active,
     .fc .fc-button-primary:not(:disabled):active,
     .fc .fc-button:hover {
-      background: linear-gradient(135deg, #e6c7a7, #f2deca);
-      color: var(--brown-1);
-      border-color: rgba(192, 139, 90, 0.2);
+      background: linear-gradient(135deg, #ebd5bc, #f3e6d7);
+      color: var(--brand-1);
+      border-color: rgba(138,96,64,.18);
     }
 
     .fc .fc-daygrid-day-frame { min-height: 92px; padding: 2px; }
@@ -352,58 +369,49 @@
       padding: 4px 6px;
       margin-top: 4px;
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 8px 16px rgba(92, 59, 36, 0.07);
-      white-space: normal;
       text-align: center;
+      box-shadow: 0 8px 16px rgba(79,52,34,.08);
     }
 
     .fc-daygrid-day-number,
     .fc-col-header-cell-cushion {
-      color: var(--brown-1);
+      color: var(--brand-1);
       text-decoration: none;
       font-weight: 800;
       font-size: 13px;
     }
 
-    .fc .fc-day-today {
-      background: rgba(246, 233, 216, 0.72) !important;
-    }
+    .fc .fc-day-today { background: rgba(239,226,211,.8) !important; }
 
-    .booking-modal,
-    .info-modal {
+    .modal {
       position: fixed;
       inset: 0;
-      background: rgba(59, 40, 25, 0.28);
+      background: rgba(46,33,24,.28);
       backdrop-filter: blur(8px);
       display: none;
       align-items: flex-end;
       justify-content: center;
-      padding: 0;
       z-index: 999;
+      padding: 0;
     }
 
-    .booking-modal.active,
-    .info-modal.active {
-      display: flex;
-    }
+    .modal.active { display: flex; }
 
-    .modal-card,
-    .info-card {
+    .modal-card {
       width: 100%;
-      max-width: 680px;
+      max-width: 720px;
       max-height: 90vh;
       overflow: auto;
-      background: linear-gradient(180deg, rgba(255,255,255,0.99), rgba(252,246,238,0.98));
-      border: 1px solid rgba(192, 139, 90, 0.16);
-      border-radius: 22px 22px 0 0;
-      box-shadow: 0 -18px 40px rgba(92, 59, 36, 0.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.99), rgba(249,243,236,.98));
+      border: 1px solid rgba(138,96,64,.12);
+      border-radius: 24px 24px 0 0;
+      box-shadow: 0 -18px 40px rgba(79,52,34,.16);
       padding: 16px 14px calc(18px + env(safe-area-inset-bottom));
     }
 
-    .modal-header,
-    .info-header {
+    .modal-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -411,36 +419,34 @@
       margin-bottom: 12px;
     }
 
-    .modal-header h3,
-    .info-header h3 {
+    .modal-head h3 {
       margin: 0;
+      color: var(--brand-1);
       font-size: 20px;
-      color: var(--brown-1);
     }
 
     .close-btn {
       width: 38px;
       height: 38px;
       border-radius: 50%;
-      border: 1px solid rgba(92,59,36,0.08);
-      background: rgba(255,255,255,0.94);
-      color: var(--brown-1);
+      border: 1px solid rgba(92,59,36,.08);
+      background: rgba(255,255,255,.95);
+      color: var(--brand-1);
       font-size: 20px;
       cursor: pointer;
       flex-shrink: 0;
     }
 
-    .modal-subtitle,
-    .info-subtitle {
+    .modal-note {
       color: var(--muted);
       margin: 0 0 14px;
-      line-height: 1.75;
+      line-height: 1.8;
       font-size: 13px;
     }
 
     .form-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1fr);
+      grid-template-columns: minmax(0,1fr);
       gap: 10px;
       width: 100%;
     }
@@ -449,7 +455,7 @@
 
     .double-field {
       display: grid;
-      grid-template-columns: minmax(92px, 108px) minmax(0, 1fr);
+      grid-template-columns: minmax(92px,108px) minmax(0,1fr);
       gap: 8px;
       align-items: end;
       width: 100%;
@@ -458,37 +464,33 @@
     label {
       display: block;
       font-size: 13px;
-      color: var(--brown-1);
+      color: var(--brand-1);
       margin-bottom: 5px;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     input, select, textarea {
       width: 100%;
-      max-width: 100%;
       min-width: 0;
-      background: rgba(255,255,255,0.96);
-      border: 1px solid rgba(92,59,36,0.1);
+      background: rgba(255,255,255,.96);
+      border: 1px solid rgba(92,59,36,.1);
       color: var(--text);
       padding: 12px 13px;
-      border-radius: 13px;
+      border-radius: 14px;
       outline: none;
       font-size: 15px;
-      box-shadow: inset 0 1px 2px rgba(92,59,36,0.03);
       min-height: 46px;
+      box-shadow: inset 0 1px 2px rgba(92,59,36,.03);
     }
 
-    input::placeholder,
-    textarea::placeholder { color: #8a7665; }
-
     textarea {
-      min-height: 90px;
+      min-height: 96px;
       resize: vertical;
     }
 
     .btn-row {
       display: grid;
-      grid-template-columns: 1.5fr 1fr;
+      grid-template-columns: 1.6fr 1fr;
       gap: 9px;
       margin-top: 14px;
       width: 100%;
@@ -503,19 +505,18 @@
       cursor: pointer;
       width: 100%;
       min-height: 50px;
-      white-space: nowrap;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--brown-3), var(--brown-4), var(--brown-5));
-      color: #fffdf8;
-      box-shadow: 0 14px 28px rgba(154, 107, 67, 0.22);
+      background: linear-gradient(135deg, var(--brand-2), var(--brand-3));
+      color: #fffdfa;
+      box-shadow: 0 14px 28px rgba(138,96,64,.22);
     }
 
     .btn-secondary {
-      background: rgba(255,255,255,0.96);
-      color: var(--brown-1);
-      border: 1px solid rgba(92,59,36,0.08);
+      background: rgba(255,255,255,.96);
+      color: var(--brand-1);
+      border: 1px solid rgba(92,59,36,.08);
     }
 
     .status-box {
@@ -530,31 +531,31 @@
 
     .status-box.success {
       display: block;
-      background: rgba(22, 163, 74, 0.12);
-      border-color: rgba(22, 163, 74, 0.18);
+      background: rgba(22,163,74,.12);
+      border-color: rgba(22,163,74,.18);
       color: #166534;
     }
 
     .status-box.error {
       display: block;
-      background: rgba(239, 68, 68, 0.12);
-      border-color: rgba(239, 68, 68, 0.18);
+      background: rgba(239,68,68,.12);
+      border-color: rgba(239,68,68,.18);
       color: #991b1b;
     }
 
     .resort-gallery {
       display: grid;
-      grid-template-columns: 1fr;
       gap: 12px;
+      grid-template-columns: 1fr;
     }
 
     .resort-gallery img {
       width: 100%;
       height: 220px;
       object-fit: cover;
-      border-radius: 16px;
-      border: 1px solid rgba(92,59,36,0.1);
-      background: #f3ece2;
+      border-radius: 18px;
+      background: #f1e8dd;
+      border: 1px solid rgba(92,59,36,.08);
     }
 
     .price-table {
@@ -564,8 +565,8 @@
 
     .price-item,
     .rules-box {
-      background: rgba(255,255,255,0.92);
-      border: 1px solid rgba(92,59,36,0.08);
+      background: rgba(255,255,255,.9);
+      border: 1px solid rgba(92,59,36,.08);
       border-radius: 16px;
       padding: 14px;
       line-height: 1.9;
@@ -575,7 +576,7 @@
     .price-item strong {
       display: block;
       margin-bottom: 8px;
-      color: var(--brown-1);
+      color: var(--brand-1);
     }
 
     .rules-box ul {
@@ -584,105 +585,119 @@
       line-height: 1.9;
     }
 
+    .fallback {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(239,68,68,.08);
+      color: #991b1b;
+      border: 1px solid rgba(239,68,68,.14);
+      font-size: 14px;
+    }
+
     @media (min-width: 768px) {
-      .container { margin-top: 18px; padding: 0 16px; }
-      .hero { padding: 22px; }
-      .logo-box { width: 72px; height: 72px; }
-      .brand-text p { font-size: 14px; }
-      .main-copy { font-size: 15px; }
-      .card { padding: 16px; }
+      .shell { padding: 20px 16px 32px; }
+      .hero { padding: 24px; }
+      .logo-card { width: 76px; height: 76px; }
+      .hero-grid { grid-template-columns: 1.2fr .9fr; align-items: end; }
+      .quick-actions { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .calendar-card { padding: 18px; }
       .fc .fc-daygrid-day-frame { min-height: 104px; }
-      .booking-modal, .info-modal { align-items: center; padding: 16px; }
-      .modal-card, .info-card {
-        width: min(680px, 100%);
+      .modal { align-items: center; padding: 16px; }
+      .modal-card {
+        width: min(720px, 100%);
         max-height: 92vh;
         border-radius: 28px;
         padding: 22px;
       }
-      .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      .form-grid {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        gap: 12px;
+      }
       .full-width { grid-column: 1 / -1; }
-      .double-field { grid-template-columns: 120px minmax(0, 1fr); gap: 10px; }
-      .btn-row { grid-template-columns: 1.7fr 1fr; }
-      .action-bar { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-      .resort-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .double-field { grid-template-columns: 120px minmax(0,1fr); gap: 10px; }
+      .btn-row { grid-template-columns: 1.8fr 1fr; }
+      .resort-gallery { grid-template-columns: repeat(2, minmax(0,1fr)); }
     }
 
     @media (max-width: 480px) {
-      .container { padding: 0 10px; }
-      .hero { border-radius: 22px; padding: 16px; }
-      .logo-box { width: 56px; height: 56px; border-radius: 16px; }
-      .brand-text h1 { font-size: 22px; }
-      .brand-text p { font-size: 12px; }
-      .main-copy { font-size: 13px; }
-      .section-title { font-size: 18px; }
-      .legend span { font-size: 11px; }
+      .hero { border-radius: 24px; padding: 16px; }
+      .logo-card { width: 58px; height: 58px; border-radius: 16px; }
+      .hero-title h1 { font-size: 24px; }
+      .hero-title p, .main-copy { font-size: 12px; }
+      .action-btn, .quick-btn { font-size: 13px; }
+      .calendar-wrapper { min-height: 280px; }
       .fc .fc-toolbar { flex-direction: column; align-items: stretch; }
-      .fc .fc-toolbar-chunk { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
+      .fc .fc-toolbar-chunk {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
       .fc .fc-daygrid-day-frame { min-height: 78px; }
       .fc-daygrid-event { font-size: 10px; padding: 3px 5px; }
-      .modal-card, .info-card {
+      .modal-card {
         max-height: 88vh;
         padding: 14px 12px calc(16px + env(safe-area-inset-bottom));
       }
-      .modal-header h3, .info-header h3 { font-size: 18px; }
-      .modal-subtitle, .info-subtitle { font-size: 12px; margin-bottom: 12px; }
-      .double-field { grid-template-columns: minmax(88px, 96px) minmax(0, 1fr); gap: 7px; }
+      .modal-head h3 { font-size: 18px; }
+      .modal-note { font-size: 12px; }
+      .double-field { grid-template-columns: minmax(88px,96px) minmax(0,1fr); gap: 7px; }
       input, select, textarea { font-size: 14px; min-height: 44px; padding: 11px 12px; }
       textarea { min-height: 84px; }
       .btn { min-height: 48px; font-size: 14px; }
-      .btn-row { grid-template-columns: 1.45fr 1fr; }
-      .loading-logo { width: 72px; height: 72px; }
-      .loading-text { font-size: 16px; }
-      .loading-subtext { font-size: 13px; }
-      .calendar-wrapper { min-height: 280px; }
       .resort-gallery img { height: 180px; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="shell">
     <section class="hero">
-      <div class="brand-wrap">
-        <div class="logo-box">
-          <img src="logo.png" alt="شعار استراحاتنا الثلاث" onerror="this.style.display='none'; this.parentNode.innerHTML='<span class=\'logo-placeholder\'>🏡</span>'">
+      <div class="hero-top">
+        <div class="logo-card">
+          <img src="logo.png" alt="شعار استراحاتنا الثلاث" onerror="this.style.display='none'; this.parentNode.innerHTML='<span class=\'logo-fallback\'>🏡</span>'">
         </div>
-        <div class="brand-text">
+        <div class="hero-title">
           <h1>استراحاتنا الثلاث</h1>
-          <p>حجز أنيق وسهل لاستراحاتك المفضلة في تجربة سريعة ومريحة</p>
+          <p>حجز سريع وواضح مع عرض التوفر والخيارات الأساسية.</p>
         </div>
       </div>
 
-      <div class="badge">واجهة حيوية ومناسبة للجوال</div>
-      <p class="main-copy">
-        استعرض التقويم لمعرفة توفر الاستراحات بشكل مباشر. الحروف داخل التقويم تمثل الاستراحات:
-        A و B و C. اللون الأخضر يعني متاح، والأحمر يعني بانتظار التأكيد أو محجوز. تظهر التواريخ السابقة بدون بيانات الحجز بداخلها.
-      </p>
+      <div class="hero-grid">
+        <div class="hero-main">
+          <div class="hero-chip">التوفر مباشر داخل التقويم</div>
+          <p>
+            A = استراحة النخيل، B = استراحة الوادي، C = استراحة الريف. الأخضر متاح، والأحمر بانتظار التأكيد أو محجوز.
+          </p>
+        </div>
 
-      <div class="action-bar">
-        <button class="action-btn" type="button" data-info-modal="resort-a">استراحة A</button>
-        <button class="action-btn" type="button" data-info-modal="resort-b">استراحة B</button>
-        <button class="action-btn" type="button" data-info-modal="resort-c">استراحة C</button>
-        <button class="action-btn" type="button" data-info-modal="prices">الأسعار</button>
-        <button class="action-btn" type="button" data-info-modal="rules">الضوابط</button>
+        <div class="quick-actions">
+          <button class="quick-btn" type="button" data-info-modal="resort-a">استراحة A</button>
+          <button class="quick-btn" type="button" data-info-modal="resort-b">استراحة B</button>
+          <button class="quick-btn" type="button" data-info-modal="resort-c">استراحة C</button>
+          <button class="quick-btn" type="button" data-info-modal="prices">الأسعار</button>
+          <button class="quick-btn" type="button" data-info-modal="rules">الضوابط</button>
+        </div>
       </div>
     </section>
 
-    <section class="card">
-      <h2 class="section-title">التقويم والتوفر</h2>
-
-      <div class="legend">
-        <span><i class="dot green"></i> متاح</span>
-        <span><i class="dot red"></i> بانتظار التأكيد / محجوز</span>
+    <section class="card calendar-card">
+      <div class="section-head">
+        <h2>التقويم والتوفر</h2>
+        <span>تظهر التواريخ السابقة بدون بيانات حجز.</span>
       </div>
 
-      <div class="legend" style="margin-bottom:10px">
-        <span><strong>A</strong> = استراحة النخيل</span>
-        <span><strong>B</strong> = استراحة الوادي</span>
-        <span><strong>C</strong> = استراحة الريف</span>
+      <div class="legend">
+        <span class="legend-item"><i class="legend-dot success"></i> متاح</span>
+        <span class="legend-item"><i class="legend-dot danger"></i> بانتظار التأكيد / محجوز</span>
+        <span class="legend-item"><strong>A</strong> النخيل</span>
+        <span class="legend-item"><strong>B</strong> الوادي</span>
+        <span class="legend-item"><strong>C</strong> الريف</span>
       </div>
 
       <div class="calendar-wrapper">
-        <div class="loading-screen" id="loadingScreen">
+        <div class="loading-overlay" id="loadingScreen">
           <div class="loading-box">
             <div class="loading-logo">
               <img src="logo.png" alt="شعار استراحاتنا الثلاث" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>🏡</span>'">
@@ -694,23 +709,19 @@
         </div>
 
         <div id="calendar"></div>
-        <div id="calendarFallback" style="display:none; margin-top:12px; padding:12px; border-radius:12px; background:rgba(239,68,68,0.08); color:#991b1b; border:1px solid rgba(239,68,68,0.14); font-size:14px;">
-          تعذر تحميل التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.
-        </div>
+        <div id="calendarFallback" class="fallback">تعذر تحميل التقويم. تأكد من رابط الخدمة وبيانات الجدول.</div>
       </div>
     </section>
   </div>
 
-  <div class="booking-modal" id="bookingModal">
+  <div class="modal" id="bookingModal">
     <div class="modal-card">
-      <div class="modal-header">
+      <div class="modal-head">
         <h3>إتمام الحجز</h3>
         <button class="close-btn" id="closeModal" type="button">×</button>
       </div>
 
-      <p class="modal-subtitle">
-        اختر الاستراحة المناسبة في التاريخ المحدد، ثم أدخل بيانات الحجز لإرسال الطلب.
-      </p>
+      <p class="modal-note">أدخل البيانات لإرسال الطلب. سيتم تسجيل الحالة بانتظار التأكيد إلى أن تعتمدها الإدارة.</p>
 
       <div class="form-grid">
         <div>
@@ -787,7 +798,7 @@
       </div>
 
       <div class="btn-row">
-        <button class="btn btn-primary" id="bookBtn" type="button">تأكيد الحجز</button>
+        <button class="btn btn-primary" id="bookBtn" type="button">إرسال الطلب</button>
         <button class="btn btn-secondary" id="cancelBtn" type="button">إلغاء</button>
       </div>
 
@@ -795,19 +806,19 @@
     </div>
   </div>
 
-  <div class="info-modal" id="infoModal">
-    <div class="info-card">
-      <div class="info-header">
+  <div class="modal" id="infoModal">
+    <div class="modal-card">
+      <div class="modal-head">
         <h3 id="infoModalTitle">تفاصيل</h3>
         <button class="close-btn" id="closeInfoModal" type="button">×</button>
       </div>
-      <p class="info-subtitle" id="infoModalSubtitle">معلومات إضافية</p>
+      <p class="modal-note" id="infoModalSubtitle">معلومات إضافية</p>
       <div id="infoModalContent"></div>
     </div>
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycby3DwMaIeymwxma_3N00VWCREjg0mt-CBgdXJxdPa-hlj5q7zsYsdQmffPpbNvQecYqfg/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbx_gT5_3PQQer8JlfhSJQk7R3B2KMfEt2JUD3aZcMjBl5BGQvcb02BXpcqvmn-X1sZrQw/exec';
 
     const ALL_RESORTS = ['استراحة النخيل', 'استراحة الوادي', 'استراحة الريف'];
     const RESORT_MAP = {
@@ -819,7 +830,7 @@
     const INFO_CONTENT = {
       'resort-a': {
         title: 'استراحة A - استراحة النخيل',
-        subtitle: 'استبدل الصور التالية بصورك الحقيقية.',
+        subtitle: 'يمكنك استبدال الصور التالية بصورك الحقيقية.',
         content: `
           <div class="resort-gallery">
             <img src="resort-a-1.jpg" alt="استراحة النخيل 1">
@@ -830,7 +841,7 @@
       },
       'resort-b': {
         title: 'استراحة B - استراحة الوادي',
-        subtitle: 'استبدل الصور التالية بصورك الحقيقية.',
+        subtitle: 'يمكنك استبدال الصور التالية بصورك الحقيقية.',
         content: `
           <div class="resort-gallery">
             <img src="resort-b-1.jpg" alt="استراحة الوادي 1">
@@ -841,7 +852,7 @@
       },
       'resort-c': {
         title: 'استراحة C - استراحة الريف',
-        subtitle: 'استبدل الصور التالية بصورك الحقيقية.',
+        subtitle: 'يمكنك استبدال الصور التالية بصورك الحقيقية.',
         content: `
           <div class="resort-gallery">
             <img src="resort-c-1.jpg" alt="استراحة الريف 1">
@@ -939,7 +950,6 @@
       } catch (err) {
         console.error('Load error:', err);
         showCalendarFallback();
-
         const fallback = document.getElementById('calendarFallback');
         if (fallback && err?.message) {
           fallback.textContent = `تعذر تحميل التقويم: ${err.message}`;
@@ -991,9 +1001,7 @@
           center: 'title',
           left: ''
         },
-        buttonText: {
-          today: 'اليوم'
-        },
+        buttonText: { today: 'اليوم' },
         events,
         dateClick(info) {
           if (info.dateStr < todayStr) {
@@ -1018,14 +1026,9 @@
 
     function normalizeDate(value) {
       if (!value) return '';
-
-      if (typeof value === 'string') {
-        return value.trim().slice(0, 10);
-      }
-
+      if (typeof value === 'string') return value.trim().slice(0, 10);
       const date = new Date(value);
       if (isNaN(date.getTime())) return '';
-
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
@@ -1042,7 +1045,6 @@
 
     function openBookingModal(dateStr, selectedResort = '') {
       const todayStr = getTodayLocalString();
-
       if (dateStr < todayStr) {
         showStatus('لا يمكن الحجز في تاريخ سابق.', 'error');
         return;
@@ -1140,14 +1142,11 @@
 
         const res = await fetch(API_URL, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'text/plain;charset=utf-8'
-          },
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(payload)
         });
 
         const rawText = await res.text();
-
         let json;
         try {
           json = JSON.parse(rawText);
@@ -1160,7 +1159,7 @@
           return;
         }
 
-        showStatus('تم إرسال طلب الحجز بنجاح، وتم تسجيل الحالة: بانتظار التأكيد.', 'success');
+        showStatus('تم إرسال الطلب بنجاح، وتم تسجيل الحالة: بانتظار التأكيد.', 'success');
         await loadBookings();
 
         setTimeout(() => {
@@ -1168,10 +1167,10 @@
         }, 900);
       } catch (err) {
         console.error('Submit error:', err);
-        showStatus('حدث خطأ أثناء إرسال الحجز.', 'error');
+        showStatus('حدث خطأ أثناء إرسال الطلب.', 'error');
       } finally {
         bookBtn.disabled = false;
-        bookBtn.textContent = 'تأكيد الحجز';
+        bookBtn.textContent = 'إرسال الطلب';
       }
     }
 
@@ -1205,7 +1204,6 @@
     function openInfoModal(key) {
       const item = INFO_CONTENT[key];
       if (!item) return;
-
       infoModalTitle.textContent = item.title;
       infoModalSubtitle.textContent = item.subtitle;
       infoModalContent.innerHTML = item.content;
@@ -1217,9 +1215,7 @@
     }
 
     document.querySelectorAll('[data-info-modal]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        openInfoModal(btn.getAttribute('data-info-modal'));
-      });
+      btn.addEventListener('click', () => openInfoModal(btn.getAttribute('data-info-modal')));
     });
 
     closeInfoModal.addEventListener('click', closeInfoModalFn);
