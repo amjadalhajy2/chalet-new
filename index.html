@@ -1078,75 +1078,72 @@
       }
     }
 
-    function renderCalendar() {
-      const todayStr = getTodayLocalString();
+function renderCalendar() {
+  const todayStr = getTodayLocalString();
 
-      const events = bookingData
-        .filter(item => normalizeDate(item['التاريخ']) >= todayStr)
-        .map(item => {
-          const status = String(item['الحالة'] || '').trim();
-          const isBlocked = status === 'محجوز' || status === 'بانتظار التأكيد';
-          const resortName = String(item['الاستراحة'] || '').trim();
-          const shortName = RESORT_MAP[resortName] || resortName;
-          const dateValue = normalizeDate(item['التاريخ']);
+  const events = bookingData
+    .filter(item => normalizeDate(item['التاريخ']) >= todayStr)
+    .map(item => {
+      const status = String(item['الحالة'] || '').trim();
+      const isBlocked = status === 'محجوز' || status === 'بانتظار التأكيد';
+      const resortName = String(item['الاستراحة'] || '').trim();
+      const shortName = RESORT_MAP[resortName] || resortName;
+      const dateValue = normalizeDate(item['التاريخ']);
 
-          return {
-            title: shortName,
-            start: dateValue,
-            allDay: true,
-            backgroundColor: isBlocked ? '#ef4444' : '#16a34a',
-            borderColor: isBlocked ? '#ef4444' : '#16a34a',
-            textColor: '#ffffff',
-            extendedProps: {
-              resort: resortName,
-              status: status
-            }
-          };
-        })
-        .filter(event => event.start);
-
-      if (calendar) {
-        calendar.destroy();
-      }
-
-      calendar = new FullCalendar.Calendar(calendarEl, {
-        locale: 'ar',
-        direction: 'rtl',
-        initialView: 'dayGridMonth',
-        height: 'auto',
-        initialDate: todayStr,
-        validRange: {
-          start: todayStr
-        },
-        headerToolbar: {
-          right: 'prev,next today',
-          center: 'title',
-          left: ''
-        },
-        buttonText: {
-          today: 'اليوم'
-        },
-        events: events,
-        dateClick(info) {
-          if (info.dateStr < todayStr) {
-            showStatus('لا يمكن الحجز في تاريخ سابق.', 'error');
-            return;
-          }
-          openBookingModal(info.dateStr);
-        },
-        eventClick(info) {
-          const selectedDate = info.event.startStr.slice(0, 10);
-          if (selectedDate < todayStr) {
-            showStatus('لا يمكن الحجز في تاريخ سابق.', 'error');
-            return;
-          }
-          openBookingModal(selectedDate, info.event.extendedProps.resort);
+      return {
+        title: shortName,
+        start: dateValue,
+        allDay: true,
+        backgroundColor: isBlocked ? '#ef4444' : '#16a34a',
+        borderColor: isBlocked ? '#ef4444' : '#16a34a',
+        textColor: '#ffffff',
+        extendedProps: {
+          resort: resortName,
+          status: status
         }
-      });
+      };
+    })
+    .filter(event => event.start);
 
-      calendar.render();
-      hideCalendarFallback();
+  if (calendar) {
+    calendar.destroy();
+  }
+
+  calendar = new FullCalendar.Calendar(calendarEl, {
+    locale: 'ar',
+    direction: 'rtl',
+    initialView: 'dayGridMonth',
+    height: 'auto',
+    initialDate: todayStr,
+    headerToolbar: {
+      right: 'prev,next today',
+      center: 'title',
+      left: ''
+    },
+    buttonText: {
+      today: 'اليوم'
+    },
+    events: events,
+    dateClick(info) {
+      if (info.dateStr < todayStr) {
+        showStatus('لا يمكن الحجز في تاريخ سابق.', 'error');
+        return;
+      }
+      openBookingModal(info.dateStr);
+    },
+    eventClick(info) {
+      const selectedDate = info.event.startStr.slice(0, 10);
+      if (selectedDate < todayStr) {
+        showStatus('لا يمكن الحجز في تاريخ سابق.', 'error');
+        return;
+      }
+      openBookingModal(selectedDate, info.event.extendedProps.resort);
     }
+  });
+
+  calendar.render();
+  hideCalendarFallback();
+}
 
     function normalizeDate(value) {
       if (!value) return '';
