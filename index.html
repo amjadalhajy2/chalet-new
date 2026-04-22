@@ -1088,7 +1088,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxcy4OU2cKQY3M_dTfUQYL-mFeqcYq0QZxomF04MdnlOAAR9D-pYqLVFUNgibYXPAN52Q/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwpMusy3trSRtOhpMBp0kC_YLjLWufAGZuYC_WemyAKnGzMKrbUgMdy09fQ3S5mbDhiPA/exec';
     const ALL_RESORTS = ['استراحة النخيل', 'استراحة الوادي', 'استراحة الريف'];
     const RESORT_MAP = {
       'استراحة النخيل': 'A',
@@ -1114,31 +1114,52 @@
     let calendar;
     let bookingData = [];
 
-    async function loadBookings() {
-      try {
-        showLoading();
-        hideCalendarFallback();
+async function loadBookings() {
+  try {
+    showLoading();
+    hideCalendarFallback();
 
-        if (!window.FullCalendar || !calendarEl) {
-          throw new Error('FullCalendar غير متوفر أو عنصر التقويم غير موجود');
-        }
-
-        const res = await fetch(API_URL, { cache: 'no-store' });
-        const json = await res.json();
-
-        if (!json.success) {
-          throw new Error('تعذر تحميل البيانات');
-        }
-
-        bookingData = Array.isArray(json.data) ? json.data : [];
-        renderCalendar();
-      } catch (err) {
-        console.error('Load error:', err);
-        showCalendarFallback();
-      } finally {
-        hideLoading();
-      }
+    if (!window.FullCalendar || !calendarEl) {
+      throw new Error('مكتبة التقويم غير متوفرة أو عنصر التقويم غير موجود');
     }
+
+    const res = await fetch(API_URL, {
+      method: 'GET',
+      cache: 'no-store'
+    });
+
+    const rawText = await res.text();
+
+    if (!rawText) {
+      throw new Error('لم يتم استلام رد من خدمة البيانات');
+    }
+
+    let json;
+    try {
+      json = JSON.parse(rawText);
+    } catch (parseError) {
+      console.error('Raw API response:', rawText);
+      throw new Error('الرد من Apps Script ليس JSON صالحًا');
+    }
+
+    if (!json.success) {
+      throw new Error(json.message || 'تعذر تحميل البيانات');
+    }
+
+    bookingData = Array.isArray(json.data) ? json.data : [];
+    renderCalendar();
+  } catch (err) {
+    console.error('Load error:', err);
+    showCalendarFallback();
+
+    const fallback = document.getElementById('calendarFallback');
+    if (fallback && err?.message) {
+      fallback.textContent = `تعذر تحميل التقويم: ${err.message}`;
+    }
+  } finally {
+    hideLoading();
+  }
+}
 
     function renderCalendar() {
       const todayStr = getTodayLocalString();
