@@ -780,6 +780,7 @@
             </div>
           </div>
           <div id="calendar"></div>
+          <div id="calendarFallback" style="display:none; margin-top:12px; padding:12px; border-radius:12px; background:rgba(239,68,68,0.08); color:#991b1b; border:1px solid rgba(239,68,68,0.14); font-size:14px;">تعذر تحميل التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.</div>
         </div>
       </section>
     </div>
@@ -1116,7 +1117,13 @@
     async function loadBookings() {
       try {
         showLoading();
-        const res = await fetch(API_URL);
+        hideCalendarFallback();
+
+        if (!window.FullCalendar || !calendarEl) {
+          throw new Error('FullCalendar غير متوفر أو عنصر التقويم غير موجود');
+        }
+
+        const res = await fetch(API_URL, { cache: 'no-store' });
         const json = await res.json();
 
         if (!json.success) {
@@ -1127,6 +1134,7 @@
         renderCalendar();
       } catch (err) {
         console.error('Load error:', err);
+        showCalendarFallback();
       } finally {
         hideLoading();
       }
@@ -1138,25 +1146,26 @@
       const events = bookingData
         .filter(item => normalizeDate(item['التاريخ']) >= todayStr)
         .map(item => {
-        const status = String(item['الحالة'] || '').trim();
-        const isBooked = status === 'محجوز';
-        const resortName = String(item['الاستراحة'] || '').trim();
-        const shortName = RESORT_MAP[resortName] || resortName;
-        const dateValue = normalizeDate(item['التاريخ']);
+          const status = String(item['الحالة'] || '').trim();
+          const isBlocked = status === 'محجوز' || status === 'بانتظار التأكيد';
+          const resortName = String(item['الاستراحة'] || '').trim();
+          const shortName = RESORT_MAP[resortName] || resortName;
+          const dateValue = normalizeDate(item['التاريخ']);
 
-        return {
-          title: shortName,
-          start: dateValue,
-          allDay: true,
-          backgroundColor: isBooked ? '#ef4444' : '#16a34a',
-          borderColor: isBooked ? '#ef4444' : '#16a34a',
-          textColor: '#ffffff',
-          extendedProps: {
-            resort: resortName,
-            status: status
-          }
-        };
-      }).filter(event => event.start);
+          return {
+            title: shortName,
+            start: dateValue,
+            allDay: true,
+            backgroundColor: isBlocked ? '#ef4444' : '#16a34a',
+            borderColor: isBlocked ? '#ef4444' : '#16a34a',
+            textColor: '#ffffff',
+            extendedProps: {
+              resort: resortName,
+              status: status
+            }
+          };
+        })
+        .filter(event => event.start);
 
       if (calendar) {
         calendar.destroy();
@@ -1167,6 +1176,10 @@
         direction: 'rtl',
         initialView: 'dayGridMonth',
         height: 'auto',
+        initialDate: todayStr,
+        validRange: {
+          start: todayStr
+        },
         headerToolbar: {
           right: 'prev,next today',
           center: 'title',
@@ -1177,14 +1190,24 @@
         },
         events: events,
         dateClick(info) {
+          if (info.dateStr < todayStr) {
+            showStatus('لا يمكن الحجز في تاريخ سابق.', 'error');
+            return;
+          }
           openBookingModal(info.dateStr);
         },
         eventClick(info) {
-          openBookingModal(info.event.startStr.slice(0, 10), info.event.extendedProps.resort);
+          const selectedDate = info.event.startStr.slice(0, 10);
+          if (selectedDate < todayStr) {
+            showStatus('لا يمكن الحجز في تاريخ سابق.', 'error');
+            return;
+          }
+          openBookingModal(selectedDate, info.event.extendedProps.resort);
         }
       });
 
       calendar.render();
+      hideCalendarFallback();
     }
 
     function normalizeDate(value) {
@@ -1254,6 +1277,8 @@
 
     async function submitBooking() {
       const rawPhone = phoneInput.value.trim();
+      const todayStr = getTodayLocalString();
+
       const payload = {
         date: dateInput.value,
         resort: resortInput.value,
@@ -1265,6 +1290,11 @@
 
       if (!payload.date || !payload.resort || !payload.bookingType || !payload.name || !rawPhone) {
         showStatus('يرجى تعبئة جميع الحقول المطلوبة.', 'error');
+        return;
+      }
+
+      if (payload.date < todayStr) {
+        showStatus('لا يمكن الحجز في تاريخ سابق.', 'error');
         return;
       }
 
@@ -1332,6 +1362,16 @@
 
     function showLoading() {
       loadingScreen.classList.remove('hidden');
+    }
+
+    function showCalendarFallback() {
+      const fallback = document.getElementById('calendarFallback');
+      if (fallback) fallback.style.display = 'block';
+    }
+
+    function hideCalendarFallback() {
+      const fallback = document.getElementById('calendarFallback');
+      if (fallback) fallback.style.display = 'none';
     }
 
     function hideLoading() {
