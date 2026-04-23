@@ -9,7 +9,7 @@
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/locales-all.global.min.js"></script>
 
-<style>
+  <style>
   :root {
     --bg-top: #eef5ff;
     --bg-mid: #f5f7fb;
@@ -35,11 +35,10 @@
     --radius-xl: 28px;
     --radius-lg: 20px;
     --radius-md: 16px;
+    --whatsapp: #25d366;
   }
 
-  * {
-    box-sizing: border-box;
-  }
+  * { box-sizing: border-box; }
 
   html, body {
     margin: 0;
@@ -81,69 +80,26 @@
     z-index: 1;
     width: min(1280px, 100%);
     margin: 0 auto;
-    padding: 24px 14px 34px;
+    padding: 20px 14px 34px;
   }
 
-  .hero {
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 18px;
-    padding: 22px;
-    border-radius: var(--radius-2xl);
-    border: 1px solid var(--line);
-    background:
-      linear-gradient(180deg, rgba(255,255,255,0.74), rgba(255,255,255,0.46)),
-      linear-gradient(135deg, rgba(255,255,255,0.28), rgba(110,168,255,0.08));
-    box-shadow: var(--shadow-xl);
-    backdrop-filter: blur(24px) saturate(1.25);
-    -webkit-backdrop-filter: blur(24px) saturate(1.25);
-  }
-
-  .hero::before,
-  .hero::after {
-    content: "";
-    position: absolute;
-    border-radius: 999px;
-    pointer-events: none;
-    filter: blur(4px);
-  }
-
-  .hero::before {
-    width: 280px;
-    height: 280px;
-    top: -120px;
-    left: -90px;
-    background: radial-gradient(circle, rgba(110,168,255,0.22), transparent 68%);
-  }
-
-  .hero::after {
-    width: 300px;
-    height: 300px;
-    bottom: -150px;
-    right: -80px;
-    background: radial-gradient(circle, rgba(139,125,255,0.18), transparent 70%);
-  }
-
-  .hero-top,
-  .brand-wrap {
-    position: relative;
-    z-index: 1;
+  .brand-header {
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 18px;
+    gap: 14px;
+    padding: 8px 2px 18px;
   }
 
   .logo-card,
   .logo-box {
-    width: 74px;
-    height: 74px;
+    width: 72px;
+    height: 72px;
     flex-shrink: 0;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 24px;
+    border-radius: 22px;
     border: 1px solid var(--line-strong);
     background: linear-gradient(180deg, rgba(255,255,255,0.84), rgba(255,255,255,0.54));
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), var(--shadow-md);
@@ -164,16 +120,16 @@
     font-size: 30px;
   }
 
-  .hero-title h1,
+  .brand-copy h1,
   .brand-text h1 {
-    margin: 0 0 6px;
-    font-size: clamp(28px, 4vw, 44px);
-    line-height: 1.05;
+    margin: 0 0 4px;
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.02;
     letter-spacing: -0.03em;
     color: var(--text);
   }
 
-  .hero-title p,
+  .brand-copy p,
   .brand-text p {
     margin: 0;
     color: var(--muted);
@@ -181,17 +137,30 @@
     line-height: 1.7;
   }
 
-  .hero-grid {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    gap: 16px;
+  .hero {
+    display: none;
   }
 
-  .hero-main {
+  .top-grid {
     display: grid;
-    gap: 12px;
-    align-content: start;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.42));
+    border: 1px solid var(--line);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-xl);
+    backdrop-filter: blur(24px) saturate(1.2);
+    -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  }
+
+  .hero-main-card,
+  .gallery-card,
+  .quick-card,
+  .calendar-card {
+    padding: 18px;
   }
 
   .hero-chip,
@@ -212,15 +181,40 @@
     -webkit-backdrop-filter: blur(18px);
   }
 
-  .hero-main p,
   .main-copy {
-    margin: 0;
+    margin: 12px 0 0;
     max-width: 900px;
     color: var(--muted);
     font-size: 14px;
     line-height: 1.9;
   }
 
+  .section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+
+  .section-head h2,
+  .section-title {
+    margin: 0;
+    color: var(--text);
+    font-size: 22px;
+    letter-spacing: -0.02em;
+  }
+
+  .section-head p,
+  .section-head span {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .gallery-actions,
   .quick-actions {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -258,41 +252,6 @@
     pointer-events: none;
   }
 
-  .card {
-    background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.42));
-    border: 1px solid var(--line);
-    border-radius: var(--radius-2xl);
-    box-shadow: var(--shadow-xl);
-    backdrop-filter: blur(24px) saturate(1.2);
-    -webkit-backdrop-filter: blur(24px) saturate(1.2);
-  }
-
-  .calendar-card {
-    padding: 18px;
-  }
-
-  .section-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-bottom: 14px;
-  }
-
-  .section-head h2,
-  .section-title {
-    margin: 0;
-    color: var(--text);
-    font-size: 24px;
-    letter-spacing: -0.02em;
-  }
-
-  .section-head span {
-    color: var(--muted);
-    font-size: 13px;
-  }
-
   .legend {
     display: flex;
     flex-wrap: wrap;
@@ -326,14 +285,9 @@
   }
 
   .legend-dot.success,
-  .dot.green {
-    background: var(--success);
-  }
-
+  .dot.green { background: var(--success); }
   .legend-dot.danger,
-  .dot.red {
-    background: var(--danger);
-  }
+  .dot.red { background: var(--danger); }
 
   .calendar-wrapper {
     position: relative;
@@ -434,9 +388,7 @@
   }
 
   .fc-theme-standard td,
-  .fc-theme-standard th {
-    border-color: rgba(255,255,255,0.26);
-  }
+  .fc-theme-standard th { border-color: rgba(255,255,255,0.26); }
 
   .fc .fc-toolbar {
     gap: 8px;
@@ -471,14 +423,8 @@
     border-color: rgba(255,255,255,0.62);
   }
 
-  .fc .fc-daygrid-day-frame {
-    min-height: 92px;
-    padding: 2px;
-  }
-
-  .fc-daygrid-day-top {
-    padding: 2px 4px;
-  }
+  .fc .fc-daygrid-day-frame { min-height: 92px; padding: 2px; }
+  .fc-daygrid-day-top { padding: 2px 4px; }
 
   .fc-daygrid-event {
     border: 0;
@@ -500,12 +446,11 @@
     font-size: 13px;
   }
 
-  .fc .fc-day-today {
-    background: rgba(235,243,255,0.88) !important;
-  }
+  .fc .fc-day-today { background: rgba(235,243,255,0.88) !important; }
 
   .modal,
-  .booking-modal {
+  .booking-modal,
+  .info-modal {
     position: fixed;
     inset: 0;
     z-index: 999;
@@ -519,11 +464,11 @@
   }
 
   .modal.active,
-  .booking-modal.active {
-    display: flex;
-  }
+  .booking-modal.active,
+  .info-modal.active { display: flex; }
 
-  .modal-card {
+  .modal-card,
+  .info-card {
     width: 100%;
     max-width: 720px;
     max-height: 90vh;
@@ -538,7 +483,8 @@
   }
 
   .modal-head,
-  .modal-header {
+  .modal-header,
+  .info-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -547,7 +493,8 @@
   }
 
   .modal-head h3,
-  .modal-header h3 {
+  .modal-header h3,
+  .info-header h3 {
     margin: 0;
     color: var(--text);
     font-size: 21px;
@@ -570,7 +517,8 @@
   }
 
   .modal-note,
-  .modal-subtitle {
+  .modal-subtitle,
+  .info-subtitle {
     margin: 0 0 14px;
     color: var(--muted);
     font-size: 13px;
@@ -584,9 +532,7 @@
     width: 100%;
   }
 
-  .full-width {
-    width: 100%;
-  }
+  .full-width { width: 100%; }
 
   .double-field {
     display: grid;
@@ -623,14 +569,9 @@
   }
 
   input::placeholder,
-  textarea::placeholder {
-    color: #7a879c;
-  }
+  textarea::placeholder { color: #7a879c; }
 
-  textarea {
-    min-height: 96px;
-    resize: vertical;
-  }
+  textarea { min-height: 96px; resize: vertical; }
 
   .btn-row {
     display: grid;
@@ -708,10 +649,7 @@
     box-shadow: 0 12px 22px rgba(25,43,77,0.08);
   }
 
-  .price-table {
-    display: grid;
-    gap: 10px;
-  }
+  .price-table { display: grid; gap: 10px; }
 
   .price-item,
   .rules-box {
@@ -749,40 +687,58 @@
     font-size: 14px;
   }
 
+  .floating-whatsapp {
+    position: fixed;
+    right: 16px;
+    bottom: 18px;
+    z-index: 1200;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #2be07f, var(--whatsapp));
+    color: #ffffff;
+    box-shadow: 0 18px 34px rgba(37, 211, 102, 0.32);
+    text-decoration: none;
+    font-size: 28px;
+    border: 2px solid rgba(255,255,255,0.78);
+  }
+
+  .floating-whatsapp:hover {
+    transform: translateY(-1px);
+  }
+
   @media (min-width: 768px) {
     .shell,
-    .container {
-      padding: 28px 18px 36px;
+    .container { padding: 24px 18px 36px; }
+
+    .top-grid {
+      grid-template-columns: 1.08fr .92fr;
+      align-items: stretch;
     }
 
-    .hero {
-      padding: 26px;
-    }
-
-    .hero-grid {
-      grid-template-columns: 1.2fr .92fr;
-      align-items: end;
-    }
-
-    .quick-actions {
+    .gallery-actions {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .calendar-card {
-      padding: 20px;
+    .quick-actions {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .fc .fc-daygrid-day-frame {
-      min-height: 106px;
-    }
+    .calendar-card { padding: 20px; }
+    .fc .fc-daygrid-day-frame { min-height: 106px; }
 
     .modal,
-    .booking-modal {
+    .booking-modal,
+    .info-modal {
       align-items: center;
       padding: 18px;
     }
 
-    .modal-card {
+    .modal-card,
+    .info-card {
       width: min(720px, 100%);
       max-height: 92vh;
       border-radius: 30px;
@@ -794,34 +750,16 @@
       gap: 12px;
     }
 
-    .full-width {
-      grid-column: 1 / -1;
-    }
-
-    .double-field {
-      grid-template-columns: 120px minmax(0, 1fr);
-      gap: 10px;
-    }
-
-    .btn-row {
-      grid-template-columns: 1.8fr 1fr;
-    }
-
-    .resort-gallery {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+    .full-width { grid-column: 1 / -1; }
+    .double-field { grid-template-columns: 120px minmax(0, 1fr); gap: 10px; }
+    .btn-row { grid-template-columns: 1.8fr 1fr; }
+    .resort-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .floating-whatsapp { right: 22px; bottom: 22px; }
   }
 
   @media (max-width: 480px) {
     .shell,
-    .container {
-      padding: 16px 10px 24px;
-    }
-
-    .hero {
-      padding: 16px;
-      border-radius: 24px;
-    }
+    .container { padding: 16px 10px 24px; }
 
     .logo-card,
     .logo-box {
@@ -830,25 +768,17 @@
       border-radius: 18px;
     }
 
-    .hero-title h1,
-    .brand-text h1 {
-      font-size: 24px;
-    }
+    .brand-copy h1,
+    .brand-text h1 { font-size: 24px; }
 
-    .hero-title p,
+    .brand-copy p,
     .brand-text p,
-    .main-copy {
-      font-size: 12px;
-    }
+    .main-copy { font-size: 12px; }
 
-    .quick-btn {
-      font-size: 13px;
-    }
+    .quick-btn { font-size: 13px; }
 
     .section-head h2,
-    .section-title {
-      font-size: 20px;
-    }
+    .section-title { font-size: 20px; }
 
     .fc .fc-toolbar {
       flex-direction: column;
@@ -862,42 +792,25 @@
       gap: 8px;
     }
 
-    .fc .fc-daygrid-day-frame {
-      min-height: 78px;
-    }
+    .fc .fc-daygrid-day-frame { min-height: 78px; }
+    .fc-daygrid-event { font-size: 10px; padding: 3px 5px; }
+    .calendar-wrapper { min-height: 290px; }
+    .loading-logo { width: 70px; height: 70px; }
+    .loading-text { font-size: 16px; }
 
-    .fc-daygrid-event {
-      font-size: 10px;
-      padding: 3px 5px;
-    }
-
-    .calendar-wrapper {
-      min-height: 290px;
-    }
-
-    .loading-logo {
-      width: 70px;
-      height: 70px;
-    }
-
-    .loading-text {
-      font-size: 16px;
-    }
-
-    .modal-card {
+    .modal-card,
+    .info-card {
       max-height: 88vh;
       padding: 14px 12px calc(16px + env(safe-area-inset-bottom));
     }
 
     .modal-head h3,
-    .modal-header h3 {
-      font-size: 18px;
-    }
+    .modal-header h3,
+    .info-header h3 { font-size: 18px; }
 
     .modal-note,
-    .modal-subtitle {
-      font-size: 12px;
-    }
+    .modal-subtitle,
+    .info-subtitle { font-size: 12px; }
 
     .double-field {
       grid-template-columns: minmax(88px, 96px) minmax(0, 1fr);
@@ -912,53 +825,51 @@
       padding: 11px 12px;
     }
 
-    textarea {
-      min-height: 84px;
-    }
-
-    .btn {
-      min-height: 48px;
-      font-size: 14px;
-    }
-
-    .resort-gallery img {
-      height: 180px;
-    }
+    textarea { min-height: 84px; }
+    .btn { min-height: 48px; font-size: 14px; }
+    .resort-gallery img { height: 180px; }
+    .floating-whatsapp { right: 12px; bottom: 14px; width: 54px; height: 54px; font-size: 26px; }
   }
 </style>
 </head>
 <body>
   <div class="shell">
-    <section class="hero">
-      <div class="hero-top">
-        <div class="logo-card">
-          <img src="logo.png" alt="شعار استراحاتنا الثلاث" onerror="this.style.display='none'; this.parentNode.innerHTML='<span class=\'logo-fallback\'>🏡</span>'">
-        </div>
-        <div class="hero-title">
-          <h1>استراحاتنا الثلاث</h1>
-          <p>حجز سريع وواضح مع عرض التوفر والخيارات الأساسية.</p>
-        </div>
+    <section class="brand-header">
+      <div class="logo-card">
+        <img src="logo.png" alt="شعار استراحاتنا الثلاث" onerror="this.style.display='none'; this.parentNode.innerHTML='<span class=\'logo-fallback\'>🏡</span>'">
       </div>
-
-      <div class="hero-grid">
-        <div class="hero-main">
-          <div class="hero-chip">التوفر مباشر داخل التقويم</div>
-          <p>
-            A = استراحة النخيل، B = استراحة الوادي، C = استراحة الريف. الأخضر متاح، والأحمر بانتظار التأكيد أو محجوز.
-          </p>
-        </div>
-
-        <div class="quick-actions">
-          <button class="quick-btn" type="button" data-info-modal="resort-a">استراحة A</button>
-          <button class="quick-btn" type="button" data-info-modal="resort-b">استراحة B</button>
-          <button class="quick-btn" type="button" data-info-modal="resort-c">استراحة C</button>
-          <button class="quick-btn" type="button" data-info-modal="prices">الأسعار</button>
-          <button class="quick-btn" type="button" data-info-modal="rules">الضوابط</button>
-        </div>
+      <div class="brand-copy">
+        <h1>استراحاتنا الثلاث</h1>
+        <p>التوفر والحجز في مكان واحد.</p>
       </div>
     </section>
 
-    <section class="card calendar-card">
+    <section class="top-grid">
+      <div class="card hero-main-card">
+        <div class="hero-chip">التوفر مباشر داخل التقويم</div>
+        <p class="main-copy">
+          A = استراحة النخيل، B = استراحة الوادي، C = استراحة الريف. الأخضر متاح، والأحمر بانتظار التأكيد أو محجوز.
+        </p>
+      </div>
+
+      <div class="card gallery-card">
+        <div class="section-head">
+          <h2>صور الاستراحات</h2>
+          <p>هذه الأزرار تعرض صور كل استراحة.</p>
+        </div>
+        <div class="gallery-actions">
+          <button class="quick-btn" type="button" data-info-modal="resort-a">صور استراحة A</button>
+          <button class="quick-btn" type="button" data-info-modal="resort-b">صور استراحة B</button>
+          <button class="quick-btn" type="button" data-info-modal="resort-c">صور استراحة C</button>
+        </div>
+      </div>
+
+      <div class="card quick-card">
+        <div class="section-head">
+          <h2>معلومات إضافية</h2>
+          <p>الأسعار والضوابط.</p>
+        </div>
+        <section class="card calendar-card">
       <div class="section-head">
         <h2>التقويم والتوفر</h2>
         <span>تظهر التواريخ السابقة بدون بيانات حجز.</span>
@@ -1508,5 +1419,10 @@
 
     loadBookings();
   </script>
+  </div>
+
+  <a class="floating-whatsapp" id="floatingWhatsapp" href="https://wa.me/96800000000" target="_blank" rel="noopener noreferrer" aria-label="واتساب">
+    <span>✆</span>
+  </a>
 </body>
 </html>
