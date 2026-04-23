@@ -1037,7 +1037,7 @@
               </select>
             </div>
             <div>
-              <input type="tel" id="phone" placeholder="أدخل رقم الهاتف" inputmode="tel" />
+              <input type="tel" id="phone" placeholder="أدخل رقم الهاتف" inputmode="numeric" autocomplete="tel" pattern="[0-9]*" dir="ltr" lang="en" />
             </div>
           </div>
         </div>
@@ -1354,7 +1354,8 @@
     }
 
     async function submitBooking() {
-      const rawPhone = phoneInput.value.trim();
+      const rawPhone = sanitizePhoneInput_(phoneInput.value.trim());
+      phoneInput.value = rawPhone;
       const todayStr = getTodayLocalString();
 
       const payload = {
@@ -1452,6 +1453,26 @@
       if (fallback) fallback.style.display = 'none';
     }
 
+    function normalizeToEnglishDigits_(value) {
+      const arabicIndic = '٠١٢٣٤٥٦٧٨٩';
+      const easternArabicIndic = '۰۱۲۳۴۵۶۷۸۹';
+
+      return String(value || '')
+        .split('')
+        .map(ch => {
+          const idx1 = arabicIndic.indexOf(ch);
+          if (idx1 > -1) return String(idx1);
+          const idx2 = easternArabicIndic.indexOf(ch);
+          if (idx2 > -1) return String(idx2);
+          return ch;
+        })
+        .join('');
+    }
+
+    function sanitizePhoneInput_(value) {
+      return normalizeToEnglishDigits_(value).replace(/[^0-9]/g, '');
+    }
+
     function openInfoModal(key) {
       const item = INFO_CONTENT[key];
       if (!item) return;
@@ -1479,13 +1500,22 @@
     bookingModal.addEventListener('click', (e) => {
       if (e.target === bookingModal) closeBookingModal();
     });
+    phoneInput.addEventListener('input', () => {
+      const start = phoneInput.selectionStart;
+      const sanitized = sanitizePhoneInput_(phoneInput.value);
+      phoneInput.value = sanitized;
+      try {
+        phoneInput.setSelectionRange(start, start);
+      } catch (e) {}
+    });
+
     bookBtn.addEventListener('click', submitBooking);
 
     loadBookings();
   </script>
   </div>
 
-  <a class="floating-whatsapp" id="floatingWhatsapp" href="https://wa.me/96894066056" target="_blank" rel="noopener noreferrer" aria-label="واتساب">
+  <a class="floating-whatsapp" id="floatingWhatsapp" href="https://wa.me/96800000000" target="_blank" rel="noopener noreferrer" aria-label="واتساب">
     <span>✆</span>
   </a>
 </body>
