@@ -147,6 +147,12 @@
     margin-bottom: 18px;
   }
 
+  .utility-grid {
+    display: grid;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
   .card {
     background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.42));
     border: 1px solid var(--line);
@@ -719,6 +725,10 @@
       align-items: stretch;
     }
 
+    .utility-grid {
+      grid-template-columns: 1fr;
+    }
+
     .gallery-actions {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
@@ -863,13 +873,22 @@
           <button class="quick-btn" type="button" data-info-modal="resort-c">صور استراحة C</button>
         </div>
       </div>
+    </section>
 
+    <section class="utility-grid">
       <div class="card quick-card">
         <div class="section-head">
           <h2>معلومات إضافية</h2>
           <p>الأسعار والضوابط.</p>
         </div>
-        <section class="card calendar-card">
+        <div class="quick-actions">
+          <button class="quick-btn" type="button" data-info-modal="prices">الأسعار</button>
+          <button class="quick-btn" type="button" data-info-modal="rules">الضوابط</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card calendar-card">
       <div class="section-head">
         <h2>التقويم والتوفر</h2>
         <span>تظهر التواريخ السابقة بدون بيانات حجز.</span>
@@ -1421,7 +1440,7 @@
   </script>
   </div>
 
-  <a class="floating-whatsapp" id="floatingWhatsapp" href="https://wa.me/96800000000" target="_blank" rel="noopener noreferrer" aria-label="واتساب">
+  <a class="floating-whatsapp" id="floatingWhatsapp" href="https://wa.me/96894066056" target="_blank" rel="noopener noreferrer" aria-label="واتساب">
     <span>✆</span>
   </a>
 </body>
