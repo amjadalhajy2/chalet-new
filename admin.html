@@ -302,7 +302,7 @@
       font-weight: 800;
       text-align: center;
       box-shadow: 0 10px 18px rgba(25,43,77,0.10);
-      cursor: default;
+      cursor: pointer;
     }
 
     .fc-daygrid-day-number,
@@ -890,7 +890,16 @@
           allDay: true,
           backgroundColor: getEventColor(status),
           borderColor: getEventColor(status),
-          textColor: '#ffffff'
+          textColor: '#ffffff',
+          extendedProps: {
+            status: status,
+            resort: resort,
+            date: date,
+            bookingType: String(item['نوع الحجز'] || '').trim() || '-',
+            name: String(item['الاسم'] || '').trim() || '-',
+            phone: String(item['الجوال'] || '').trim() || '-',
+            notes: String(item['ملاحظات'] || '').trim() || '-'
+          }
         };
       }).filter(function(item) { return item.start; });
 
@@ -911,7 +920,10 @@
         selectable: false,
         events: events,
         dateClick: function() {},
-        eventClick: function(info) { info.jsEvent.preventDefault(); }
+        eventClick: function(info) {
+          info.jsEvent.preventDefault();
+          openCalendarEvent(info.event.extendedProps || {});
+        }
       });
 
       calendar.render();
@@ -986,47 +998,7 @@
       }
 
       listWrap.innerHTML = items.map(function(item) {
-        const date = normalizeDate(item['التاريخ']);
-        const resort = String(item['الاستراحة'] || '').trim();
-        const status = String(item['الحالة'] || '').trim();
-        const bookingType = String(item['نوع الحجز'] || '').trim() || '-';
-        const name = String(item['الاسم'] || '').trim() || '-';
-        const phone = String(item['الجوال'] || '').trim() || '-';
-        const notes = String(item['ملاحظات'] || '').trim() || '-';
-        const waLink = getWhatsAppLink(item);
-        const badgeClass = currentView === 'pending' ? 'pending' : 'booked';
-
-        let actionsHtml = '';
-        if (currentView === 'pending') {
-          actionsHtml += '<button class="btn-confirm" type="button" data-confirm-date="' + date + '" data-confirm-resort="' + resort + '">تأكيد الحجز</button>';
-          actionsHtml += '<button class="btn-reject" type="button" data-reject-date="' + date + '" data-reject-resort="' + resort + '">رفض الحجز</button>';
-        } else {
-          actionsHtml += '<button class="btn-reject" type="button" data-cancel-date="' + date + '" data-cancel-resort="' + resort + '">إلغاء الحجز</button>';
-        }
-
-        if (waLink) {
-          actionsHtml += '<a class="wa-link" href="' + waLink + '" target="_blank" rel="noopener noreferrer">واتساب العميل</a>';
-        } else {
-          actionsHtml += '<div class="wa-link" style="opacity:.75;pointer-events:none;">لا يوجد واتساب</div>';
-        }
-
-        return '' +
-          '<article class="booking-card">' +
-            '<div class="booking-head">' +
-              '<div>' +
-                '<h3>' + resort + '</h3>' +
-                '<div class="booking-sub">التاريخ: ' + date + '</div>' +
-              '</div>' +
-              '<span class="badge ' + badgeClass + '">' + status + '</span>' +
-            '</div>' +
-            '<div class="booking-grid">' +
-              '<div class="meta-box"><div class="meta-label">نوع الحجز</div><div class="meta-value">' + bookingType + '</div></div>' +
-              '<div class="meta-box"><div class="meta-label">الاسم</div><div class="meta-value">' + name + '</div></div>' +
-              '<div class="meta-box"><div class="meta-label">الجوال</div><div class="meta-value">' + phone + '</div></div>' +
-              '<div class="meta-box"><div class="meta-label">الملاحظات</div><div class="meta-value">' + notes + '</div></div>' +
-            '</div>' +
-            '<div class="booking-actions">' + actionsHtml + '</div>' +
-          '</article>';
+        return renderRecordCard(item, currentView === 'pending' ? 'pending' : 'booked');
       }).join('');
     }
 
@@ -1041,20 +1013,86 @@
       clearStatus(statusMessage);
     }
 
-    function openAddModal() {
+    function openAddModal(prefill) {
       clearStatus(addStatusMessage);
-      adminDate.value = '';
-      adminResort.value = '';
-      adminBookingType.value = 'بدون مبيت';
-      adminName.value = '';
-      adminPhone.value = '';
-      adminNotes.value = '';
+      adminDate.value = (prefill && prefill.date) ? prefill.date : '';
+      adminResort.value = (prefill && prefill.resort) ? prefill.resort : '';
+      adminBookingType.value = (prefill && prefill.bookingType && prefill.bookingType !== '-') ? prefill.bookingType : 'بدون مبيت';
+      adminName.value = (prefill && prefill.name && prefill.name !== '-') ? prefill.name : '';
+      adminPhone.value = (prefill && prefill.phone && prefill.phone !== '-') ? sanitizePhone(prefill.phone) : '';
+      adminNotes.value = (prefill && prefill.notes && prefill.notes !== '-') ? prefill.notes : '';
       addModal.classList.add('active');
     }
 
     function closeAddBookingModal() {
       addModal.classList.remove('active');
       clearStatus(addStatusMessage);
+    }
+
+    function openCalendarEvent(record) {
+      const status = String(record.status || '').trim();
+
+      if (status === 'متاح') {
+        openAddModal({
+          date: record.date || '',
+          resort: record.resort || '',
+          bookingType: 'بدون مبيت',
+          name: '',
+          phone: '',
+          notes: ''
+        });
+        return;
+      }
+
+      modalTitle.textContent = status === 'بانتظار التأكيد' ? 'طلب حجز بانتظار التأكيد' : 'حجز مؤكد';
+      modalSubtitle.textContent = 'بيانات الحجز للتاريخ المحدد.';
+      clearStatus(statusMessage);
+      listWrap.innerHTML = renderRecordCard(record, status === 'بانتظار التأكيد' ? 'pending' : 'booked');
+      listModal.classList.add('active');
+    }
+
+    function renderRecordCard(record, viewType) {
+      const date = normalizeDate(record.date || record['التاريخ']);
+      const resort = String(record.resort || record['الاستراحة'] || '').trim();
+      const status = String(record.status || record['الحالة'] || '').trim();
+      const bookingType = String(record.bookingType || record['نوع الحجز'] || '').trim() || '-';
+      const name = String(record.name || record['الاسم'] || '').trim() || '-';
+      const phone = String(record.phone || record['الجوال'] || '').trim() || '-';
+      const notes = String(record.notes || record['ملاحظات'] || '').trim() || '-';
+      const waLink = getWhatsAppLink({ 'الجوال': phone, 'الاسم': name, 'الاستراحة': resort, 'التاريخ': date });
+      const badgeClass = viewType === 'pending' ? 'pending' : 'booked';
+
+      let actionsHtml = '';
+      if (viewType === 'pending') {
+        actionsHtml += '<button class="btn-confirm" type="button" data-confirm-date="' + date + '" data-confirm-resort="' + resort + '">تأكيد الحجز</button>';
+        actionsHtml += '<button class="btn-reject" type="button" data-reject-date="' + date + '" data-reject-resort="' + resort + '">رفض الحجز</button>';
+      } else {
+        actionsHtml += '<button class="btn-reject" type="button" data-cancel-date="' + date + '" data-cancel-resort="' + resort + '">إلغاء الحجز</button>';
+      }
+
+      if (waLink) {
+        actionsHtml += '<a class="wa-link" href="' + waLink + '" target="_blank" rel="noopener noreferrer">واتساب العميل</a>';
+      } else {
+        actionsHtml += '<div class="wa-link" style="opacity:.75;pointer-events:none;">لا يوجد واتساب</div>';
+      }
+
+      return '' +
+        '<article class="booking-card">' +
+          '<div class="booking-head">' +
+            '<div>' +
+              '<h3>' + resort + '</h3>' +
+              '<div class="booking-sub">التاريخ: ' + date + '</div>' +
+            '</div>' +
+            '<span class="badge ' + badgeClass + '">' + status + '</span>' +
+          '</div>' +
+          '<div class="booking-grid">' +
+            '<div class="meta-box"><div class="meta-label">نوع الحجز</div><div class="meta-value">' + bookingType + '</div></div>' +
+            '<div class="meta-box"><div class="meta-label">الاسم</div><div class="meta-value">' + name + '</div></div>' +
+            '<div class="meta-box"><div class="meta-label">الجوال</div><div class="meta-value">' + phone + '</div></div>' +
+            '<div class="meta-box"><div class="meta-label">الملاحظات</div><div class="meta-value">' + notes + '</div></div>' +
+          '</div>' +
+          '<div class="booking-actions">' + actionsHtml + '</div>' +
+        '</article>';
     }
 
     function sanitizePhone(value) {
@@ -1170,7 +1208,7 @@
 
     pendingBtn.addEventListener('click', function() { openList('pending'); });
     bookedBtn.addEventListener('click', function() { openList('booked'); });
-    addBookedBtn.addEventListener('click', openAddModal);
+    addBookedBtn.addEventListener('click', function() { openAddModal(); });
     closeModal.addEventListener('click', closeList);
     closeAddModal.addEventListener('click', closeAddBookingModal);
     cancelAdminBooking.addEventListener('click', closeAddBookingModal);
