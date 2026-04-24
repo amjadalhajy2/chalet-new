@@ -3,914 +3,886 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>استراحاتنا الثلاث</title>
+  <title>رافانا شاليه</title>
 
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/locales-all.global.min.js"></script>
 
   <style>
-  :root {
-    --bg-top: #eef5ff;
-    --bg-mid: #f5f7fb;
-    --bg-btm: #eef2f8;
-    --glass: rgba(255, 255, 255, 0.52);
-    --glass-strong: rgba(255, 255, 255, 0.72);
-    --glass-soft: rgba(255, 255, 255, 0.36);
-    --line: rgba(255, 255, 255, 0.34);
-    --line-strong: rgba(255, 255, 255, 0.5);
-    --text: #152033;
-    --muted: #5e6b82;
-    --tint-1: #6ea8ff;
-    --tint-2: #8b7dff;
-    --tint-3: #b8d3ff;
-    --tint-4: #d9e8ff;
-    --tint-5: #f4f8ff;
-    --success: #19a765;
-    --danger: #f05d5e;
-    --shadow-xl: 0 30px 80px rgba(25, 43, 77, 0.14);
-    --shadow-lg: 0 18px 40px rgba(25, 43, 77, 0.10);
-    --shadow-md: 0 10px 24px rgba(25, 43, 77, 0.08);
-    --radius-2xl: 34px;
-    --radius-xl: 28px;
-    --radius-lg: 20px;
-    --radius-md: 16px;
-    --whatsapp: #25d366;
-  }
+    :root {
+      --bg-top: #eef5ff;
+      --bg-mid: #f5f7fb;
+      --bg-btm: #eef2f8;
+      --glass: rgba(255, 255, 255, 0.52);
+      --glass-strong: rgba(255, 255, 255, 0.72);
+      --glass-soft: rgba(255, 255, 255, 0.36);
+      --line: rgba(255, 255, 255, 0.34);
+      --line-strong: rgba(255, 255, 255, 0.5);
+      --text: #152033;
+      --muted: #5e6b82;
+      --tint-1: #6ea8ff;
+      --tint-2: #8b7dff;
+      --tint-3: #b8d3ff;
+      --tint-4: #d9e8ff;
+      --tint-5: #f4f8ff;
+      --success: #19a765;
+      --danger: #f05d5e;
+      --shadow-xl: 0 30px 80px rgba(25, 43, 77, 0.14);
+      --shadow-lg: 0 18px 40px rgba(25, 43, 77, 0.10);
+      --shadow-md: 0 10px 24px rgba(25, 43, 77, 0.08);
+      --radius-2xl: 34px;
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --whatsapp: #25d366;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(110,168,255,0.24), transparent 22%),
+        radial-gradient(circle at 88% 14%, rgba(139,125,255,0.14), transparent 18%),
+        radial-gradient(circle at 50% 100%, rgba(184,211,255,0.26), transparent 30%),
+        linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 44%, var(--bg-btm) 100%);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.28), transparent 24%),
+        radial-gradient(circle at 80% 22%, rgba(255,255,255,0.18), transparent 18%);
+      z-index: 0;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
 
-  * { box-sizing: border-box; }
-
-  html, body {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-  }
-
-  body {
-    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-    color: var(--text);
-    min-height: 100vh;
-    background:
-      radial-gradient(circle at 12% 10%, rgba(110,168,255,0.24), transparent 22%),
-      radial-gradient(circle at 88% 14%, rgba(139,125,255,0.14), transparent 18%),
-      radial-gradient(circle at 50% 100%, rgba(184,211,255,0.26), transparent 30%),
-      linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 44%, var(--bg-btm) 100%);
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-  }
-
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    background:
-      linear-gradient(135deg, rgba(255,255,255,0.28), transparent 24%),
-      radial-gradient(circle at 80% 22%, rgba(255,255,255,0.18), transparent 18%);
-    z-index: 0;
-  }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  .shell,
-  .container {
-    position: relative;
-    z-index: 1;
-    width: min(1280px, 100%);
-    margin: 0 auto;
-    padding: 20px 14px 34px;
-  }
-
-  .brand-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 8px 2px 18px;
-  }
-
-  .logo-card,
-  .logo-box {
-    width: 72px;
-    height: 72px;
-    flex-shrink: 0;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 22px;
-    border: 1px solid var(--line-strong);
-    background: linear-gradient(180deg, rgba(255,255,255,0.84), rgba(255,255,255,0.54));
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), var(--shadow-md);
-    backdrop-filter: blur(18px) saturate(1.2);
-    -webkit-backdrop-filter: blur(18px) saturate(1.2);
-  }
-
-  .logo-card img,
-  .logo-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
-  }
-
-  .logo-fallback,
-  .logo-placeholder {
-    font-size: 30px;
-  }
-
-  .brand-copy h1,
-  .brand-text h1 {
-    margin: 0 0 4px;
-    font-size: clamp(28px, 4vw, 42px);
-    line-height: 1.02;
-    letter-spacing: -0.03em;
-    color: var(--text);
-  }
-
-  .brand-copy p,
-  .brand-text p {
-    margin: 0;
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.7;
-  }
-
-  .hero {
-    display: none;
-  }
-
-  .top-grid {
-    display: grid;
-    gap: 14px;
-    margin-bottom: 18px;
-  }
-
-  .utility-grid {
-    display: grid;
-    gap: 14px;
-    margin-bottom: 18px;
-  }
-
-  .card {
-    background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.42));
-    border: 1px solid var(--line);
-    border-radius: var(--radius-2xl);
-    box-shadow: var(--shadow-xl);
-    backdrop-filter: blur(24px) saturate(1.2);
-    -webkit-backdrop-filter: blur(24px) saturate(1.2);
-  }
-
-  .hero-main-card,
-  .gallery-card,
-  .quick-card,
-  .calendar-card {
-    padding: 18px;
-  }
-
-  .hero-chip,
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    width: fit-content;
-    padding: 10px 14px;
-    border-radius: 999px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.52));
-    border: 1px solid var(--line-strong);
-    color: var(--text);
-    font-size: 13px;
-    font-weight: 800;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 8px 16px rgba(25,43,77,0.06);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-  }
-
-  .main-copy {
-    margin: 12px 0 0;
-    max-width: 900px;
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.9;
-  }
-
-  .section-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-bottom: 14px;
-  }
-
-  .section-head h2,
-  .section-title {
-    margin: 0;
-    color: var(--text);
-    font-size: 22px;
-    letter-spacing: -0.02em;
-  }
-
-  .section-head p,
-  .section-head span {
-    margin: 0;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.7;
-  }
-
-  .gallery-actions,
-  .quick-actions {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-  }
-
-  .quick-btn {
-    position: relative;
-    overflow: hidden;
-    min-height: 56px;
-    border-radius: 18px;
-    border: 1px solid var(--line-strong);
-    background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.46));
-    color: var(--text);
-    font-size: 14px;
-    font-weight: 800;
-    cursor: pointer;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), var(--shadow-md);
-    backdrop-filter: blur(18px) saturate(1.2);
-    -webkit-backdrop-filter: blur(18px) saturate(1.2);
-    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-  }
-
-  .quick-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 16px 28px rgba(25,43,77,0.12);
-    border-color: rgba(255,255,255,0.62);
-  }
-
-  .quick-btn::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.36), transparent 38%);
-    pointer-events: none;
-  }
-
-  .legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 14px;
-  }
-
-  .legend-item,
-  .legend span {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 12px;
-    border-radius: 999px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.5));
-    border: 1px solid var(--line-strong);
-    color: var(--muted);
-    font-size: 12px;
-    font-weight: 700;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 8px 16px rgba(25,43,77,0.05);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-  }
-
-  .legend-dot,
-  .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    display: inline-block;
-  }
-
-  .legend-dot.success,
-  .dot.green { background: var(--success); }
-  .legend-dot.danger,
-  .dot.red { background: var(--danger); }
-
-  .calendar-wrapper {
-    position: relative;
-    min-height: 360px;
-    overflow: hidden;
-    border-radius: 24px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.32), rgba(255,255,255,0.14));
-    border: 1px solid rgba(255,255,255,0.24);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.45);
-  }
-
-  #calendar {
-    position: relative;
-    z-index: 1;
-    min-height: 330px;
-    padding: 8px;
-  }
-
-  .loading-overlay,
-  .loading-screen {
-    position: absolute;
-    inset: 0;
-    z-index: 20;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(180deg, rgba(255,255,255,0.90), rgba(244,248,255,0.88));
-    transition: opacity .35s ease, visibility .35s ease;
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-  }
-
-  .loading-overlay.hidden,
-  .loading-screen.hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-  }
-
-  .loading-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    text-align: center;
-    padding: 24px;
-  }
-
-  .loading-logo {
-    width: 82px;
-    height: 82px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 24px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.56));
-    border: 1px solid var(--line-strong);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), var(--shadow-md);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-  }
-
-  .loading-logo img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
-  }
-
-  .loading-spinner {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 3px solid rgba(110,168,255,0.20);
-    border-top-color: var(--tint-2);
-    animation: spin .9s linear infinite;
-  }
-
-  .loading-text {
-    color: var(--text);
-    font-size: 18px;
-    font-weight: 800;
-  }
-
-  .loading-subtext {
-    color: var(--muted);
-    font-size: 13px;
-  }
-
-  .fc {
-    --fc-border-color: rgba(255,255,255,0.32);
-    --fc-page-bg-color: transparent;
-    --fc-neutral-bg-color: rgba(255,255,255,0.22);
-    --fc-list-event-hover-bg-color: rgba(110,168,255,0.10);
-    --fc-today-bg-color: rgba(217,232,255,0.48);
-    color: var(--text);
-  }
-
-  .fc-theme-standard td,
-  .fc-theme-standard th { border-color: rgba(255,255,255,0.26); }
-
-  .fc .fc-toolbar {
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 10px;
-  }
-
-  .fc .fc-toolbar-title {
-    font-size: clamp(1.05rem, 3vw, 1.4rem);
-    color: var(--text);
-    font-weight: 800;
-    letter-spacing: -0.01em;
-  }
-
-  .fc .fc-button {
-    min-height: 40px;
-    border-radius: 13px;
-    border: 1px solid var(--line-strong);
-    background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.52));
-    color: var(--text);
-    font-weight: 700;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 8px 18px rgba(25,43,77,0.05);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-
-  .fc .fc-button-primary:not(:disabled).fc-button-active,
-  .fc .fc-button-primary:not(:disabled):active,
-  .fc .fc-button:hover {
-    background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(228,239,255,0.82));
-    color: var(--text);
-    border-color: rgba(255,255,255,0.62);
-  }
-
-  .fc .fc-daygrid-day-frame { min-height: 92px; padding: 2px; }
-  .fc-daygrid-day-top { padding: 2px 4px; }
-
-  .fc-daygrid-event {
-    border: 0;
-    border-radius: 12px;
-    padding: 4px 6px;
-    margin-top: 4px;
-    font-size: 11px;
-    font-weight: 800;
-    cursor: pointer;
-    text-align: center;
-    box-shadow: 0 10px 18px rgba(25,43,77,0.10);
-  }
-
-  .fc-daygrid-day-number,
-  .fc-col-header-cell-cushion {
-    color: var(--text);
-    text-decoration: none;
-    font-weight: 800;
-    font-size: 13px;
-  }
-
-  .fc .fc-day-today { background: rgba(235,243,255,0.88) !important; }
-
-  .modal,
-  .booking-modal,
-  .info-modal {
-    position: fixed;
-    inset: 0;
-    z-index: 999;
-    display: none;
-    align-items: flex-end;
-    justify-content: center;
-    padding: 0;
-    background: rgba(18, 28, 46, 0.24);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-
-  .modal.active,
-  .booking-modal.active,
-  .info-modal.active { display: flex; }
-
-  .modal-card,
-  .info-card {
-    width: min(100%, 720px);
-    max-width: 720px;
-    max-height: 90vh;
-    overflow: auto;
-    padding: 18px 16px calc(20px + env(safe-area-inset-bottom));
-    border-radius: 28px 28px 0 0;
-    border: 1px solid var(--line-strong);
-    background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.68));
-    box-shadow: 0 -20px 42px rgba(25,43,77,0.16);
-    backdrop-filter: blur(26px) saturate(1.2);
-    -webkit-backdrop-filter: blur(26px) saturate(1.2);
-  }
-
-  .modal-head,
-  .modal-header,
-  .info-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-
-  .modal-head h3,
-  .modal-header h3,
-  .info-header h3 {
-    margin: 0;
-    color: var(--text);
-    font-size: 21px;
-    letter-spacing: -0.01em;
-  }
-
-  .close-btn {
-    width: 40px;
-    height: 40px;
-    flex-shrink: 0;
-    border-radius: 50%;
-    border: 1px solid var(--line-strong);
-    background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.58));
-    color: var(--text);
-    font-size: 20px;
-    cursor: pointer;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 8px 18px rgba(25,43,77,0.05);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-
-  .modal-note,
-  .modal-subtitle,
-  .info-subtitle {
-    margin: 0 0 14px;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.8;
-  }
-
-  .form-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 10px;
-    width: 100%;
-  }
-
-  .form-grid > div,
-  .double-field > div,
-  .btn-row > * {
-    min-width: 0;
-  }
-
-  .full-width { width: 100%; }
-
-  .double-field {
-    display: grid;
-    grid-template-columns: minmax(92px, 108px) minmax(0, 1fr);
-    gap: 8px;
-    align-items: end;
-    width: 100%;
-  }
-
-  label {
-    display: block;
-    margin-bottom: 5px;
-    color: var(--text);
-    font-size: 13px;
-    font-weight: 800;
-  }
-
-  input,
-  select,
-  textarea {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    min-height: 46px;
-    padding: 12px 13px;
-    border-radius: 16px;
-    border: 1px solid rgba(255,255,255,0.44);
-    background: linear-gradient(180deg, rgba(255,255,255,0.90), rgba(255,255,255,0.62));
-    color: var(--text);
-    outline: none;
-    font-size: 15px;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.72), 0 6px 14px rgba(25,43,77,0.04);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-
-  input[type="date"] {
-    width: 100%;
-    max-width: 100%;
-    appearance: none;
-    -webkit-appearance: none;
-  }
-
-  #date {
-    direction: ltr;
-    text-align: right;
-  }
-
-  input::placeholder,
-  textarea::placeholder { color: #7a879c; }
-
-  textarea { min-height: 96px; resize: vertical; }
-
-  .btn-row {
-    display: grid;
-    grid-template-columns: 1.6fr 1fr;
-    gap: 10px;
-    margin-top: 14px;
-    width: 100%;
-  }
-
-  .btn {
-    width: 100%;
-    min-height: 52px;
-    padding: 14px 16px;
-    border-radius: 18px;
-    border: none;
-    font-size: 15px;
-    font-weight: 800;
-    cursor: pointer;
-  }
-
-  .btn-primary {
-    color: #ffffff;
-    background: linear-gradient(135deg, #5f8cff, #8b7dff);
-    box-shadow: 0 16px 28px rgba(95,140,255,0.28);
-  }
-
-  .btn-secondary {
-    color: var(--text);
-    background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.56));
-    border: 1px solid var(--line-strong);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 8px 18px rgba(25,43,77,0.05);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
-
-  .status-box {
-    display: none;
-    margin-top: 12px;
-    padding: 12px;
-    border-radius: 14px;
-    border: 1px solid transparent;
-    font-size: 13px;
-    line-height: 1.7;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
-
-  .status-box.success {
-    display: block;
-    background: rgba(25,167,101,0.12);
-    border-color: rgba(25,167,101,0.18);
-    color: #166534;
-  }
-
-  .status-box.error {
-    display: block;
-    background: rgba(240,93,94,0.12);
-    border-color: rgba(240,93,94,0.18);
-    color: #991b1b;
-  }
-
-  .resort-gallery {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .resort-gallery img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    border-radius: 22px;
-    border: 1px solid rgba(255,255,255,0.34);
-    background: #e9eff8;
-    box-shadow: 0 12px 22px rgba(25,43,77,0.08);
-  }
-
-  .price-table { display: grid; gap: 10px; }
-
-  .price-item,
-  .rules-box {
-    padding: 15px;
-    border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.34);
-    background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.56));
-    color: var(--muted);
-    line-height: 1.9;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 8px 18px rgba(25,43,77,0.05);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-  }
-
-  .price-item strong {
-    display: block;
-    margin-bottom: 8px;
-    color: var(--text);
-  }
-
-  .rules-box ul {
-    margin: 0;
-    padding-inline-start: 18px;
-    line-height: 1.9;
-  }
-
-  .fallback {
-    display: none;
-    margin-top: 12px;
-    padding: 12px;
-    border-radius: 14px;
-    background: rgba(240,93,94,0.10);
-    color: #991b1b;
-    border: 1px solid rgba(240,93,94,0.14);
-    font-size: 14px;
-  }
-
-  .floating-whatsapp {
-    position: fixed;
-    right: 16px;
-    bottom: 18px;
-    z-index: 1200;
-    width: 58px;
-    height: 58px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #2be07f, var(--whatsapp));
-    color: #ffffff;
-    box-shadow: 0 18px 34px rgba(37, 211, 102, 0.32);
-    text-decoration: none;
-    font-size: 28px;
-    border: 2px solid rgba(255,255,255,0.78);
-  }
-
-  .floating-whatsapp:hover {
-    transform: translateY(-1px);
-  }
-
-  @media (min-width: 768px) {
     .shell,
-    .container { padding: 24px 18px 36px; }
-
-    .top-grid {
-      grid-template-columns: 1.08fr .92fr;
-      align-items: stretch;
+    .container {
+      position: relative;
+      z-index: 1;
+      width: min(1280px, 100%);
+      margin: 0 auto;
+      padding: 20px 14px 34px;
     }
 
+    .brand-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 8px 2px 18px;
+      margin-bottom: 8px;
+    }
+
+    .logo-card,
+    .logo-box {
+      width: 96px;
+      height: 96px;
+      flex-shrink: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 26px;
+      border: 1px solid var(--line-strong);
+      background: linear-gradient(180deg, rgba(255,255,255,0.84), rgba(255,255,255,0.54));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), var(--shadow-md);
+      backdrop-filter: blur(18px) saturate(1.2);
+      -webkit-backdrop-filter: blur(18px) saturate(1.2);
+    }
+
+    .logo-card img,
+    .logo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .logo-fallback,
+    .logo-placeholder {
+      font-size: 34px;
+    }
+
+    .brand-copy h1,
+    .brand-text h1 {
+      margin: 0 0 6px;
+      font-size: clamp(32px, 4.6vw, 52px);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+
+    .brand-copy p,
+    .brand-text p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 2;
+      max-width: 900px;
+    }
+
+    .top-grid,
     .utility-grid {
-      grid-template-columns: 1fr;
+      display: grid;
+      gap: 14px;
+      margin-bottom: 18px;
     }
 
-    .gallery-actions {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.42));
+      border: 1px solid var(--line);
+      border-radius: var(--radius-2xl);
+      box-shadow: var(--shadow-xl);
+      backdrop-filter: blur(24px) saturate(1.2);
+      -webkit-backdrop-filter: blur(24px) saturate(1.2);
     }
 
+    .gallery-card,
+    .quick-card,
+    .calendar-card {
+      padding: 18px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .section-head h2,
+    .section-title {
+      margin: 0;
+      color: var(--text);
+      font-size: 22px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-head p,
+    .section-head span {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .gallery-actions,
     .quick-actions {
+      display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
     }
 
-    .calendar-card { padding: 20px; }
-    .fc .fc-daygrid-day-frame { min-height: 106px; }
+    .quick-btn {
+      position: relative;
+      overflow: hidden;
+      min-height: 56px;
+      border-radius: 18px;
+      border: 1px solid var(--line-strong);
+      background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.46));
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), var(--shadow-md);
+      backdrop-filter: blur(18px) saturate(1.2);
+      -webkit-backdrop-filter: blur(18px) saturate(1.2);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+
+    .quick-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 16px 28px rgba(25,43,77,0.12);
+      border-color: rgba(255,255,255,0.62);
+    }
+
+    .quick-btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.36), transparent 38%);
+      pointer-events: none;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.5));
+      border: 1px solid var(--line-strong);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 8px 16px rgba(25,43,77,0.05);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .legend-dot.success { background: var(--success); }
+    .legend-dot.danger { background: var(--danger); }
+
+    .calendar-wrapper {
+      position: relative;
+      min-height: 360px;
+      overflow: hidden;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.32), rgba(255,255,255,0.14));
+      border: 1px solid rgba(255,255,255,0.24);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.45);
+    }
+
+    #calendar {
+      position: relative;
+      z-index: 1;
+      min-height: 330px;
+      padding: 8px;
+    }
+
+    .loading-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, rgba(255,255,255,0.90), rgba(244,248,255,0.88));
+      transition: opacity .35s ease, visibility .35s ease;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .loading-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .loading-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .loading-logo {
+      width: 82px;
+      height: 82px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.56));
+      border: 1px solid var(--line-strong);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), var(--shadow-md);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .loading-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 3px solid rgba(110,168,255,0.20);
+      border-top-color: var(--tint-2);
+      animation: spin .9s linear infinite;
+    }
+
+    .loading-text {
+      color: var(--text);
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .loading-subtext {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .fallback {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(240,93,94,0.10);
+      color: #991b1b;
+      border: 1px solid rgba(240,93,94,0.14);
+      font-size: 14px;
+    }
+
+    .fc {
+      --fc-border-color: rgba(255,255,255,0.32);
+      --fc-page-bg-color: transparent;
+      --fc-neutral-bg-color: rgba(255,255,255,0.22);
+      --fc-list-event-hover-bg-color: rgba(110,168,255,0.10);
+      --fc-today-bg-color: rgba(217,232,255,0.48);
+      color: var(--text);
+    }
+
+    .fc-theme-standard td,
+    .fc-theme-standard th {
+      border-color: rgba(255,255,255,0.26);
+    }
+
+    .fc .fc-toolbar {
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .fc .fc-toolbar-title {
+      font-size: clamp(1.05rem, 3vw, 1.4rem);
+      color: var(--text);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .fc .fc-button {
+      min-height: 40px;
+      border-radius: 13px;
+      border: 1px solid var(--line-strong);
+      background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.52));
+      color: var(--text);
+      font-weight: 700;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 8px 18px rgba(25,43,77,0.05);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .fc .fc-button-primary:not(:disabled).fc-button-active,
+    .fc .fc-button-primary:not(:disabled):active,
+    .fc .fc-button:hover {
+      background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(228,239,255,0.82));
+      color: var(--text);
+      border-color: rgba(255,255,255,0.62);
+    }
+
+    .fc .fc-daygrid-day-frame {
+      min-height: 92px;
+      padding: 2px;
+    }
+
+    .fc-daygrid-day-top {
+      padding: 2px 4px;
+    }
+
+    .fc-daygrid-event {
+      border: 0;
+      border-radius: 12px;
+      padding: 4px 6px;
+      margin-top: 4px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: center;
+      box-shadow: 0 10px 18px rgba(25,43,77,0.10);
+    }
+
+    .fc-daygrid-day-number,
+    .fc-col-header-cell-cushion {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .fc .fc-day-today {
+      background: rgba(235,243,255,0.88) !important;
+    }
 
     .modal,
     .booking-modal,
     .info-modal {
-      align-items: center;
-      padding: 18px;
-    }
-
-    .modal-card,
-    .info-card {
-      width: min(720px, 100%);
-      max-height: 92vh;
-      border-radius: 30px;
-      padding: 24px;
-    }
-
-    .form-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .full-width { grid-column: 1 / -1; }
-    .double-field { grid-template-columns: 120px minmax(0, 1fr); gap: 10px; }
-    .btn-row { grid-template-columns: 1.8fr 1fr; }
-    .resort-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .floating-whatsapp { right: 22px; bottom: 22px; }
-  }
-
-  @media (max-width: 480px) {
-    .shell,
-    .container { padding: 16px 10px 24px; }
-
-    .logo-card,
-    .logo-box {
-      width: 58px;
-      height: 58px;
-      border-radius: 18px;
-    }
-
-    .brand-copy h1,
-    .brand-text h1 { font-size: 24px; }
-
-    .brand-copy p,
-    .brand-text p,
-    .main-copy { font-size: 12px; }
-
-    .quick-btn { font-size: 13px; }
-
-    .section-head h2,
-    .section-title { font-size: 20px; }
-
-    .fc .fc-toolbar {
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    .fc .fc-toolbar-chunk {
-      display: flex;
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      display: none;
+      align-items: flex-end;
       justify-content: center;
-      flex-wrap: wrap;
-      gap: 8px;
+      padding: 0;
+      background: rgba(18, 28, 46, 0.24);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
 
-    .fc .fc-daygrid-day-frame { min-height: 78px; }
-    .fc-daygrid-event { font-size: 10px; padding: 3px 5px; }
-    .calendar-wrapper { min-height: 290px; }
-    .loading-logo { width: 70px; height: 70px; }
-    .loading-text { font-size: 16px; }
+    .modal.active,
+    .booking-modal.active,
+    .info-modal.active {
+      display: flex;
+    }
 
     .modal-card,
     .info-card {
-      width: calc(100vw - 12px);
-      max-width: calc(100vw - 12px);
-      max-height: 88vh;
-      margin: 0 6px;
-      padding: 14px 10px calc(16px + env(safe-area-inset-bottom));
-      border-radius: 24px 24px 0 0;
+      width: min(100%, 720px);
+      max-width: 720px;
+      max-height: 90vh;
+      overflow: auto;
+      padding: 18px 16px calc(20px + env(safe-area-inset-bottom));
+      border-radius: 28px 28px 0 0;
+      border: 1px solid var(--line-strong);
+      background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.68));
+      box-shadow: 0 -20px 42px rgba(25,43,77,0.16);
+      backdrop-filter: blur(26px) saturate(1.2);
+      -webkit-backdrop-filter: blur(26px) saturate(1.2);
+    }
+
+    .modal-head,
+    .modal-header,
+    .info-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
     }
 
     .modal-head h3,
     .modal-header h3,
-    .info-header h3 { font-size: 18px; }
+    .info-header h3 {
+      margin: 0;
+      color: var(--text);
+      font-size: 21px;
+      letter-spacing: -0.01em;
+    }
+
+    .close-btn {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      border: 1px solid var(--line-strong);
+      background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.58));
+      color: var(--text);
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 8px 18px rgba(25,43,77,0.05);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
 
     .modal-note,
     .modal-subtitle,
-    .info-subtitle { font-size: 12px; }
-
-    .form-grid {
-      grid-template-columns: 1fr !important;
-      gap: 9px;
+    .info-subtitle {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
     }
 
+    .form-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 10px;
+      width: 100%;
+    }
+
+    .full-width { width: 100%; }
+
     .double-field {
-      grid-template-columns: 92px minmax(0, 1fr);
-      gap: 7px;
+      display: grid;
+      grid-template-columns: minmax(110px, 130px) minmax(0, 1fr);
+      gap: 8px;
+      align-items: end;
+      width: 100%;
+    }
+
+    .form-grid > div,
+    .double-field > div,
+    .btn-row > * {
+      min-width: 0;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 800;
     }
 
     input,
     select,
     textarea {
-      font-size: 14px;
-      min-height: 44px;
-      padding: 11px 12px;
-    }
-
-    input[type="date"],
-    #date {
-      font-size: 14px;
       width: 100%;
       max-width: 100%;
+      min-width: 0;
+      min-height: 46px;
+      padding: 12px 13px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.44);
+      background: linear-gradient(180deg, rgba(255,255,255,0.90), rgba(255,255,255,0.62));
+      color: var(--text);
+      outline: none;
+      font-size: 15px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.72), 0 6px 14px rgba(25,43,77,0.04);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
 
-    textarea { min-height: 84px; }
+    input::placeholder,
+    textarea::placeholder {
+      color: #7a879c;
+    }
+
+    input[type="date"] {
+      width: 100%;
+      max-width: 100%;
+      appearance: none;
+      -webkit-appearance: none;
+      direction: ltr;
+      text-align: right;
+    }
+
+    textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
 
     .btn-row {
-      grid-template-columns: 1fr;
-      gap: 8px;
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+      width: 100%;
     }
 
     .btn {
-      min-height: 48px;
-      font-size: 14px;
+      width: 100%;
+      min-height: 52px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: none;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
     }
 
-    .resort-gallery img { height: 180px; }
-    .floating-whatsapp { right: 12px; bottom: 14px; width: 54px; height: 54px; font-size: 26px; }
-  }
-</style>
+    .btn-primary {
+      color: #ffffff;
+      background: linear-gradient(135deg, #5f8cff, #8b7dff);
+      box-shadow: 0 16px 28px rgba(95,140,255,0.28);
+    }
+
+    .btn-secondary {
+      color: var(--text);
+      background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.56));
+      border: 1px solid var(--line-strong);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 8px 18px rgba(25,43,77,0.05);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .status-box {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      font-size: 13px;
+      line-height: 1.7;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .status-box.success {
+      display: block;
+      background: rgba(25,167,101,0.12);
+      border-color: rgba(25,167,101,0.18);
+      color: #166534;
+    }
+
+    .status-box.error {
+      display: block;
+      background: rgba(240,93,94,0.12);
+      border-color: rgba(240,93,94,0.18);
+      color: #991b1b;
+    }
+
+    .resort-gallery {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .resort-gallery img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.34);
+      background: #e9eff8;
+      box-shadow: 0 12px 22px rgba(25,43,77,0.08);
+    }
+
+    .price-table {
+      display: grid;
+      gap: 10px;
+    }
+
+    .price-item,
+    .rules-box {
+      padding: 15px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.34);
+      background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.56));
+      color: var(--muted);
+      line-height: 1.9;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 8px 18px rgba(25,43,77,0.05);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .price-item strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .rules-box ul {
+      margin: 0;
+      padding-inline-start: 18px;
+      line-height: 1.9;
+    }
+
+    .floating-whatsapp {
+      position: fixed;
+      right: 16px;
+      bottom: 18px;
+      z-index: 1200;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #2be07f, var(--whatsapp));
+      color: #ffffff;
+      box-shadow: 0 18px 34px rgba(37, 211, 102, 0.32);
+      text-decoration: none;
+      font-size: 28px;
+      border: 2px solid rgba(255,255,255,0.78);
+    }
+
+    .floating-whatsapp:hover {
+      transform: translateY(-1px);
+    }
+
+    @media (min-width: 768px) {
+      .shell,
+      .container { padding: 24px 18px 36px; }
+
+      .top-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .utility-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .gallery-actions {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .quick-actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .calendar-card { padding: 20px; }
+      .fc .fc-daygrid-day-frame { min-height: 106px; }
+
+      .modal,
+      .booking-modal,
+      .info-modal {
+        align-items: center;
+        padding: 18px;
+      }
+
+      .modal-card,
+      .info-card {
+        width: min(720px, 100%);
+        max-height: 92vh;
+        border-radius: 30px;
+        padding: 24px;
+      }
+
+      .form-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .full-width { grid-column: 1 / -1; }
+      .double-field { grid-template-columns: 120px minmax(0, 1fr); gap: 10px; }
+      .btn-row { grid-template-columns: 1.8fr 1fr; }
+      .resort-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .floating-whatsapp { right: 22px; bottom: 22px; }
+    }
+
+    @media (max-width: 480px) {
+      .shell,
+      .container { padding: 16px 10px 24px; }
+
+      .brand-header {
+        align-items: flex-start;
+      }
+
+      .logo-card,
+      .logo-box {
+        width: 74px;
+        height: 74px;
+        border-radius: 20px;
+      }
+
+      .brand-copy h1,
+      .brand-text h1 {
+        font-size: 28px;
+      }
+
+      .brand-copy p,
+      .brand-text p {
+        font-size: 13px;
+        line-height: 1.9;
+      }
+
+      .quick-btn { font-size: 13px; }
+
+      .section-head h2,
+      .section-title { font-size: 20px; }
+
+      .fc .fc-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .fc .fc-toolbar-chunk {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .fc .fc-daygrid-day-frame { min-height: 78px; }
+      .fc-daygrid-event { font-size: 10px; padding: 3px 5px; }
+      .calendar-wrapper { min-height: 290px; }
+      .loading-logo { width: 70px; height: 70px; }
+      .loading-text { font-size: 16px; }
+
+      .modal-card,
+      .info-card {
+        width: calc(100vw - 12px);
+        max-width: calc(100vw - 12px);
+        max-height: 88vh;
+        margin: 0 6px;
+        padding: 14px 10px calc(16px + env(safe-area-inset-bottom));
+        border-radius: 24px 24px 0 0;
+      }
+
+      .modal-head h3,
+      .modal-header h3,
+      .info-header h3 { font-size: 18px; }
+
+      .modal-note,
+      .modal-subtitle,
+      .info-subtitle { font-size: 12px; }
+
+      .form-grid { grid-template-columns: 1fr !important; gap: 9px; }
+
+      .double-field {
+        grid-template-columns: 92px minmax(0, 1fr);
+        gap: 7px;
+      }
+
+      input,
+      select,
+      textarea {
+        font-size: 14px;
+        min-height: 44px;
+        padding: 11px 12px;
+      }
+
+      input[type="date"] {
+        font-size: 14px;
+        width: 100%;
+        max-width: 100%;
+      }
+
+      textarea { min-height: 84px; }
+
+      .btn-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .btn { min-height: 48px; font-size: 14px; }
+
+      .resort-gallery img { height: 180px; }
+      .floating-whatsapp { right: 12px; bottom: 14px; width: 54px; height: 54px; font-size: 26px; }
+    }
+  </style>
 </head>
 <body>
   <div class="shell">
     <section class="brand-header">
       <div class="logo-card">
-        <img src="logo.png" alt="شعار استراحاتنا الثلاث" onerror="this.style.display='none'; this.parentNode.innerHTML='<span class=\'logo-fallback\'>🏡</span>'">
+        <img src="logo.png" alt="شعار رافانا شاليه" onerror="this.style.display='none'; this.parentNode.innerHTML='<span class=\'logo-fallback\'>🏡</span>'">
       </div>
       <div class="brand-copy">
-        <h1>استراحاتنا الثلاث</h1>
-        <p>التوفر والحجز في مكان واحد.</p>
+        <h1>رافانا شاليه</h1>
+        <p>
+          استمتعوا بأجواء هادئة وخصوصية تامة في استراحة مصممة لتمنحكم تجربة مريحة ومميزة.
+          مكان مثالي للاسترخاء، تغيير الأجواء، وقضاء لحظات جميلة بعيداً عن ضغوط الحياة اليومية.
+        </p>
       </div>
     </section>
 
     <section class="top-grid">
-      <div class="card hero-main-card">
-        <div class="hero-chip">التوفر مباشر داخل التقويم</div>
-        <p class="main-copy">
-          A = استراحة النخيل، B = استراحة الوادي، C = استراحة الريف. الأخضر متاح، والأحمر بانتظار التأكيد أو محجوز.
-        </p>
-      </div>
-
       <div class="card gallery-card">
         <div class="section-head">
           <h2>صور الاستراحات</h2>
-          <p>هذه الأزرار تعرض صور كل استراحة.</p>
         </div>
         <div class="gallery-actions">
           <button class="quick-btn" type="button" data-info-modal="resort-a">صور استراحة A</button>
@@ -923,8 +895,7 @@
     <section class="utility-grid">
       <div class="card quick-card">
         <div class="section-head">
-          <h2>معلومات إضافية</h2>
-          <p>الأسعار والضوابط.</p>
+          <h2>الاسعار والضوابط</h2>
         </div>
         <div class="quick-actions">
           <button class="quick-btn" type="button" data-info-modal="prices">الأسعار</button>
@@ -935,32 +906,32 @@
 
     <section class="card calendar-card">
       <div class="section-head">
-        <h2>التقويم والتوفر</h2>
-        <span>تظهر التواريخ السابقة بدون بيانات حجز.</span>
+        <h2>التوفر والحجز</h2>
+        <span>يمكنك الحجز من خلال التقويم ادناه</span>
       </div>
 
       <div class="legend">
         <span class="legend-item"><i class="legend-dot success"></i> متاح</span>
-        <span class="legend-item"><i class="legend-dot danger"></i> بانتظار التأكيد / محجوز</span>
-        <span class="legend-item"><strong>A</strong> النخيل</span>
-        <span class="legend-item"><strong>B</strong> الوادي</span>
-        <span class="legend-item"><strong>C</strong> الريف</span>
+        <span class="legend-item"><i class="legend-dot danger"></i> محجوز</span>
       </div>
 
       <div class="calendar-wrapper">
-        <div class="loading-overlay" id="loadingScreen">
+        <div class="loading-overlay" id="calendarLoading">
           <div class="loading-box">
             <div class="loading-logo">
-              <img src="logo.png" alt="شعار استراحاتنا الثلاث" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>🏡</span>'">
+              <img src="logo.png" alt="شعار رافانا شاليه" onerror="this.style.display='none'; this.parentNode.innerHTML='🏡'">
             </div>
             <div class="loading-spinner"></div>
             <div class="loading-text">جاري تحميل التقويم</div>
-            <div class="loading-subtext">يرجى الانتظار لحظات...</div>
+            <div class="loading-subtext">يرجى الانتظار قليلاً</div>
           </div>
         </div>
 
         <div id="calendar"></div>
-        <div id="calendarFallback" class="fallback">تعذر تحميل التقويم. تأكد من رابط الخدمة وبيانات الجدول.</div>
+      </div>
+
+      <div class="fallback" id="calendarError">
+        تعذر تحميل التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.
       </div>
     </section>
   </div>
@@ -968,73 +939,50 @@
   <div class="modal" id="bookingModal">
     <div class="modal-card">
       <div class="modal-head">
-        <h3>إتمام الحجز</h3>
-        <button class="close-btn" id="closeModal" type="button">×</button>
+        <div>
+          <h3>إرسال طلب حجز</h3>
+        </div>
+        <button class="close-btn" id="closeBookingModal" type="button">×</button>
       </div>
 
-      <p class="modal-note">أدخل البيانات لإرسال الطلب. سيتم تسجيل الحالة بانتظار التأكيد إلى أن تعتمدها الإدارة.</p>
+      <p class="modal-note">بعد إرسال الطلب سيتم تسجيله بحالة بانتظار التأكيد حتى يقوم مدير الحجوزات باعتماده.</p>
+
+      <div class="status-box" id="bookingStatus"></div>
 
       <div class="form-grid">
         <div>
           <label for="date">التاريخ</label>
-          <input type="date" id="date" readonly />
+          <input type="date" id="date" />
         </div>
 
         <div>
           <label for="resort">الاستراحة</label>
           <select id="resort">
             <option value="">اختر الاستراحة</option>
+            <option value="استراحة النخيل">استراحة A - استراحة النخيل</option>
+            <option value="استراحة الوادي">استراحة B - استراحة الوادي</option>
+            <option value="استراحة الريف">استراحة C - استراحة الريف</option>
           </select>
         </div>
 
         <div>
           <label for="bookingType">نوع الحجز</label>
           <select id="bookingType">
-            <option value="مع مبيت">مع مبيت</option>
             <option value="بدون مبيت" selected>بدون مبيت</option>
+            <option value="مع مبيت">مع مبيت</option>
           </select>
         </div>
 
         <div>
           <label for="name">الاسم</label>
-          <input type="text" id="name" placeholder="اسم العميل" />
+          <input type="text" id="name" placeholder="أدخل الاسم" />
         </div>
 
         <div class="full-width">
-          <label>رقم الهاتف</label>
+          <label for="phone">رقم الهاتف</label>
           <div class="double-field">
             <div>
-              <select id="countryCode">
-                <option value="+968" selected>🇴🇲 +968</option>
-                <option value="+971">🇦🇪 +971</option>
-                <option value="+966">🇸🇦 +966</option>
-                <option value="+973">🇧🇭 +973</option>
-                <option value="+965">🇰🇼 +965</option>
-                <option value="+974">🇶🇦 +974</option>
-                <option value="+20">🇪🇬 +20</option>
-                <option value="+962">🇯🇴 +962</option>
-                <option value="+1">🇺🇸/🇨🇦 +1</option>
-                <option value="+44">🇬🇧 +44</option>
-                <option value="+33">🇫🇷 +33</option>
-                <option value="+49">🇩🇪 +49</option>
-                <option value="+39">🇮🇹 +39</option>
-                <option value="+34">🇪🇸 +34</option>
-                <option value="+90">🇹🇷 +90</option>
-                <option value="+91">🇮🇳 +91</option>
-                <option value="+92">🇵🇰 +92</option>
-                <option value="+880">🇧🇩 +880</option>
-                <option value="+86">🇨🇳 +86</option>
-                <option value="+81">🇯🇵 +81</option>
-                <option value="+82">🇰🇷 +82</option>
-                <option value="+60">🇲🇾 +60</option>
-                <option value="+62">🇮🇩 +62</option>
-                <option value="+63">🇵🇭 +63</option>
-                <option value="+66">🇹🇭 +66</option>
-                <option value="+84">🇻🇳 +84</option>
-                <option value="+61">🇦🇺 +61</option>
-                <option value="+64">🇳🇿 +64</option>
-                <option value="+27">🇿🇦 +27</option>
-              </select>
+              <select id="countryCode"></select>
             </div>
             <div>
               <input type="tel" id="phone" placeholder="أدخل رقم الهاتف" inputmode="numeric" autocomplete="tel" pattern="[0-9]*" dir="ltr" lang="en" />
@@ -1044,236 +992,237 @@
 
         <div class="full-width">
           <label for="notes">ملاحظات</label>
-          <textarea id="notes" placeholder="أي تفاصيل إضافية"></textarea>
+          <textarea id="notes" placeholder="أي ملاحظات إضافية"></textarea>
         </div>
       </div>
 
       <div class="btn-row">
-        <button class="btn btn-primary" id="bookBtn" type="button">إرسال الطلب</button>
-        <button class="btn btn-secondary" id="cancelBtn" type="button">إلغاء</button>
+        <button class="btn btn-primary" id="bookBtn" type="button">تأكيد الحجز</button>
+        <button class="btn btn-secondary" id="cancelBookingBtn" type="button">إلغاء</button>
       </div>
-
-      <div id="statusBox" class="status-box"></div>
     </div>
   </div>
 
   <div class="modal" id="infoModal">
-    <div class="modal-card">
-      <div class="modal-head">
-        <h3 id="infoModalTitle">تفاصيل</h3>
+    <div class="info-card">
+      <div class="info-header">
+        <div>
+          <h3 id="infoTitle">العنوان</h3>
+        </div>
         <button class="close-btn" id="closeInfoModal" type="button">×</button>
       </div>
-      <p class="modal-note" id="infoModalSubtitle">معلومات إضافية</p>
-      <div id="infoModalContent"></div>
+
+      <div id="infoContent"></div>
     </div>
   </div>
 
-  <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyHpPNiodZ08gv0DHHKeIzCVABAmC0tMb3Otxds4jBn09D3Vdb5ssBcfIyUDQ7G-iVARA/exec';
+  <a class="floating-whatsapp" id="floatingWhatsapp" href="https://wa.me/96800000000" target="_blank" rel="noopener noreferrer" aria-label="واتساب">
+    <span>✆</span>
+  </a>
 
-    const ALL_RESORTS = ['استراحة النخيل', 'استراحة الوادي', 'استراحة الريف'];
-    const RESORT_MAP = {
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwsSUVtsSZTd3iuFjU147Y99O2iEkK9TwpMpl5MoAbAJMg-cBRpU46EOBR8RljwoAzbZQ/exec';
+
+    const RESORTS = {
+      A: 'استراحة النخيل',
+      B: 'استراحة الوادي',
+      C: 'استراحة الريف'
+    };
+
+    const RESORT_TO_CODE = {
       'استراحة النخيل': 'A',
       'استراحة الوادي': 'B',
       'استراحة الريف': 'C'
     };
 
-    const INFO_CONTENT = {
+    // عدل الصور هنا
+    const RESORT_IMAGES = {
       'resort-a': {
-        title: 'استراحة A - استراحة النخيل',
-        subtitle: 'يمكنك استبدال الصور التالية بصورك الحقيقية.',
-        content: `
-          <div class="resort-gallery">
-            <img src="resort-a-1.jpg" alt="استراحة النخيل 1">
-            <img src="resort-a-2.jpg" alt="استراحة النخيل 2">
-            <img src="resort-a-3.jpg" alt="استراحة النخيل 3">
-          </div>
-        `
+        title: 'صور استراحة A - استراحة النخيل',
+        images: [
+          'images/resort-a-1.jpg',
+          'images/resort-a-2.jpg',
+          'images/resort-a-3.jpg',
+          'images/resort-a-4.jpg'
+        ]
       },
       'resort-b': {
-        title: 'استراحة B - استراحة الوادي',
-        subtitle: 'يمكنك استبدال الصور التالية بصورك الحقيقية.',
-        content: `
-          <div class="resort-gallery">
-            <img src="resort-b-1.jpg" alt="استراحة الوادي 1">
-            <img src="resort-b-2.jpg" alt="استراحة الوادي 2">
-            <img src="resort-b-3.jpg" alt="استراحة الوادي 3">
-          </div>
-        `
+        title: 'صور استراحة B - استراحة الوادي',
+        images: [
+          'images/resort-b-1.jpg',
+          'images/resort-b-2.jpg',
+          'images/resort-b-3.jpg',
+          'images/resort-b-4.jpg'
+        ]
       },
       'resort-c': {
-        title: 'استراحة C - استراحة الريف',
-        subtitle: 'يمكنك استبدال الصور التالية بصورك الحقيقية.',
-        content: `
-          <div class="resort-gallery">
-            <img src="resort-c-1.jpg" alt="استراحة الريف 1">
-            <img src="resort-c-2.jpg" alt="استراحة الريف 2">
-            <img src="resort-c-3.jpg" alt="استراحة الريف 3">
-          </div>
-        `
-      },
-      'prices': {
-        title: 'الأسعار',
-        subtitle: 'يمكنك تعديل الأسعار التالية حسب تسعيرك.',
-        content: `
-          <div class="price-table">
-            <div class="price-item"><strong>استراحة النخيل</strong>بدون مبيت: 25 ريال عماني<br>مع مبيت: 40 ريال عماني</div>
-            <div class="price-item"><strong>استراحة الوادي</strong>بدون مبيت: 30 ريال عماني<br>مع مبيت: 45 ريال عماني</div>
-            <div class="price-item"><strong>استراحة الريف</strong>بدون مبيت: 28 ريال عماني<br>مع مبيت: 42 ريال عماني</div>
-          </div>
-        `
-      },
-      'rules': {
-        title: 'الضوابط',
-        subtitle: 'يمكنك تعديل الضوابط التالية حسب سياستك.',
-        content: `
-          <div class="rules-box">
-            <ul>
-              <li>الالتزام بوقت الدخول والخروج المحدد.</li>
-              <li>المحافظة على نظافة الاستراحة والمرافق.</li>
-              <li>يمنع الإزعاج أو رفع الأصوات بشكل مخالف.</li>
-              <li>أي تلفيات يتحملها المستأجر.</li>
-              <li>لا يعتبر الحجز مؤكدًا إلا بعد اعتماد الإدارة.</li>
-            </ul>
-          </div>
-        `
+        title: 'صور استراحة C - استراحة الريف',
+        images: [
+          'images/resort-c-1.jpg',
+          'images/resort-c-2.jpg',
+          'images/resort-c-3.jpg',
+          'images/resort-c-4.jpg'
+        ]
       }
     };
 
-    const loadingScreen = document.getElementById('loadingScreen');
-    const calendarEl = document.getElementById('calendar');
+    // عدل الأسعار هنا
+    const PRICES = [
+      { resort: 'استراحة A - استراحة النخيل', day: 'بدون مبيت: 25 ريال', overnight: 'مع مبيت: 40 ريال' },
+      { resort: 'استراحة B - استراحة الوادي', day: 'بدون مبيت: 25 ريال', overnight: 'مع مبيت: 40 ريال' },
+      { resort: 'استراحة C - استراحة الريف', day: 'بدون مبيت: 25 ريال', overnight: 'مع مبيت: 40 ريال' }
+    ];
+
+    // عدل الضوابط هنا
+    const RULES = [
+      'الالتزام بالنظافة والمحافظة على الممتلكات.',
+      'يمنع إزعاج الجيران أو استخدام الأصوات المرتفعة.',
+      'يمنع إدخال أي أشخاص إضافيين غير المتفق عليهم.',
+      'يتم الالتزام بوقت الدخول والخروج المحدد.',
+      'أي تلفيات يتحملها المستأجر.'
+    ];
+
+    // قائمة واسعة لأكواد الدول - الافتراضي عمان
+    const COUNTRY_CODES = [
+      { name: 'عُمان', code: '+968' },
+      { name: 'الإمارات', code: '+971' },
+      { name: 'السعودية', code: '+966' },
+      { name: 'الكويت', code: '+965' },
+      { name: 'البحرين', code: '+973' },
+      { name: 'قطر', code: '+974' },
+      { name: 'اليمن', code: '+967' },
+      { name: 'العراق', code: '+964' },
+      { name: 'الأردن', code: '+962' },
+      { name: 'لبنان', code: '+961' },
+      { name: 'سوريا', code: '+963' },
+      { name: 'فلسطين', code: '+970' },
+      { name: 'مصر', code: '+20' },
+      { name: 'ليبيا', code: '+218' },
+      { name: 'تونس', code: '+216' },
+      { name: 'الجزائر', code: '+213' },
+      { name: 'المغرب', code: '+212' },
+      { name: 'موريتانيا', code: '+222' },
+      { name: 'السودان', code: '+249' },
+      { name: 'الصومال', code: '+252' },
+      { name: 'جيبوتي', code: '+253' },
+      { name: 'إريتريا', code: '+291' },
+      { name: 'إثيوبيا', code: '+251' },
+      { name: 'كينيا', code: '+254' },
+      { name: 'تنزانيا', code: '+255' },
+      { name: 'أوغندا', code: '+256' },
+      { name: 'رواندا', code: '+250' },
+      { name: 'بوروندي', code: '+257' },
+      { name: 'جنوب أفريقيا', code: '+27' },
+      { name: 'نيجيريا', code: '+234' },
+      { name: 'غانا', code: '+233' },
+      { name: 'السنغال', code: '+221' },
+      { name: 'مالي', code: '+223' },
+      { name: 'النيجر', code: '+227' },
+      { name: 'تشاد', code: '+235' },
+      { name: 'الكاميرون', code: '+237' },
+      { name: 'الكونغو', code: '+242' },
+      { name: 'الكونغو الديمقراطية', code: '+243' },
+      { name: 'أنغولا', code: '+244' },
+      { name: 'زيمبابوي', code: '+263' },
+      { name: 'زامبيا', code: '+260' },
+      { name: 'مالاوي', code: '+265' },
+      { name: 'موزمبيق', code: '+258' },
+      { name: 'مدغشقر', code: '+261' },
+      { name: 'الهند', code: '+91' },
+      { name: 'باكستان', code: '+92' },
+      { name: 'أفغانستان', code: '+93' },
+      { name: 'إيران', code: '+98' },
+      { name: 'تركيا', code: '+90' },
+      { name: 'أذربيجان', code: '+994' },
+      { name: 'أرمينيا', code: '+374' },
+      { name: 'جورجيا', code: '+995' },
+      { name: 'كازاخستان', code: '+7' },
+      { name: 'أوزبكستان', code: '+998' },
+      { name: 'طاجيكستان', code: '+992' },
+      { name: 'قرغيزستان', code: '+996' },
+      { name: 'تركمانستان', code: '+993' },
+      { name: 'الصين', code: '+86' },
+      { name: 'اليابان', code: '+81' },
+      { name: 'كوريا الجنوبية', code: '+82' },
+      { name: 'كوريا الشمالية', code: '+850' },
+      { name: 'إندونيسيا', code: '+62' },
+      { name: 'ماليزيا', code: '+60' },
+      { name: 'سنغافورة', code: '+65' },
+      { name: 'تايلند', code: '+66' },
+      { name: 'فيتنام', code: '+84' },
+      { name: 'الفلبين', code: '+63' },
+      { name: 'كمبوديا', code: '+855' },
+      { name: 'لاوس', code: '+856' },
+      { name: 'ميانمار', code: '+95' },
+      { name: 'نيبال', code: '+977' },
+      { name: 'سريلانكا', code: '+94' },
+      { name: 'بنغلاديش', code: '+880' },
+      { name: 'المالديف', code: '+960' },
+      { name: 'أستراليا', code: '+61' },
+      { name: 'نيوزيلندا', code: '+64' },
+      { name: 'الولايات المتحدة', code: '+1' },
+      { name: 'كندا', code: '+1' },
+      { name: 'المكسيك', code: '+52' },
+      { name: 'البرازيل', code: '+55' },
+      { name: 'الأرجنتين', code: '+54' },
+      { name: 'تشيلي', code: '+56' },
+      { name: 'كولومبيا', code: '+57' },
+      { name: 'بيرو', code: '+51' },
+      { name: 'فنزويلا', code: '+58' },
+      { name: 'ألمانيا', code: '+49' },
+      { name: 'فرنسا', code: '+33' },
+      { name: 'إسبانيا', code: '+34' },
+      { name: 'إيطاليا', code: '+39' },
+      { name: 'المملكة المتحدة', code: '+44' },
+      { name: 'أيرلندا', code: '+353' },
+      { name: 'هولندا', code: '+31' },
+      { name: 'بلجيكا', code: '+32' },
+      { name: 'سويسرا', code: '+41' },
+      { name: 'النمسا', code: '+43' },
+      { name: 'السويد', code: '+46' },
+      { name: 'النرويج', code: '+47' },
+      { name: 'الدنمارك', code: '+45' },
+      { name: 'فنلندا', code: '+358' },
+      { name: 'البرتغال', code: '+351' },
+      { name: 'اليونان', code: '+30' },
+      { name: 'بولندا', code: '+48' },
+      { name: 'التشيك', code: '+420' },
+      { name: 'سلوفاكيا', code: '+421' },
+      { name: 'هنغاريا', code: '+36' },
+      { name: 'رومانيا', code: '+40' },
+      { name: 'بلغاريا', code: '+359' },
+      { name: 'صربيا', code: '+381' },
+      { name: 'كرواتيا', code: '+385' },
+      { name: 'سلوفينيا', code: '+386' },
+      { name: 'البوسنة والهرسك', code: '+387' },
+      { name: 'ألبانيا', code: '+355' },
+      { name: 'روسيا', code: '+7' },
+      { name: 'أوكرانيا', code: '+380' },
+      { name: 'بيلاروسيا', code: '+375' }
+    ];
+
+    const calendarLoading = document.getElementById('calendarLoading');
+    const calendarError = document.getElementById('calendarError');
     const bookingModal = document.getElementById('bookingModal');
-    const closeModal = document.getElementById('closeModal');
-    const cancelBtn = document.getElementById('cancelBtn');
+    const closeBookingModal = document.getElementById('closeBookingModal');
+    const cancelBookingBtn = document.getElementById('cancelBookingBtn');
+    const bookingStatus = document.getElementById('bookingStatus');
+    const infoModal = document.getElementById('infoModal');
+    const closeInfoModal = document.getElementById('closeInfoModal');
+    const infoTitle = document.getElementById('infoTitle');
+    const infoContent = document.getElementById('infoContent');
+
     const dateInput = document.getElementById('date');
     const resortInput = document.getElementById('resort');
     const bookingTypeInput = document.getElementById('bookingType');
     const nameInput = document.getElementById('name');
+    const countryCodeInput = document.getElementById('countryCode');
     const phoneInput = document.getElementById('phone');
     const notesInput = document.getElementById('notes');
-    const countryCodeInput = document.getElementById('countryCode');
     const bookBtn = document.getElementById('bookBtn');
-    const statusBox = document.getElementById('statusBox');
 
-    const infoModal = document.getElementById('infoModal');
-    const infoModalTitle = document.getElementById('infoModalTitle');
-    const infoModalSubtitle = document.getElementById('infoModalSubtitle');
-    const infoModalContent = document.getElementById('infoModalContent');
-    const closeInfoModal = document.getElementById('closeInfoModal');
-
-    let calendar;
+    let calendar = null;
     let bookingData = [];
-
-    async function loadBookings() {
-      try {
-        showLoading();
-        hideCalendarFallback();
-
-        if (!window.FullCalendar || !calendarEl) {
-          throw new Error('مكتبة التقويم غير متوفرة أو عنصر التقويم غير موجود');
-        }
-
-        const res = await fetch(API_URL, {
-          method: 'GET',
-          cache: 'no-store'
-        });
-
-        const rawText = await res.text();
-
-        if (!rawText) {
-          throw new Error('لم يتم استلام رد من خدمة البيانات');
-        }
-
-        let json;
-        try {
-          json = JSON.parse(rawText);
-        } catch {
-          console.error('Raw API response:', rawText);
-          throw new Error('الرد من Apps Script ليس JSON صالحًا');
-        }
-
-        if (!json.success) {
-          throw new Error(json.message || 'تعذر تحميل البيانات');
-        }
-
-        bookingData = Array.isArray(json.data) ? json.data : [];
-        renderCalendar();
-      } catch (err) {
-        console.error('Load error:', err);
-        showCalendarFallback();
-        const fallback = document.getElementById('calendarFallback');
-        if (fallback && err?.message) {
-          fallback.textContent = `تعذر تحميل التقويم: ${err.message}`;
-        }
-      } finally {
-        hideLoading();
-      }
-    }
-
-    function renderCalendar() {
-      const todayStr = getTodayLocalString();
-
-      const events = bookingData
-        .filter(item => normalizeDate(item['التاريخ']) >= todayStr)
-        .map(item => {
-          const status = String(item['الحالة'] || '').trim();
-          const isBlocked = status === 'محجوز' || status === 'بانتظار التأكيد';
-          const resortName = String(item['الاستراحة'] || '').trim();
-          const shortName = RESORT_MAP[resortName] || resortName;
-          const dateValue = normalizeDate(item['التاريخ']);
-
-          return {
-            title: shortName,
-            start: dateValue,
-            allDay: true,
-            backgroundColor: isBlocked ? '#ef4444' : '#16a34a',
-            borderColor: isBlocked ? '#ef4444' : '#16a34a',
-            textColor: '#ffffff',
-            extendedProps: {
-              resort: resortName,
-              status: status
-            }
-          };
-        })
-        .filter(event => event.start);
-
-      if (calendar) {
-        calendar.destroy();
-      }
-
-      calendar = new FullCalendar.Calendar(calendarEl, {
-        locale: 'ar',
-        direction: 'rtl',
-        initialView: 'dayGridMonth',
-        height: 'auto',
-        initialDate: todayStr,
-        headerToolbar: {
-          right: 'prev,next today',
-          center: 'title',
-          left: ''
-        },
-        buttonText: { today: 'اليوم' },
-        events,
-        dateClick(info) {
-          if (info.dateStr < todayStr) {
-            showStatus('لا يمكن الحجز في تاريخ سابق.', 'error');
-            return;
-          }
-          openBookingModal(info.dateStr);
-        },
-        eventClick(info) {
-          const selectedDate = info.event.startStr.slice(0, 10);
-          if (selectedDate < todayStr) {
-            showStatus('لا يمكن الحجز في تاريخ سابق.', 'error');
-            return;
-          }
-          openBookingModal(selectedDate, info.event.extendedProps.resort);
-        }
-      });
-
-      calendar.render();
-      hideCalendarFallback();
-    }
 
     function normalizeDate(value) {
       if (!value) return '';
@@ -1283,177 +1232,18 @@
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
+      return year + '-' + month + '-' + day;
     }
 
-    function getTodayLocalString() {
+    function todayString() {
       const now = new Date();
       const year = now.getFullYear();
       const month = String(now.getMonth() + 1).padStart(2, '0');
       const day = String(now.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
+      return year + '-' + month + '-' + day;
     }
 
-    function openBookingModal(dateStr, selectedResort = '') {
-      const todayStr = getTodayLocalString();
-      if (dateStr < todayStr) {
-        showStatus('لا يمكن الحجز في تاريخ سابق.', 'error');
-        return;
-      }
-
-      dateInput.value = dateStr;
-      nameInput.value = '';
-      phoneInput.value = '';
-      notesInput.value = '';
-      bookingTypeInput.value = 'بدون مبيت';
-      countryCodeInput.value = '+968';
-      statusBox.className = 'status-box';
-      statusBox.textContent = '';
-
-      populateAvailableResorts(dateStr, selectedResort);
-      bookingModal.classList.add('active');
-    }
-
-    function populateAvailableResorts(dateStr, selectedResort = '') {
-      const unavailableResorts = bookingData
-        .filter(item => {
-          const itemStatus = String(item['الحالة'] || '').trim();
-          return normalizeDate(item['التاريخ']) === dateStr &&
-            (itemStatus === 'محجوز' || itemStatus === 'بانتظار التأكيد');
-        })
-        .map(item => String(item['الاستراحة'] || '').trim());
-
-      const availableResorts = ALL_RESORTS.filter(resort => !unavailableResorts.includes(resort));
-
-      resortInput.innerHTML = '';
-
-      if (availableResorts.length === 0) {
-        const option = document.createElement('option');
-        option.value = '';
-        option.textContent = 'لا توجد استراحات متاحة في هذا التاريخ';
-        resortInput.appendChild(option);
-        showStatus('جميع الاستراحات غير متاحة في هذا التاريخ.', 'error');
-        return;
-      }
-
-      const defaultOption = document.createElement('option');
-      defaultOption.value = '';
-      defaultOption.textContent = 'اختر الاستراحة';
-      resortInput.appendChild(defaultOption);
-
-      availableResorts.forEach(resort => {
-        const option = document.createElement('option');
-        option.value = resort;
-        option.textContent = resort;
-        resortInput.appendChild(option);
-      });
-
-      if (selectedResort && availableResorts.includes(selectedResort)) {
-        resortInput.value = selectedResort;
-      }
-    }
-
-    async function submitBooking() {
-      const rawPhone = sanitizePhoneInput_(phoneInput.value.trim());
-      phoneInput.value = rawPhone;
-      const todayStr = getTodayLocalString();
-
-      const payload = {
-        date: dateInput.value,
-        resort: resortInput.value,
-        bookingType: bookingTypeInput.value,
-        name: nameInput.value.trim(),
-        phone: `${countryCodeInput.value} ${rawPhone}`,
-        notes: notesInput.value.trim()
-      };
-
-      if (!payload.date || !payload.resort || !payload.bookingType || !payload.name || !rawPhone) {
-        showStatus('يرجى تعبئة جميع الحقول المطلوبة.', 'error');
-        return;
-      }
-
-      if (payload.date < todayStr) {
-        showStatus('لا يمكن الحجز في تاريخ سابق.', 'error');
-        return;
-      }
-
-      const existing = bookingData.find(item =>
-        normalizeDate(item['التاريخ']) === payload.date &&
-        String(item['الاستراحة'] || '').trim() === payload.resort &&
-        ['محجوز', 'بانتظار التأكيد'].includes(String(item['الحالة'] || '').trim())
-      );
-
-      if (existing) {
-        showStatus('هذه الاستراحة غير متاحة حاليًا في هذا التاريخ.', 'error');
-        return;
-      }
-
-      try {
-        bookBtn.disabled = true;
-        bookBtn.textContent = 'جارٍ إرسال الطلب...';
-
-        const res = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(payload)
-        });
-
-        const rawText = await res.text();
-        let json;
-        try {
-          json = JSON.parse(rawText);
-        } catch {
-          throw new Error('تعذر قراءة رد الحجز من الخدمة');
-        }
-
-        if (!json.success) {
-          showStatus(json.message || 'تعذر تنفيذ الحجز', 'error');
-          return;
-        }
-
-        showStatus('تم إرسال الطلب بنجاح، وتم تسجيل الحالة: بانتظار التأكيد.', 'success');
-        await loadBookings();
-
-        setTimeout(() => {
-          bookingModal.classList.remove('active');
-        }, 900);
-      } catch (err) {
-        console.error('Submit error:', err);
-        showStatus('حدث خطأ أثناء إرسال الطلب.', 'error');
-      } finally {
-        bookBtn.disabled = false;
-        bookBtn.textContent = 'إرسال الطلب';
-      }
-    }
-
-    function showStatus(message, type) {
-      statusBox.textContent = message;
-      statusBox.className = `status-box ${type}`;
-    }
-
-    function closeBookingModal() {
-      bookingModal.classList.remove('active');
-    }
-
-    function showLoading() {
-      loadingScreen.classList.remove('hidden');
-    }
-
-    function hideLoading() {
-      loadingScreen.classList.add('hidden');
-    }
-
-    function showCalendarFallback() {
-      const fallback = document.getElementById('calendarFallback');
-      if (fallback) fallback.style.display = 'block';
-    }
-
-    function hideCalendarFallback() {
-      const fallback = document.getElementById('calendarFallback');
-      if (fallback) fallback.style.display = 'none';
-    }
-
-    function normalizeToEnglishDigits_(value) {
+    function normalizeToEnglishDigits(value) {
       const arabicIndic = '٠١٢٣٤٥٦٧٨٩';
       const easternArabicIndic = '۰۱۲۳۴۵۶۷۸۹';
 
@@ -1469,54 +1259,333 @@
         .join('');
     }
 
-    function sanitizePhoneInput_(value) {
-      return normalizeToEnglishDigits_(value).replace(/[^0-9]/g, '');
+    function sanitizePhoneInput(value) {
+      return normalizeToEnglishDigits(value).replace(/[^0-9]/g, '');
+    }
+
+    function buildFullPhone() {
+      const code = String(countryCodeInput.value || '').replace('+', '');
+      const phone = sanitizePhoneInput(phoneInput.value || '');
+      return code + phone;
+    }
+
+    function showBookingStatus(message, type) {
+      bookingStatus.textContent = message;
+      bookingStatus.className = 'status-box ' + type;
+    }
+
+    function clearBookingStatus() {
+      bookingStatus.textContent = '';
+      bookingStatus.className = 'status-box';
+    }
+
+    function openBookingModal(prefill) {
+      clearBookingStatus();
+
+      const today = todayString();
+      dateInput.min = today;
+
+      dateInput.value = (prefill && prefill.date) ? prefill.date : '';
+      resortInput.value = (prefill && prefill.resort) ? prefill.resort : '';
+      bookingTypeInput.value = 'بدون مبيت';
+      nameInput.value = '';
+      phoneInput.value = '';
+      notesInput.value = '';
+
+      bookingModal.classList.add('active');
+    }
+
+    function closeBooking() {
+      bookingModal.classList.remove('active');
+      clearBookingStatus();
     }
 
     function openInfoModal(key) {
-      const item = INFO_CONTENT[key];
-      if (!item) return;
-      infoModalTitle.textContent = item.title;
-      infoModalSubtitle.textContent = item.subtitle;
-      infoModalContent.innerHTML = item.content;
+      const modalData = buildInfoModalData(key);
+      infoTitle.textContent = modalData.title;
+      infoContent.innerHTML = modalData.content;
       infoModal.classList.add('active');
     }
 
-    function closeInfoModalFn() {
+    function closeInfo() {
       infoModal.classList.remove('active');
+    }
+
+    function buildGalleryHtml(images) {
+      return '<div class="resort-gallery">' + images.map(src => {
+        return '<img src="' + src + '" alt="صورة الاستراحة" onerror="this.style.display=\'none\'">';
+      }).join('') + '</div>';
+    }
+
+    function buildPricesHtml() {
+      return '<div class="price-table">' + PRICES.map(item => {
+        return (
+          '<div class="price-item">' +
+            '<strong>' + item.resort + '</strong>' +
+            '<div>' + item.day + '</div>' +
+            '<div>' + item.overnight + '</div>' +
+          '</div>'
+        );
+      }).join('') + '</div>';
+    }
+
+    function buildRulesHtml() {
+      return (
+        '<div class="rules-box">' +
+          '<ul>' +
+            RULES.map(rule => '<li>' + rule + '</li>').join('') +
+          '</ul>' +
+        '</div>'
+      );
+    }
+
+    function buildInfoModalData(key) {
+      if (key === 'prices') {
+        return { title: 'الأسعار', content: buildPricesHtml() };
+      }
+
+      if (key === 'rules') {
+        return { title: 'الضوابط', content: buildRulesHtml() };
+      }
+
+      const data = RESORT_IMAGES[key];
+      if (data) {
+        return { title: data.title, content: buildGalleryHtml(data.images) };
+      }
+
+      return { title: 'معلومات', content: '<div class="rules-box">لا توجد بيانات.</div>' };
+    }
+
+    function populateCountryCodes() {
+      countryCodeInput.innerHTML = COUNTRY_CODES.map(item => {
+        const selected = item.code === '+968' ? 'selected' : '';
+        return '<option value="' + item.code + '" ' + selected + '>' + item.name + ' (' + item.code + ')</option>';
+      }).join('');
+    }
+
+    function getResortShortName(resort) {
+      return RESORT_TO_CODE[resort] || resort;
+    }
+
+    function getEventColor(status) {
+      if (status === 'متاح') return '#19a765';
+      return '#f05d5e';
+    }
+
+    function isPastDate(dateStr) {
+      return dateStr < todayString();
+    }
+
+    function buildCalendarEvents(data) {
+      return data
+        .filter(item => !isPastDate(normalizeDate(item['التاريخ'])))
+        .map(item => {
+          const status = String(item['الحالة'] || '').trim();
+          const resort = String(item['الاستراحة'] || '').trim();
+          const date = normalizeDate(item['التاريخ']);
+
+          return {
+            title: getResortShortName(resort),
+            start: date,
+            allDay: true,
+            backgroundColor: getEventColor(status),
+            borderColor: getEventColor(status),
+            textColor: '#ffffff',
+            extendedProps: {
+              status: status,
+              resort: resort,
+              date: date
+            }
+          };
+        });
+    }
+
+    function renderCalendar() {
+      const calendarEl = document.getElementById('calendar');
+      const events = buildCalendarEvents(bookingData);
+
+      if (calendar) calendar.destroy();
+
+      calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'ar',
+        direction: 'rtl',
+        initialView: 'dayGridMonth',
+        height: 'auto',
+        headerToolbar: {
+          right: 'prev,next today',
+          center: 'title',
+          left: ''
+        },
+        buttonText: { today: 'اليوم' },
+        editable: false,
+        selectable: false,
+        events: events,
+        dateClick: function(info) {
+          const clickedDate = normalizeDate(info.dateStr);
+          if (isPastDate(clickedDate)) {
+            showBookingStatus('لا يمكن الحجز في تاريخ سابق.', 'error');
+            openBookingModal({ date: clickedDate });
+            return;
+          }
+          closeBooking();
+          openBookingModal({ date: clickedDate });
+        },
+        eventClick: function(info) {
+          info.jsEvent.preventDefault();
+
+          const props = info.event.extendedProps || {};
+          const date = normalizeDate(props.date);
+          const resort = props.resort;
+          const status = String(props.status || '').trim();
+
+          if (isPastDate(date)) return;
+
+          if (status === 'متاح') {
+            closeBooking();
+            openBookingModal({ date: date, resort: resort });
+          } else {
+            closeBooking();
+            openBookingModal({ date: date, resort: resort });
+            showBookingStatus('هذه الاستراحة محجوزة في هذا التاريخ.', 'error');
+          }
+        }
+      });
+
+      calendar.render();
+    }
+
+    async function loadBookings() {
+      try {
+        calendarError.style.display = 'none';
+        calendarLoading.classList.remove('hidden');
+
+        const res = await fetch(API_URL, {
+          method: 'GET',
+          cache: 'no-store'
+        });
+
+        const rawText = await res.text();
+        let json;
+
+        try {
+          json = JSON.parse(rawText);
+        } catch (e) {
+          throw new Error('الرد من الخدمة غير صالح.');
+        }
+
+        if (!json.success) {
+          throw new Error(json.message || 'تعذر تحميل البيانات');
+        }
+
+        bookingData = Array.isArray(json.data) ? json.data : [];
+        renderCalendar();
+      } catch (error) {
+        console.error(error);
+        calendarError.style.display = 'block';
+      } finally {
+        calendarLoading.classList.add('hidden');
+      }
+    }
+
+    async function submitBooking() {
+      clearBookingStatus();
+
+      const date = normalizeDate(dateInput.value);
+      const resort = String(resortInput.value || '').trim();
+      const bookingType = String(bookingTypeInput.value || '').trim();
+      const name = String(nameInput.value || '').trim();
+      const rawPhone = sanitizePhoneInput(phoneInput.value.trim());
+      phoneInput.value = rawPhone;
+      const notes = String(notesInput.value || '').trim();
+      const phone = buildFullPhone();
+
+      if (!date || !resort || !bookingType || !name || !rawPhone) {
+        showBookingStatus('يرجى تعبئة جميع الحقول المطلوبة.', 'error');
+        return;
+      }
+
+      if (isPastDate(date)) {
+        showBookingStatus('لا يمكن الحجز في تاريخ سابق.', 'error');
+        return;
+      }
+
+      try {
+        bookBtn.disabled = true;
+        showBookingStatus('جاري إرسال طلب الحجز...', 'success');
+
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+          },
+          body: JSON.stringify({
+            date: date,
+            resort: resort,
+            bookingType: bookingType,
+            name: name,
+            phone: phone,
+            notes: notes
+          })
+        });
+
+        const rawText = await res.text();
+        let json;
+
+        try {
+          json = JSON.parse(rawText);
+        } catch (e) {
+          throw new Error('تعذر قراءة رد الخدمة.');
+        }
+
+        console.log('Booking response:', json);
+
+        if (!json.success) {
+          throw new Error(json.message || 'تعذر إرسال طلب الحجز');
+        }
+
+        showBookingStatus(json.message || 'تم إرسال الطلب بنجاح.', 'success');
+        await loadBookings();
+
+        setTimeout(() => {
+          closeBooking();
+        }, 900);
+      } catch (error) {
+        console.error(error);
+        showBookingStatus(error.message || 'حدث خطأ أثناء إرسال الطلب.', 'error');
+      } finally {
+        bookBtn.disabled = false;
+      }
     }
 
     document.querySelectorAll('[data-info-modal]').forEach(btn => {
       btn.addEventListener('click', () => openInfoModal(btn.getAttribute('data-info-modal')));
     });
 
-    closeInfoModal.addEventListener('click', closeInfoModalFn);
-    infoModal.addEventListener('click', (e) => {
-      if (e.target === infoModal) closeInfoModalFn();
+    closeBookingModal.addEventListener('click', closeBooking);
+    cancelBookingBtn.addEventListener('click', closeBooking);
+    closeInfoModal.addEventListener('click', closeInfo);
+    bookBtn.addEventListener('click', submitBooking);
+
+    bookingModal.addEventListener('click', e => {
+      if (e.target === bookingModal) closeBooking();
     });
 
-    closeModal.addEventListener('click', closeBookingModal);
-    cancelBtn.addEventListener('click', closeBookingModal);
-    bookingModal.addEventListener('click', (e) => {
-      if (e.target === bookingModal) closeBookingModal();
+    infoModal.addEventListener('click', e => {
+      if (e.target === infoModal) closeInfo();
     });
+
     phoneInput.addEventListener('input', () => {
       const start = phoneInput.selectionStart;
-      const sanitized = sanitizePhoneInput_(phoneInput.value);
+      const sanitized = sanitizePhoneInput(phoneInput.value);
       phoneInput.value = sanitized;
       try {
         phoneInput.setSelectionRange(start, start);
       } catch (e) {}
     });
 
-    bookBtn.addEventListener('click', submitBooking);
-
+    populateCountryCodes();
+    dateInput.min = todayString();
     loadBookings();
   </script>
-  </div>
-
-  <a class="floating-whatsapp" id="floatingWhatsapp" href="https://wa.me/96800000000" target="_blank" rel="noopener noreferrer" aria-label="واتساب">
-    <span>✆</span>
-  </a>
 </body>
 </html>
