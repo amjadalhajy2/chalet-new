@@ -115,7 +115,7 @@
 
     .action-button {
       width: 100%;
-      min-height: 110px;
+      min-height: 92px;
       padding: 20px;
       border: 1px solid var(--line);
       border-radius: var(--radius-2xl);
@@ -150,9 +150,7 @@
     }
 
     .action-subtitle {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.7;
+      display: none;
     }
 
     .count-badge {
@@ -341,7 +339,7 @@
     .modal.active { display: flex; }
 
     .modal-card {
-      width: 100%;
+      width: min(100%, 860px);
       max-width: 860px;
       max-height: 90vh;
       overflow: auto;
@@ -474,7 +472,7 @@
 
     .booking-actions {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 8px;
     }
 
@@ -546,9 +544,15 @@
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
+      width: 100%;
     }
 
     .full-width { grid-column: 1 / -1; }
+
+    .form-grid > div,
+    .submit-row > * {
+      min-width: 0;
+    }
 
     label {
       display: block;
@@ -562,6 +566,7 @@
     select,
     textarea {
       width: 100%;
+      max-width: 100%;
       min-width: 0;
       min-height: 46px;
       padding: 12px 13px;
@@ -589,6 +594,7 @@
       grid-template-columns: 1.7fr 1fr;
       gap: 8px;
       margin-top: 12px;
+      width: 100%;
     }
 
     .btn-primary {
@@ -605,6 +611,11 @@
       font-weight: 800;
     }
 
+    .submit-row button {
+      width: 100%;
+      min-height: 50px;
+    }
+
     @media (min-width: 760px) {
       .action-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -618,14 +629,30 @@
       .brand-copy p { font-size: 12px; }
       .action-title { font-size: 21px; }
       .modal-card {
+        width: calc(100vw - 12px);
+        max-width: calc(100vw - 12px);
         max-height: 88vh;
-        padding: 14px 12px calc(16px + env(safe-area-inset-bottom));
+        margin: 0 6px;
+        padding: 14px 10px calc(16px + env(safe-area-inset-bottom));
       }
       .booking-grid,
       .booking-actions,
       .form-grid,
       .submit-row {
         grid-template-columns: 1fr;
+      }
+      input,
+      select,
+      textarea {
+        font-size: 14px;
+        min-height: 44px;
+        padding: 11px 12px;
+      }
+      textarea {
+        min-height: 84px;
+      }
+      .submit-row button {
+        min-height: 48px;
       }
       .fc .fc-toolbar {
         flex-direction: column;
@@ -660,7 +687,6 @@
           <div class="count-badge" id="pendingCount">0</div>
           <div class="action-title">طلبات حجز جديدة</div>
         </div>
-        <div class="action-subtitle">طلبات بحالة بانتظار التأكيد.</div>
       </button>
 
       <button class="action-button" id="bookedBtn" type="button">
@@ -668,7 +694,6 @@
           <div class="count-badge" id="bookedCount">0</div>
           <div class="action-title">الحجوزات المؤكدة</div>
         </div>
-        <div class="action-subtitle">الحجوزات التي حالتها محجوز.</div>
       </button>
 
       <button class="action-button" id="addBookedBtn" type="button">
@@ -676,7 +701,6 @@
           <div class="count-badge">+</div>
           <div class="action-title">إضافة حجز مؤكد</div>
         </div>
-        <div class="action-subtitle">إضافة حجز محجوز مباشرة من قبل مدير النظام.</div>
       </button>
     </section>
 
@@ -685,7 +709,6 @@
     <section class="card">
       <div class="section-head">
         <h2>التقويم</h2>
-        <p>عرض فقط بدون إضافة حجز من داخل التقويم.</p>
       </div>
       <div class="legend">
         <span class="legend-item"><i class="dot green"></i> متاح</span>
@@ -954,12 +977,11 @@
       const items = getItemsByView(currentView);
 
       if (currentView === 'pending') {
-        modalTitle.textContent = 'طلبات حجز جديدة';
-        modalSubtitle.textContent = 'قائمة الطلبات بحالة بانتظار التأكيد.';
-      } else {
-        modalTitle.textContent = 'الحجوزات المؤكدة';
-        modalSubtitle.textContent = 'قائمة الحجوزات بحالة محجوز.';
-      }
+          actionsHtml += '<button class="btn-confirm" type="button" data-date="' + date + '" data-resort="' + resort + '">تأكيد الحجز</button>';
+          actionsHtml += '<button class="btn-confirm" style="background: linear-gradient(135deg, #f05d5e, #dc4f50); box-shadow: 0 14px 26px rgba(240, 93, 94, 0.22);" type="button" data-reject-date="' + date + '" data-reject-resort="' + resort + '">رفض الحجز</button>';
+        } else {
+          actionsHtml += '<button class="btn-confirm" style="background: linear-gradient(135deg, #f05d5e, #dc4f50); box-shadow: 0 14px 26px rgba(240, 93, 94, 0.22);" type="button" data-cancel-date="' + date + '" data-cancel-resort="' + resort + '">إلغاء الحجز</button>';
+        }
 
       if (!items.length) {
         listWrap.innerHTML = '<div class="empty-state">لا توجد سجلات في هذه القائمة حاليًا.</div>';
@@ -1053,9 +1075,24 @@
     async function confirmBooking(date, resort) {
       const sure = window.confirm('هل أنت متأكد من تأكيد هذا الحجز؟');
       if (!sure) return;
+      await updateBookingStatus(date, resort, 'محجوز', 'جاري تأكيد الحجز...', 'تم تأكيد الحجز بنجاح.');
+    }
 
+    async function rejectBooking(date, resort) {
+      const sure = window.confirm('هل أنت متأكد من رفض هذا الحجز؟');
+      if (!sure) return;
+      await updateBookingStatus(date, resort, 'متاح', 'جاري رفض الحجز...', 'تم رفض الحجز وإعادة الحالة إلى متاح.');
+    }
+
+    async function cancelBooked(date, resort) {
+      const sure = window.confirm('هل أنت متأكد من إلغاء هذا الحجز؟');
+      if (!sure) return;
+      await updateBookingStatus(date, resort, 'متاح', 'جاري إلغاء الحجز...', 'تم إلغاء الحجز وإعادة الحالة إلى متاح.');
+    }
+
+    async function updateBookingStatus(date, resort, status, loadingMessage, successMessage) {
       try {
-        showStatus(statusMessage, 'جاري تأكيد الحجز...', 'success');
+        showStatus(statusMessage, loadingMessage, 'success');
 
         const res = await fetch(API_URL, {
           method: 'POST',
@@ -1066,7 +1103,7 @@
             action: 'updateStatus',
             date: date,
             resort: resort,
-            status: 'محجوز'
+            status: status
           })
         });
 
@@ -1083,12 +1120,12 @@
           throw new Error(json.message || 'تعذر تحديث الحالة');
         }
 
-        showStatus(statusMessage, 'تم تأكيد الحجز بنجاح.', 'success');
+        showStatus(statusMessage, successMessage, 'success');
         await loadBookings();
         renderCurrentView();
       } catch (error) {
         console.error(error);
-        showStatus(statusMessage, error.message || 'حدث خطأ أثناء تأكيد الحجز', 'error');
+        showStatus(statusMessage, error.message || 'حدث خطأ أثناء تحديث الحالة', 'error');
       }
     }
 
@@ -1163,6 +1200,12 @@
       if (e.target === listModal) closeList();
       if (e.target.matches('.btn-confirm[data-date][data-resort]')) {
         confirmBooking(e.target.getAttribute('data-date'), e.target.getAttribute('data-resort'));
+      }
+      if (e.target.matches('[data-reject-date][data-reject-resort]')) {
+        rejectBooking(e.target.getAttribute('data-reject-date'), e.target.getAttribute('data-reject-resort'));
+      }
+      if (e.target.matches('[data-cancel-date][data-cancel-resort]')) {
+        cancelBooked(e.target.getAttribute('data-cancel-date'), e.target.getAttribute('data-cancel-resort'));
       }
     });
 
