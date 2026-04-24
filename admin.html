@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>لوحة مدير الحجوزات</title>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/locales-all.global.min.js"></script>
   <style>
     :root {
       --bg-top: #eef5ff;
@@ -53,7 +56,7 @@
     .shell {
       position: relative;
       z-index: 1;
-      width: min(980px, 100%);
+      width: min(1120px, 100%);
       margin: 0 auto;
       padding: 20px 14px 34px;
     }
@@ -107,12 +110,13 @@
       display: grid;
       grid-template-columns: 1fr;
       gap: 14px;
+      margin-bottom: 14px;
     }
 
     .action-button {
       width: 100%;
-      min-height: 118px;
-      padding: 22px 20px;
+      min-height: 110px;
+      padding: 20px;
       border: 1px solid var(--line);
       border-radius: var(--radius-2xl);
       background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.42));
@@ -129,11 +133,19 @@
       box-shadow: 0 18px 42px rgba(25, 43, 77, 0.12);
     }
 
+    .action-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-direction: row-reverse;
+      margin-bottom: 8px;
+    }
+
     .action-title {
       font-size: 24px;
       font-weight: 800;
       color: var(--text);
-      margin-bottom: 6px;
       letter-spacing: -0.02em;
     }
 
@@ -141,14 +153,13 @@
       color: var(--muted);
       font-size: 14px;
       line-height: 1.7;
-      margin-bottom: 14px;
     }
 
     .count-badge {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 52px;
+      min-width: 56px;
       padding: 10px 16px;
       border-radius: 999px;
       background: linear-gradient(180deg, rgba(255,255,255,0.86), rgba(255,255,255,0.58));
@@ -157,10 +168,11 @@
       font-size: 18px;
       font-weight: 800;
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 8px 16px rgba(25,43,77,0.05);
+      flex-shrink: 0;
     }
 
     .status-strip {
-      margin-top: 14px;
+      margin-bottom: 14px;
       padding: 12px 14px;
       border-radius: 16px;
       background: rgba(255,255,255,0.52);
@@ -169,6 +181,149 @@
       font-size: 13px;
       line-height: 1.7;
     }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.42));
+      border: 1px solid var(--line);
+      border-radius: var(--radius-2xl);
+      box-shadow: var(--shadow-xl);
+      backdrop-filter: blur(24px) saturate(1.2);
+      -webkit-backdrop-filter: blur(24px) saturate(1.2);
+      padding: 18px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 22px;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.5));
+      border: 1px solid var(--line-strong);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot.green { background: var(--success); }
+    .dot.yellow { background: var(--warning); }
+    .dot.red { background: var(--danger); }
+
+    .calendar-wrap {
+      border-radius: 24px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.35);
+      border: 1px solid rgba(255,255,255,0.25);
+      min-height: 340px;
+    }
+
+    #calendar {
+      min-height: 320px;
+      padding: 8px;
+    }
+
+    .fc {
+      --fc-border-color: rgba(255,255,255,0.32);
+      --fc-page-bg-color: transparent;
+      --fc-neutral-bg-color: rgba(255,255,255,0.22);
+      --fc-today-bg-color: rgba(217,232,255,0.48);
+      color: var(--text);
+    }
+
+    .fc-theme-standard td,
+    .fc-theme-standard th { border-color: rgba(255,255,255,0.26); }
+
+    .fc .fc-toolbar {
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .fc .fc-toolbar-title {
+      font-size: clamp(1.05rem, 3vw, 1.4rem);
+      color: var(--text);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .fc .fc-button {
+      min-height: 40px;
+      border-radius: 13px;
+      border: 1px solid var(--line-strong);
+      background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.52));
+      color: var(--text);
+      font-weight: 700;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 8px 18px rgba(25,43,77,0.05);
+    }
+
+    .fc .fc-button-primary:not(:disabled).fc-button-active,
+    .fc .fc-button-primary:not(:disabled):active,
+    .fc .fc-button:hover {
+      background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(228,239,255,0.82));
+      color: var(--text);
+      border-color: rgba(255,255,255,0.62);
+    }
+
+    .fc .fc-daygrid-day-frame { min-height: 94px; padding: 2px; }
+    .fc-daygrid-day-top { padding: 2px 4px; }
+
+    .fc-daygrid-event {
+      border: 0;
+      border-radius: 12px;
+      padding: 4px 6px;
+      margin-top: 4px;
+      font-size: 11px;
+      font-weight: 800;
+      text-align: center;
+      box-shadow: 0 10px 18px rgba(25,43,77,0.10);
+      cursor: default;
+    }
+
+    .fc-daygrid-day-number,
+    .fc-col-header-cell-cushion {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .fc .fc-day-today { background: rgba(235,243,255,0.88) !important; }
 
     .modal {
       position: fixed;
@@ -387,9 +542,72 @@
       border: 1px dashed rgba(255,255,255,0.54);
     }
 
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .full-width { grid-column: 1 / -1; }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      min-width: 0;
+      min-height: 46px;
+      padding: 12px 13px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.44);
+      background: linear-gradient(180deg, rgba(255,255,255,0.90), rgba(255,255,255,0.62));
+      color: var(--text);
+      outline: none;
+      font-size: 14px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.72), 0 6px 14px rgba(25,43,77,0.04);
+    }
+
+    input[type="date"] {
+      direction: ltr;
+      text-align: right;
+    }
+
+    textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+
+    .submit-row {
+      display: grid;
+      grid-template-columns: 1.7fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(135deg, #5f8cff, #8b7dff);
+      border: none;
+      box-shadow: 0 16px 28px rgba(95,140,255,0.28);
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .btn-secondary {
+      cursor: pointer;
+      font-weight: 800;
+    }
+
     @media (min-width: 760px) {
       .action-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
     }
 
@@ -404,9 +622,23 @@
         padding: 14px 12px calc(16px + env(safe-area-inset-bottom));
       }
       .booking-grid,
-      .booking-actions {
+      .booking-actions,
+      .form-grid,
+      .submit-row {
         grid-template-columns: 1fr;
       }
+      .fc .fc-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .fc .fc-toolbar-chunk {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .fc .fc-daygrid-day-frame { min-height: 78px; }
+      .fc-daygrid-event { font-size: 10px; padding: 3px 5px; }
     }
   </style>
 </head>
@@ -418,25 +650,52 @@
       </div>
       <div class="brand-copy">
         <h1>لوحة مدير الحجوزات</h1>
-        <p>إدارة الطلبات الجديدة والمؤكدة فقط.</p>
+        <p>إدارة الطلبات الجديدة والمؤكدة وإضافة حجوزات مؤكدة.</p>
       </div>
     </section>
 
     <section class="action-grid">
       <button class="action-button" id="pendingBtn" type="button">
-        <div class="action-title">طلبات حجز جديدة</div>
+        <div class="action-top">
+          <div class="count-badge" id="pendingCount">0</div>
+          <div class="action-title">طلبات حجز جديدة</div>
+        </div>
         <div class="action-subtitle">طلبات بحالة بانتظار التأكيد.</div>
-        <div class="count-badge" id="pendingCount">0</div>
       </button>
 
       <button class="action-button" id="bookedBtn" type="button">
-        <div class="action-title">الحجوزات المؤكدة</div>
+        <div class="action-top">
+          <div class="count-badge" id="bookedCount">0</div>
+          <div class="action-title">الحجوزات المؤكدة</div>
+        </div>
         <div class="action-subtitle">الحجوزات التي حالتها محجوز.</div>
-        <div class="count-badge" id="bookedCount">0</div>
+      </button>
+
+      <button class="action-button" id="addBookedBtn" type="button">
+        <div class="action-top">
+          <div class="count-badge">+</div>
+          <div class="action-title">إضافة حجز مؤكد</div>
+        </div>
+        <div class="action-subtitle">إضافة حجز محجوز مباشرة من قبل مدير النظام.</div>
       </button>
     </section>
 
     <div class="status-strip" id="statusStrip">جاري تحميل البيانات...</div>
+
+    <section class="card">
+      <div class="section-head">
+        <h2>التقويم</h2>
+        <p>عرض فقط بدون إضافة حجز من داخل التقويم.</p>
+      </div>
+      <div class="legend">
+        <span class="legend-item"><i class="dot green"></i> متاح</span>
+        <span class="legend-item"><i class="dot yellow"></i> بانتظار التأكيد</span>
+        <span class="legend-item"><i class="dot red"></i> محجوز</span>
+      </div>
+      <div class="calendar-wrap">
+        <div id="calendar"></div>
+      </div>
+    </section>
   </div>
 
   <div class="modal" id="listModal">
@@ -454,12 +713,67 @@
     </div>
   </div>
 
+  <div class="modal" id="addModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <h2>إضافة حجز مؤكد</h2>
+          <p>سيتم تسجيل الحجز مباشرة بحالة محجوز.</p>
+        </div>
+        <button class="close-btn" id="closeAddModal" type="button">×</button>
+      </div>
+
+      <div class="status-message" id="addStatusMessage"></div>
+
+      <div class="form-grid">
+        <div>
+          <label for="adminDate">التاريخ</label>
+          <input type="date" id="adminDate" />
+        </div>
+        <div>
+          <label for="adminResort">الاستراحة</label>
+          <select id="adminResort">
+            <option value="">اختر الاستراحة</option>
+            <option value="استراحة النخيل">استراحة النخيل</option>
+            <option value="استراحة الوادي">استراحة الوادي</option>
+            <option value="استراحة الريف">استراحة الريف</option>
+          </select>
+        </div>
+        <div>
+          <label for="adminBookingType">نوع الحجز</label>
+          <select id="adminBookingType">
+            <option value="بدون مبيت">بدون مبيت</option>
+            <option value="مع مبيت">مع مبيت</option>
+          </select>
+        </div>
+        <div>
+          <label for="adminName">الاسم</label>
+          <input type="text" id="adminName" placeholder="اسم العميل" />
+        </div>
+        <div>
+          <label for="adminPhone">رقم الهاتف</label>
+          <input type="tel" id="adminPhone" inputmode="numeric" pattern="[0-9]*" dir="ltr" lang="en" placeholder="96890000000" />
+        </div>
+        <div class="full-width">
+          <label for="adminNotes">ملاحظات</label>
+          <textarea id="adminNotes" placeholder="أي ملاحظات إضافية"></textarea>
+        </div>
+      </div>
+
+      <div class="submit-row">
+        <button class="btn-primary" id="submitAdminBooking" type="button">حفظ الحجز المؤكد</button>
+        <button class="btn-secondary" id="cancelAdminBooking" type="button">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyHpPNiodZ08gv0DHHKeIzCVABAmC0tMb3Otxds4jBn09D3Vdb5ssBcfIyUDQ7G-iVARA/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwsSUVtsSZTd3iuFjU147Y99O2iEkK9TwpMpl5MoAbAJMg-cBRpU46EOBR8RljwoAzbZQ/exec';
 
     const statusStrip = document.getElementById('statusStrip');
     const pendingBtn = document.getElementById('pendingBtn');
     const bookedBtn = document.getElementById('bookedBtn');
+    const addBookedBtn = document.getElementById('addBookedBtn');
     const pendingCount = document.getElementById('pendingCount');
     const bookedCount = document.getElementById('bookedCount');
     const listModal = document.getElementById('listModal');
@@ -468,9 +782,21 @@
     const modalSubtitle = document.getElementById('modalSubtitle');
     const listWrap = document.getElementById('listWrap');
     const statusMessage = document.getElementById('statusMessage');
+    const addModal = document.getElementById('addModal');
+    const closeAddModal = document.getElementById('closeAddModal');
+    const cancelAdminBooking = document.getElementById('cancelAdminBooking');
+    const submitAdminBooking = document.getElementById('submitAdminBooking');
+    const addStatusMessage = document.getElementById('addStatusMessage');
+    const adminDate = document.getElementById('adminDate');
+    const adminResort = document.getElementById('adminResort');
+    const adminBookingType = document.getElementById('adminBookingType');
+    const adminName = document.getElementById('adminName');
+    const adminPhone = document.getElementById('adminPhone');
+    const adminNotes = document.getElementById('adminNotes');
 
     let bookingData = [];
     let currentView = 'pending';
+    let calendar = null;
 
     function normalizeDate(value) {
       if (!value) return '';
@@ -499,14 +825,68 @@
       return 'https://wa.me/' + phone + '?text=' + text;
     }
 
-    function showStatus(message, type) {
-      statusMessage.textContent = message;
-      statusMessage.className = 'status-message ' + type;
+    function showStatus(el, message, type) {
+      el.textContent = message;
+      el.className = 'status-message ' + type;
     }
 
-    function clearStatus() {
-      statusMessage.textContent = '';
-      statusMessage.className = 'status-message';
+    function clearStatus(el) {
+      el.textContent = '';
+      el.className = 'status-message';
+    }
+
+    function getResortShortName(resort) {
+      if (resort === 'استراحة النخيل') return 'A';
+      if (resort === 'استراحة الوادي') return 'B';
+      if (resort === 'استراحة الريف') return 'C';
+      return resort;
+    }
+
+    function getEventColor(status) {
+      if (status === 'متاح') return '#19a765';
+      if (status === 'بانتظار التأكيد') return '#f59e0b';
+      return '#f05d5e';
+    }
+
+    function renderCalendar() {
+      const calendarEl = document.getElementById('calendar');
+      const events = bookingData.map(function(item) {
+        const status = String(item['الحالة'] || '').trim();
+        const resort = String(item['الاستراحة'] || '').trim();
+        const date = normalizeDate(item['التاريخ']);
+        return {
+          title: getResortShortName(resort),
+          start: date,
+          allDay: true,
+          backgroundColor: getEventColor(status),
+          borderColor: getEventColor(status),
+          textColor: '#ffffff'
+        };
+      }).filter(function(item) { return item.start; });
+
+      if (calendar) {
+        calendar.destroy();
+      }
+
+      calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'ar',
+        direction: 'rtl',
+        initialView: 'dayGridMonth',
+        height: 'auto',
+        headerToolbar: {
+          right: 'prev,next today',
+          center: 'title',
+          left: ''
+        },
+        buttonText: { today: 'اليوم' },
+        editable: false,
+        selectable: false,
+        events: events,
+        dateClick: function() {},
+        eventClick: function(info) { info.jsEvent.preventDefault(); }
+      });
+
+      calendar.render();
     }
 
     async function loadBookings() {
@@ -544,6 +924,7 @@
         pendingCount.textContent = String(pending.length);
         bookedCount.textContent = String(booked.length);
         statusStrip.textContent = 'تم تحديث البيانات بنجاح';
+        renderCalendar();
 
         if (listModal.classList.contains('active')) {
           renderCurrentView();
@@ -569,7 +950,7 @@
     }
 
     function renderCurrentView() {
-      clearStatus();
+      clearStatus(statusMessage);
       const items = getItemsByView(currentView);
 
       if (currentView === 'pending') {
@@ -637,12 +1018,44 @@
 
     function closeList() {
       listModal.classList.remove('active');
-      clearStatus();
+      clearStatus(statusMessage);
+    }
+
+    function openAddModal() {
+      clearStatus(addStatusMessage);
+      adminDate.value = '';
+      adminResort.value = '';
+      adminBookingType.value = 'بدون مبيت';
+      adminName.value = '';
+      adminPhone.value = '';
+      adminNotes.value = '';
+      addModal.classList.add('active');
+    }
+
+    function closeAddBookingModal() {
+      addModal.classList.remove('active');
+      clearStatus(addStatusMessage);
+    }
+
+    function sanitizePhone(value) {
+      const arabicIndic = '٠١٢٣٤٥٦٧٨٩';
+      const easternArabicIndic = '۰۱۲۳۴۵۶۷۸۹';
+      let result = String(value || '').split('').map(function(ch) {
+        const idx1 = arabicIndic.indexOf(ch);
+        if (idx1 > -1) return String(idx1);
+        const idx2 = easternArabicIndic.indexOf(ch);
+        if (idx2 > -1) return String(idx2);
+        return ch;
+      }).join('');
+      return result.replace(/[^0-9]/g, '');
     }
 
     async function confirmBooking(date, resort) {
+      const sure = window.confirm('هل أنت متأكد من تأكيد هذا الحجز؟');
+      if (!sure) return;
+
       try {
-        showStatus('جاري تأكيد الحجز...', 'success');
+        showStatus(statusMessage, 'جاري تأكيد الحجز...', 'success');
 
         const res = await fetch(API_URL, {
           method: 'POST',
@@ -670,23 +1083,91 @@
           throw new Error(json.message || 'تعذر تحديث الحالة');
         }
 
-        showStatus('تم تأكيد الحجز بنجاح.', 'success');
+        showStatus(statusMessage, 'تم تأكيد الحجز بنجاح.', 'success');
         await loadBookings();
         renderCurrentView();
       } catch (error) {
         console.error(error);
-        showStatus(error.message || 'حدث خطأ أثناء تأكيد الحجز', 'error');
+        showStatus(statusMessage, error.message || 'حدث خطأ أثناء تأكيد الحجز', 'error');
+      }
+    }
+
+    async function createBookedByAdmin() {
+      const date = adminDate.value;
+      const resort = adminResort.value;
+      const bookingType = adminBookingType.value;
+      const name = adminName.value.trim();
+      const phone = sanitizePhone(adminPhone.value.trim());
+      const notes = adminNotes.value.trim();
+      adminPhone.value = phone;
+
+      if (!date || !resort || !bookingType || !name || !phone) {
+        showStatus(addStatusMessage, 'يرجى تعبئة جميع الحقول المطلوبة.', 'error');
+        return;
+      }
+
+      try {
+        showStatus(addStatusMessage, 'جاري حفظ الحجز المؤكد...', 'success');
+
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+          },
+          body: JSON.stringify({
+            action: 'adminCreateBooked',
+            date: date,
+            resort: resort,
+            bookingType: bookingType,
+            name: name,
+            phone: phone,
+            notes: notes,
+            status: 'محجوز'
+          })
+        });
+
+        const rawText = await res.text();
+        let json;
+
+        try {
+          json = JSON.parse(rawText);
+        } catch (e) {
+          throw new Error('تعذر قراءة رد إضافة الحجز');
+        }
+
+        if (!json.success) {
+          throw new Error(json.message || 'تعذر إضافة الحجز');
+        }
+
+        showStatus(addStatusMessage, 'تمت إضافة الحجز المؤكد بنجاح.', 'success');
+        await loadBookings();
+        setTimeout(closeAddBookingModal, 700);
+      } catch (error) {
+        console.error(error);
+        showStatus(addStatusMessage, error.message || 'حدث خطأ أثناء إضافة الحجز', 'error');
       }
     }
 
     pendingBtn.addEventListener('click', function() { openList('pending'); });
     bookedBtn.addEventListener('click', function() { openList('booked'); });
+    addBookedBtn.addEventListener('click', openAddModal);
     closeModal.addEventListener('click', closeList);
+    closeAddModal.addEventListener('click', closeAddBookingModal);
+    cancelAdminBooking.addEventListener('click', closeAddBookingModal);
+    submitAdminBooking.addEventListener('click', createBookedByAdmin);
+    adminPhone.addEventListener('input', function() {
+      adminPhone.value = sanitizePhone(adminPhone.value);
+    });
+
     listModal.addEventListener('click', function(e) {
       if (e.target === listModal) closeList();
       if (e.target.matches('.btn-confirm[data-date][data-resort]')) {
         confirmBooking(e.target.getAttribute('data-date'), e.target.getAttribute('data-resort'));
       }
+    });
+
+    addModal.addEventListener('click', function(e) {
+      if (e.target === addModal) closeAddBookingModal();
     });
 
     loadBookings();
