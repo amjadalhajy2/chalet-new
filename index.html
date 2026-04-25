@@ -32,7 +32,13 @@
     }
 
     * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; overflow-x: hidden; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
     body {
       font-family: "Segoe UI", Tahoma, Arial, sans-serif;
       color: var(--text);
@@ -46,6 +52,10 @@
     a { color: inherit; }
     button { font-family: inherit; }
 
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
     .container {
       width: min(1180px, calc(100% - 20px));
       margin: 0 auto;
@@ -53,23 +63,25 @@
 
     .topbar {
       position: sticky;
-      top: 10px;
+      top: 0;
       z-index: 1100;
-      padding-top: 10px;
+      width: 100%;
+      padding-top: 0;
     }
 
     .topbar-inner {
+      width: 100%;
       min-height: var(--header-h);
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 12px 16px;
-      border-radius: 999px;
+      padding: 12px 18px;
+      border-radius: 0;
       background: rgba(255,255,255,0.78);
       backdrop-filter: blur(18px) saturate(1.2);
       -webkit-backdrop-filter: blur(18px) saturate(1.2);
-      border: 1px solid rgba(255,255,255,0.7);
+      border-bottom: 1px solid rgba(255,255,255,0.7);
       box-shadow: var(--shadow-md);
     }
 
@@ -122,7 +134,9 @@
     }
 
     .hero {
-      padding-top: 14px;
+      padding-top: 0;
+      width: 100vw;
+      margin-inline: calc(50% - 50vw);
     }
 
     .hero-media {
@@ -130,7 +144,7 @@
       width: 100%;
       aspect-ratio: 19 / 6;
       min-height: 320px;
-      border-radius: 34px;
+      border-radius: 0;
       overflow: hidden;
       box-shadow: var(--shadow-xl);
       background: #d8cfc1;
@@ -150,6 +164,7 @@
     }
 
     .hero-card {
+      z-index: 2;
       position: absolute;
       left: 50%;
       bottom: 20px;
@@ -738,6 +753,69 @@
       line-height: 1.9;
     }
 
+    .form-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 10px;
+      width: 100%;
+    }
+
+    .full-width { width: 100%; }
+
+    .double-field {
+      display: grid;
+      grid-template-columns: minmax(110px, 130px) minmax(0, 1fr);
+      gap: 8px;
+      align-items: end;
+      width: 100%;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      min-height: 46px;
+      padding: 12px 13px;
+      border-radius: 16px;
+      border: 1px solid rgba(95,70,48,0.12);
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(246,240,232,0.86));
+      color: var(--text);
+      outline: none;
+      font-size: 15px;
+    }
+
+    input[type="date"] {
+      width: 100%;
+      max-width: 100%;
+      appearance: none;
+      -webkit-appearance: none;
+      direction: ltr;
+      text-align: right;
+    }
+
+    textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
+
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+      width: 100%;
+    }
+
     .floating-whatsapp {
       position: fixed;
       right: 16px;
@@ -765,23 +843,25 @@
 
     @media (max-width: 720px) {
       :root { --header-h: 72px; }
+
       .hero-media {
         aspect-ratio: 6 / 9.8;
         min-height: 500px;
       }
+
       .hero-card {
         bottom: 14px;
         width: calc(100% - 24px);
       }
+
       .hero-card h1 {
         font-size: 24px;
       }
     }
 
     @media (max-width: 560px) {
-      .container,
-      .shell { width: min(100%, calc(100% - 12px)); }
-      .topbar { top: 6px; }
+      .container { width: min(100%, calc(100% - 12px)); }
+      .topbar { top: 0; }
       .topbar-inner { padding: 10px 12px; }
       .brand-title { font-size: 18px; }
       .lang-btn { min-height: 44px; padding: 0 14px; }
@@ -789,12 +869,17 @@
       .section-title { font-size: 24px; }
       .section-copy { font-size: 14px; }
       .chalet-title { font-size: 22px; }
+
       .chalet-actions,
       .btn-row,
-      .form-grid { grid-template-columns: 1fr !important; }
+      .form-grid {
+        grid-template-columns: 1fr !important;
+      }
+
       .double-field {
         grid-template-columns: 96px minmax(0, 1fr);
       }
+
       .modal-card {
         width: calc(100vw - 12px);
         max-width: calc(100vw - 12px);
@@ -802,17 +887,21 @@
         margin: 0 6px;
         padding: 14px 10px calc(16px + env(safe-area-inset-bottom));
       }
+
       .resort-gallery img { height: 190px; }
+
       .fc .fc-toolbar {
         flex-direction: column;
         align-items: stretch;
       }
+
       .fc .fc-toolbar-chunk {
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
         gap: 8px;
       }
+
       .fc .fc-daygrid-day-frame { min-height: 78px; }
       .fc-daygrid-event { font-size: 10px; padding: 3px 5px; }
       .floating-whatsapp { right: 12px; bottom: 14px; width: 54px; height: 54px; font-size: 26px; }
@@ -821,31 +910,29 @@
 </head>
 <body>
   <div class="topbar">
-    <div class="container">
-      <div class="topbar-inner">
-        <div class="brand-wrap">
-          <div class="logo-box">
-            <img src="logo.png" alt="Ravana Chalets" onerror="this.style.display='none'; this.parentNode.innerHTML='🏡'">
-          </div>
-          <div class="brand-title" data-i18n="topbarBrand">شاليهات رافانا</div>
+    <div class="topbar-inner">
+      <div class="brand-wrap">
+        <div class="logo-box">
+          <img src="logo.png" alt="Ravana Chalets" onerror="this.style.display='none'; this.parentNode.innerHTML='🏡'">
         </div>
-        <button class="lang-btn" id="langToggle" type="button">EN</button>
+        <div class="brand-title" data-i18n="topbarBrand">شاليهات رافانا</div>
       </div>
+      <button class="lang-btn" id="langToggle" type="button">EN</button>
     </div>
   </div>
 
-  <main class="container">
-    <section class="hero section">
-      <div class="hero-media">
-        <img src="images/hero-cover.jpg" alt="شاليهات رافانا" onerror="this.src='https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80'">
-        <div class="hero-overlay"></div>
-        <div class="hero-card">
-          <h1 data-i18n="heroWelcome">مرحبا بكم في شاليهات رافانا</h1>
-          <button class="hero-btn" id="heroBookBtn" type="button" data-i18n="heroBook">احجز اقامتك الان</button>
-        </div>
+  <section class="hero">
+    <div class="hero-media">
+      <img src="images/hero-cover.jpg" alt="شاليهات رافانا" onerror="this.src='https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80'">
+      <div class="hero-overlay"></div>
+      <div class="hero-card">
+        <h1 data-i18n="heroWelcome">مرحبا بكم في شاليهات رافانا</h1>
+        <button class="hero-btn" id="heroBookBtn" type="button" data-i18n="heroBook">احجز اقامتك الان</button>
       </div>
-    </section>
+    </div>
+  </section>
 
+  <main class="container">
     <section class="section">
       <div class="intro-card">
         <h2 class="section-title" data-i18n="introTitle">تجربة إقامة لا تُنسى</h2>
@@ -858,7 +945,7 @@
     <section class="section chalet-stack" id="chaletsSection"></section>
 
     <section class="section">
-      <div class="calendar-card">
+      <div class="calendar-card" id="bookingSection">
         <div class="calendar-head">
           <h2 class="section-title" data-i18n="calendarTitle">التوفر والحجز</h2>
           <span data-i18n="calendarSub">يمكنك الحجز من خلال التقويم ادناه</span>
@@ -896,9 +983,9 @@
           <h2 class="section-title" data-i18n="locationTitle">موقعنا</h2>
         </div>
 
-        <a class="map-link" href="https://maps.google.com/?q=Nizwa,Oman" target="_blank" rel="noopener noreferrer">
+        <a class="map-link" id="mapLink" href="https://maps.google.com/?q=Nizwa,Oman" target="_blank" rel="noopener noreferrer">
           <div class="map-thumb">
-            <img src="images/location-satellite.jpg" alt="Nizwa, Oman" onerror="this.src='https://maps.geoapify.com/v1/staticmap?style=osm-bright-satellite&width=1200&height=600&center=lonlat:57.5369,22.9333&zoom=12&apiKey=YOUR_GEOAPIFY_KEY'">
+            <img src="images/location-satellite.jpg" alt="Nizwa, Oman" onerror="this.src='https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1600&q=80'">
           </div>
           <div class="location-copy">
             <div>
@@ -937,10 +1024,7 @@
 
         <div>
           <label for="bookingType" data-i18n="fieldBookingType">نوع الحجز</label>
-          <select id="bookingType">
-            <option value="بدون مبيت" data-i18n-option="withoutStay">بدون مبيت</option>
-            <option value="مع مبيت" data-i18n-option="withStay">مع مبيت</option>
-          </select>
+          <select id="bookingType"></select>
         </div>
 
         <div>
@@ -992,6 +1076,7 @@
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbwsSUVtsSZTd3iuFjU147Y99O2iEkK9TwpMpl5MoAbAJMg-cBRpU46EOBR8RljwoAzbZQ/exec';
     const GOOGLE_MAPS_URL = 'https://maps.google.com/?q=Nizwa,Oman';
+    const FLOATING_WHATSAPP_URL = 'https://wa.me/96800000000';
 
     const CHALET_DATA = [
       {
@@ -1043,29 +1128,6 @@
         ]
       }
     ];
-
-    const PRICES = [
-      { resortAr: 'شاليه رافانا 1', resortEn: 'Ravana Chalet 1', day: '25 OMR', overnight: '40 OMR' },
-      { resortAr: 'شاليه رافانا 2', resortEn: 'Ravana Chalet 2', day: '25 OMR', overnight: '40 OMR' },
-      { resortAr: 'شاليه رافانا 3', resortEn: 'Ravana Chalet 3', day: '25 OMR', overnight: '40 OMR' }
-    ];
-
-    const RULES = {
-      ar: [
-        'الالتزام بالنظافة والمحافظة على الممتلكات.',
-        'يمنع إزعاج الآخرين أو استخدام الأصوات المرتفعة.',
-        'يمنع إدخال أشخاص إضافيين غير المسجلين في الحجز.',
-        'يتم الالتزام بأوقات الدخول والخروج المحددة.',
-        'أي تلفيات يتحملها المستأجر.'
-      ],
-      en: [
-        'Please keep the chalet clean and protect all property.',
-        'Loud noise and disturbing others are not allowed.',
-        'No extra unregistered guests are allowed.',
-        'Check-in and check-out times must be respected.',
-        'Any damages are the responsibility of the guest.'
-      ]
-    };
 
     const COUNTRY_CODES = [
       { nameAr: 'عُمان', nameEn: 'Oman', code: '+968' },
@@ -1119,8 +1181,6 @@
         phonePlaceholder: 'أدخل رقم الهاتف',
         notesPlaceholder: 'أي ملاحظات إضافية',
         selectResort: 'اختر الشاليه',
-        pricesTitle: 'الأسعار',
-        rulesTitle: 'الضوابط',
         imageError: 'تعذر تحميل الصورة',
         noImages: 'لا توجد صور متاحة حالياً.',
         requiredError: 'يرجى تعبئة جميع الحقول المطلوبة.',
@@ -1166,8 +1226,6 @@
         phonePlaceholder: 'Enter phone number',
         notesPlaceholder: 'Any additional notes',
         selectResort: 'Choose a chalet',
-        pricesTitle: 'Prices',
-        rulesTitle: 'Rules',
         imageError: 'Unable to load image',
         noImages: 'No images available at the moment.',
         requiredError: 'Please complete all required fields.',
@@ -1231,6 +1289,7 @@
     function normalizeToEnglishDigits(value) {
       const arabicIndic = '٠١٢٣٤٥٦٧٨٩';
       const easternArabicIndic = '۰۱۲۳۴۵۶۷۸۹';
+
       return String(value || '')
         .split('')
         .map(ch => {
@@ -1286,12 +1345,14 @@
       }).join('');
     }
 
-    function populateResortOptions(selectedValue) {
-      resortInput.innerHTML = '<option value="">' + t('selectResort') + '</option>' + CHALET_DATA.map(item => {
-        const name = currentLang === 'ar' ? item.nameAr : item.nameEn;
-        const selected = selectedValue === item.resortValue ? 'selected' : '';
-        return '<option value="' + item.resortValue + '" ' + selected + '>' + name + '</option>';
-      }).join('');
+    function populateResortOptions(selectedValue = '') {
+      resortInput.innerHTML =
+        '<option value="">' + t('selectResort') + '</option>' +
+        CHALET_DATA.map(item => {
+          const name = currentLang === 'ar' ? item.nameAr : item.nameEn;
+          const selected = selectedValue === item.resortValue ? 'selected' : '';
+          return '<option value="' + item.resortValue + '" ' + selected + '>' + name + '</option>';
+        }).join('');
     }
 
     function populateBookingTypeOptions() {
@@ -1312,8 +1373,7 @@
 
     function openBookingModal(prefill) {
       clearBookingStatus();
-      const today = todayString();
-      dateInput.min = today;
+      dateInput.min = todayString();
       dateInput.value = (prefill && prefill.date) ? prefill.date : '';
       populateResortOptions((prefill && prefill.resort) ? prefill.resort : '');
       bookingTypeInput.value = 'بدون مبيت';
@@ -1334,35 +1394,26 @@
 
     function buildGalleryHtml(images) {
       const validImages = (images || []).filter(Boolean);
+
       if (!validImages.length) {
         return '<div class="rules-box">' + t('noImages') + '</div>';
       }
+
       return '<div class="resort-gallery">' + validImages.map(src => {
         return '<img src="' + src + '" alt="Chalet" loading="lazy" onerror="this.outerHTML=\'<div class=&quot;rules-box&quot;>' + t('imageError') + '</div>\'">';
       }).join('') + '</div>';
     }
 
-    function buildPricesHtml() {
-      return '<div class="price-table">' + PRICES.map(item => {
-        const name = currentLang === 'ar' ? item.resortAr : item.resortEn;
-        return (
-          '<div class="price-item">' +
-            '<strong>' + name + '</strong>' +
-            '<div>' + t('withoutStay') + ': ' + item.day + '</div>' +
-            '<div>' + t('withStay') + ': ' + item.overnight + '</div>' +
-          '</div>'
-        );
-      }).join('') + '</div>';
-    }
-
-    function buildRulesHtml() {
-      return '<div class="rules-box"><ul>' + RULES[currentLang].map(rule => '<li>' + rule + '</li>').join('') + '</ul></div>';
-    }
-
     function buildDetailsHtml(chalet) {
       const title = currentLang === 'ar' ? chalet.nameAr : chalet.nameEn;
       const details = currentLang === 'ar' ? chalet.detailsAr : chalet.detailsEn;
-      return '<div class="details-box"><strong>' + title + '</strong><div>' + details + '</div></div>' + buildGalleryHtml(chalet.images);
+      return (
+        '<div class="details-box">' +
+          '<strong>' + title + '</strong>' +
+          '<div>' + details + '</div>' +
+        '</div>' +
+        buildGalleryHtml(chalet.images)
+      );
     }
 
     function openDetailsModal(code) {
@@ -1379,6 +1430,7 @@
       const slides = chalet.images.map(src => (
         '<div class="slide"><img src="' + src + '" alt="' + title + '" onerror="this.src=\'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80\'"></div>'
       )).join('');
+
       const dots = chalet.images.map((_, index) => (
         '<button class="dot-btn ' + (index === 0 ? 'active' : '') + '" type="button" data-dot-index="' + index + '"></button>'
       )).join('');
@@ -1435,16 +1487,19 @@
     function initSlider(code) {
       const root = document.querySelector('[data-slider="' + code + '"]');
       if (!root) return;
+
       const track = root.querySelector('.slides');
       const dots = Array.from(root.querySelectorAll('.dot-btn'));
       const slides = Array.from(root.querySelectorAll('.slide'));
       const prev = root.querySelector('[data-nav="prev"]');
       const next = root.querySelector('[data-nav="next"]');
+
       const state = { root, track, dots, count: slides.length, index: 0, startX: 0, deltaX: 0 };
       sliders.set(code, state);
 
       prev.addEventListener('click', () => setSliderIndex(code, state.index - 1));
       next.addEventListener('click', () => setSliderIndex(code, state.index + 1));
+
       dots.forEach(dot => {
         dot.addEventListener('click', () => setSliderIndex(code, Number(dot.getAttribute('data-dot-index'))));
       });
@@ -1488,6 +1543,7 @@
           const status = String(item['الحالة'] || '').trim();
           const resort = String(item['الاستراحة'] || '').trim();
           const date = normalizeDate(item['التاريخ']);
+
           return {
             title: getResortShortName(resort),
             start: date,
@@ -1495,11 +1551,7 @@
             backgroundColor: getEventColor(status),
             borderColor: getEventColor(status),
             textColor: '#ffffff',
-            extendedProps: {
-              status,
-              resort,
-              date
-            }
+            extendedProps: { status, resort, date }
           };
         });
     }
@@ -1507,6 +1559,7 @@
     function renderCalendar() {
       const calendarEl = document.getElementById('calendar');
       const events = buildCalendarEvents(bookingData);
+
       if (calendar) calendar.destroy();
 
       calendar = new FullCalendar.Calendar(calendarEl, {
@@ -1556,9 +1609,14 @@
         calendarError.style.display = 'none';
         calendarLoading.classList.remove('hidden');
 
-        const res = await fetch(API_URL, { method: 'GET', cache: 'no-store' });
+        const res = await fetch(API_URL, {
+          method: 'GET',
+          cache: 'no-store'
+        });
+
         const rawText = await res.text();
         let json;
+
         try {
           json = JSON.parse(rawText);
         } catch (e) {
@@ -1566,6 +1624,7 @@
         }
 
         if (!json.success) throw new Error(json.message || 'Load error');
+
         bookingData = Array.isArray(json.data) ? json.data : [];
         renderCalendar();
       } catch (error) {
@@ -1578,6 +1637,7 @@
 
     async function submitBooking() {
       clearBookingStatus();
+
       const date = normalizeDate(dateInput.value);
       const resort = String(resortInput.value || '').trim();
       const bookingType = String(bookingTypeInput.value || '').trim();
@@ -1591,6 +1651,7 @@
         showBookingStatus(t('requiredError'), 'error');
         return;
       }
+
       if (isPastDate(date)) {
         showBookingStatus(t('pastDateError'), 'error');
         return;
@@ -1608,6 +1669,7 @@
 
         const rawText = await res.text();
         let json;
+
         try {
           json = JSON.parse(rawText);
         } catch (e) {
@@ -1615,6 +1677,7 @@
         }
 
         if (!json.success) throw new Error(json.message || 'Booking error');
+
         showBookingStatus(json.message || 'Success', 'success');
         await loadBookings();
         setTimeout(closeBooking, 900);
@@ -1626,21 +1689,31 @@
       }
     }
 
-    document.querySelector('.map-link').setAttribute('href', GOOGLE_MAPS_URL);
-    document.getElementById('floatingWhatsapp').setAttribute('href', 'https://wa.me/96800000000');
+    document.getElementById('mapLink').setAttribute('href', GOOGLE_MAPS_URL);
+    document.getElementById('floatingWhatsapp').setAttribute('href', FLOATING_WHATSAPP_URL);
+
     heroBookBtn.addEventListener('click', () => {
-      document.querySelector('.calendar-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
+
     langToggle.addEventListener('click', () => {
       currentLang = currentLang === 'ar' ? 'en' : 'ar';
       applyLanguage();
     });
+
     closeBookingModal.addEventListener('click', closeBooking);
     cancelBookingBtn.addEventListener('click', closeBooking);
     closeInfoModal.addEventListener('click', closeInfo);
     bookBtn.addEventListener('click', submitBooking);
-    bookingModal.addEventListener('click', e => { if (e.target === bookingModal) closeBooking(); });
-    infoModal.addEventListener('click', e => { if (e.target === infoModal) closeInfo(); });
+
+    bookingModal.addEventListener('click', e => {
+      if (e.target === bookingModal) closeBooking();
+    });
+
+    infoModal.addEventListener('click', e => {
+      if (e.target === infoModal) closeInfo();
+    });
+
     phoneInput.addEventListener('input', () => {
       const start = phoneInput.selectionStart;
       const sanitized = sanitizePhoneInput(phoneInput.value);
