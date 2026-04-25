@@ -49,6 +49,10 @@
       padding-top: var(--header-h);
     }
 
+    body.menu-open {
+      overflow: hidden;
+    }
+
     a { color: inherit; text-decoration: none; }
     button { font-family: inherit; }
 
@@ -120,16 +124,95 @@
       text-overflow: ellipsis;
     }
 
-    .lang-btn {
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .lang-btn,
+    .menu-btn {
       border: 0;
       min-height: 48px;
       padding: 0 18px;
       border-radius: 999px;
-      background: linear-gradient(135deg, var(--brand), var(--brand-dark));
-      color: #fff;
       font-weight: 800;
       cursor: pointer;
+      font-size: 14px;
+    }
+
+    .lang-btn {
+      background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+      color: #fff;
       box-shadow: 0 14px 28px rgba(95, 70, 48, 0.18);
+    }
+
+    .menu-btn {
+      border: 1px solid rgba(95,70,48,0.12);
+      background: linear-gradient(180deg, #fff, #f6f0e8);
+      color: var(--text);
+    }
+
+    .side-menu-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2090;
+      background: rgba(32, 23, 16, 0.26);
+      opacity: 0;
+      visibility: hidden;
+      transition: .25s ease;
+    }
+
+    .side-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 2100;
+      width: min(88vw, 320px);
+      height: 100vh;
+      padding: 18px 16px;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: -16px 0 40px rgba(66,43,19,0.12);
+      transform: translateX(100%);
+      transition: .25s ease;
+      overflow-y: auto;
+    }
+
+    body.menu-open .side-menu {
+      transform: translateX(0);
+    }
+
+    body.menu-open .side-menu-overlay {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .side-menu-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .side-menu-head strong {
+      font-size: 20px;
+    }
+
+    .side-menu-links {
+      display: grid;
+      gap: 10px;
+    }
+
+    .menu-link {
+      display: block;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fff, #f6f0e8);
+      border: 1px solid rgba(95,70,48,0.08);
+      font-weight: 800;
     }
 
     .hero {
@@ -183,8 +266,7 @@
 
     .hero-btn,
     .primary-btn,
-    .secondary-btn,
-    .ghost-btn {
+    .secondary-btn {
       min-height: 52px;
       padding: 14px 18px;
       border-radius: 18px;
@@ -192,6 +274,7 @@
       font-size: 15px;
       font-weight: 800;
       cursor: pointer;
+      width: 100%;
     }
 
     .hero-btn,
@@ -207,14 +290,15 @@
       border: 1px solid rgba(95,70,48,0.12);
     }
 
-    .ghost-btn {
-      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.72));
-      color: var(--text);
-      border: 1px solid rgba(95,70,48,0.12);
-    }
-
     .section {
       padding: 18px 0 0;
+    }
+
+    .intro-band {
+      width: 100vw;
+      margin-inline: calc(50% - 50vw);
+      margin-top: 0;
+      padding-top: 0;
     }
 
     .intro-card,
@@ -228,22 +312,39 @@
       -webkit-backdrop-filter: blur(18px);
     }
 
-    .intro-card,
-    .calendar-card {
+    .intro-card {
       padding: 22px;
     }
 
-    .section-title {
+    .intro-full {
+      border-radius: 0;
+      margin-top: 0;
+      padding: 28px 0;
+    }
+
+    .calendar-card {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .section-title,
+    .location-title {
       margin: 0 0 10px;
       font-size: 28px;
       letter-spacing: -0.03em;
     }
 
-    .section-copy {
+    .section-copy,
+    .location-place {
       margin: 0;
       color: var(--muted);
       font-size: 15px;
       line-height: 1.95;
+    }
+
+    .location-place {
+      font-size: 16px;
+      margin-bottom: 16px;
     }
 
     .chalet-stack {
@@ -358,6 +459,10 @@
       gap: 10px;
     }
 
+    .calendar-top {
+      padding: 22px 22px 14px;
+    }
+
     .calendar-head {
       display: flex;
       align-items: center;
@@ -376,7 +481,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 14px;
+      margin-bottom: 0;
     }
 
     .legend-item {
@@ -406,16 +511,24 @@
       position: relative;
       min-height: 360px;
       overflow: hidden;
-      border-radius: 24px;
+      border-radius: 0;
+      margin: 0;
+      border-left: 0;
+      border-right: 0;
+      border-bottom: 0;
       background: linear-gradient(180deg, rgba(255,255,255,0.52), rgba(255,255,255,0.24));
-      border: 1px solid rgba(95,70,48,0.08);
+      border-top: 1px solid rgba(95,70,48,0.08);
     }
 
     #calendar {
       position: relative;
       z-index: 1;
       min-height: 330px;
-      padding: 8px;
+      padding: 0;
+    }
+
+    #calendar .fc {
+      padding: 0 10px 10px;
     }
 
     .loading-overlay {
@@ -486,7 +599,7 @@
 
     .fallback {
       display: none;
-      margin-top: 12px;
+      margin: 12px 22px 22px;
       padding: 12px;
       border-radius: 14px;
       background: rgba(212,84,84,0.10);
@@ -575,19 +688,6 @@
       padding: 24px 2px 8px;
     }
 
-    .location-title {
-      margin: 0 0 6px;
-      font-size: 28px;
-      letter-spacing: -0.03em;
-    }
-
-    .location-place {
-      margin: 0 0 16px;
-      color: var(--muted);
-      font-size: 16px;
-      line-height: 1.8;
-    }
-
     .map-link {
       display: block;
       text-decoration: none;
@@ -612,7 +712,7 @@
     .modal {
       position: fixed;
       inset: 0;
-      z-index: 1200;
+      z-index: 2200;
       display: none;
       align-items: flex-end;
       justify-content: center;
@@ -799,7 +899,7 @@
       position: fixed;
       right: 16px;
       bottom: 18px;
-      z-index: 1300;
+      z-index: 2300;
       width: 58px;
       height: 58px;
       border-radius: 50%;
@@ -843,8 +943,15 @@
       .topbar { top: 0; }
       .topbar-inner { padding: 10px 12px; }
       .brand-title { font-size: 18px; }
-      .lang-btn { min-height: 44px; padding: 0 14px; }
       .logo-box { width: 50px; height: 50px; border-radius: 16px; }
+      .topbar-actions { gap: 8px; }
+
+      .menu-btn,
+      .lang-btn {
+        min-height: 44px;
+        padding: 0 14px;
+      }
+
       .section-title,
       .location-title { font-size: 24px; }
       .section-copy { font-size: 14px; }
@@ -857,6 +964,18 @@
 
       .double-field {
         grid-template-columns: 96px minmax(0, 1fr);
+      }
+
+      .intro-full {
+        padding: 22px 0;
+      }
+
+      .calendar-top {
+        padding: 18px 14px 12px;
+      }
+
+      #calendar .fc {
+        padding: 0 6px 6px;
       }
 
       .modal-card {
@@ -884,6 +1003,10 @@
       .fc .fc-daygrid-day-frame { min-height: 78px; }
       .fc-daygrid-event { font-size: 10px; padding: 3px 5px; }
       .floating-whatsapp { right: 12px; bottom: 14px; width: 54px; height: 54px; font-size: 26px; }
+
+      .side-menu {
+        width: min(90vw, 300px);
+      }
     }
   </style>
 </head>
@@ -896,11 +1019,31 @@
         </div>
         <div class="brand-title" data-i18n="topbarBrand">شاليهات رافانا</div>
       </div>
-      <button class="lang-btn" id="langToggle" type="button">EN</button>
+
+      <div class="topbar-actions">
+        <button class="menu-btn" id="menuToggle" type="button" data-i18n="menuBtn">القائمة</button>
+        <button class="lang-btn" id="langToggle" type="button">EN</button>
+      </div>
     </div>
   </div>
 
-  <section class="hero">
+  <div class="side-menu-overlay" id="sideMenuOverlay"></div>
+
+  <aside class="side-menu" id="sideMenu">
+    <div class="side-menu-head">
+      <strong data-i18n="menuTitle">التنقل</strong>
+      <button class="close-btn" id="closeMenuBtn" type="button">×</button>
+    </div>
+
+    <nav class="side-menu-links">
+      <a href="#" class="menu-link" data-scroll-target="heroSection" data-i18n="menuHome">الرئيسية</a>
+      <a href="#" class="menu-link" data-scroll-target="chalet-section-A" data-i18n="menuChaletA">شاليه رافانا A</a>
+      <a href="#" class="menu-link" data-scroll-target="chalet-section-B" data-i18n="menuChaletB">شاليه رافانا B</a>
+      <a href="#" class="menu-link" data-scroll-target="chalet-section-C" data-i18n="menuChaletC">شاليه رافانا C</a>
+    </nav>
+  </aside>
+
+  <section class="hero" id="heroSection">
     <div class="hero-media">
       <img src="images/hero-cover.jpg" alt="شاليهات رافانا" onerror="this.src='https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80'">
       <div class="hero-overlay"></div>
@@ -911,28 +1054,32 @@
     </div>
   </section>
 
-  <main class="container">
-    <section class="section">
-      <div class="intro-card">
+  <section class="intro-band">
+    <div class="intro-card intro-full">
+      <div class="container">
         <h2 class="section-title" data-i18n="introTitle">تجربة إقامة لا تُنسى</h2>
         <p class="section-copy" data-i18n="introCopy">
           في شاليهات رافانا ستجدون مساحة خاصة لأجمل اللحظات، حيث الهدوء والخصوصية والتصميم الدافئ في بيئة تمنحكم الراحة والاسترخاء. تجربة مثالية للعائلات والأصدقاء ولكل من يبحث عن إقامة مميزة بعيداً عن صخب الحياة اليومية.
         </p>
       </div>
-    </section>
+    </div>
+  </section>
 
+  <main class="container">
     <section class="section chalet-stack" id="chaletsSection"></section>
 
     <section class="section">
       <div class="calendar-card" id="bookingSection">
-        <div class="calendar-head">
-          <h2 class="section-title" data-i18n="calendarTitle">التوفر والحجز</h2>
-          <span data-i18n="calendarSub">يمكنك الحجز من خلال التقويم ادناه</span>
-        </div>
+        <div class="calendar-top">
+          <div class="calendar-head">
+            <h2 class="section-title" data-i18n="calendarTitle">التوفر والحجز</h2>
+            <span data-i18n="calendarSub">يمكنك الحجز من خلال التقويم ادناه</span>
+          </div>
 
-        <div class="legend">
-          <span class="legend-item"><i class="legend-dot success"></i><span data-i18n="legendAvailable">متاح</span></span>
-          <span class="legend-item"><i class="legend-dot danger"></i><span data-i18n="legendBooked">محجوز</span></span>
+          <div class="legend">
+            <span class="legend-item"><i class="legend-dot success"></i><span data-i18n="legendAvailable">متاح</span></span>
+            <span class="legend-item"><i class="legend-dot danger"></i><span data-i18n="legendBooked">محجوز</span></span>
+          </div>
         </div>
 
         <div class="calendar-wrapper">
@@ -1047,56 +1194,56 @@
     const GOOGLE_MAPS_URL = 'https://maps.google.com/?q=Nizwa,Oman';
     const FLOATING_WHATSAPP_URL = 'https://wa.me/96800000000';
 
-const CHALET_DATA = [
-  {
-    code: 'A',
-    nameAr: 'شاليه رافانا A',
-    nameEn: 'Ravana Chalet A',
-    resortValue: 'شاليه رافانا A',
-    descAr: 'إطلالة مريحة ومساحات خاصة مثالية لجلسات هادئة وتجربة إقامة دافئة.',
-    descEn: 'A warm private retreat with relaxing views and a calm, comfortable atmosphere.',
-    detailsAr: 'يتميز هذا الشاليه بخصوصية عالية وجلسات خارجية مريحة ومساحة مناسبة للعائلات الصغيرة والأصدقاء.',
-    detailsEn: 'This chalet offers strong privacy, cozy outdoor seating, and a comfortable layout for couples, friends, and small families.',
-    images: [
-      './images/resort-a-1.jpg',
-      './images/resort-a-2.jpg',
-      './images/resort-a-3.jpg',
-      './images/resort-a-4.jpg'
-    ]
-  },
-  {
-    code: 'B',
-    nameAr: 'شاليه رافانا B',
-    nameEn: 'Ravana Chalet B',
-    resortValue: 'شاليه رافانا B',
-    descAr: 'تصميم عصري وجلسات أنيقة تمنحكم أجواء هادئة ولحظات مميزة طوال الإقامة.',
-    descEn: 'A modern chalet with elegant seating and a peaceful mood for memorable stays.',
-    detailsAr: 'خيار مناسب لعشاق الأجواء الهادئة مع مساحات منظمة وتجربة إقامة مريحة في كل التفاصيل.',
-    detailsEn: 'A great choice for peaceful escapes with organized spaces and comfort in every detail.',
-    images: [
-      './images/resort-b-1.jpg',
-      './images/resort-b-2.jpg',
-      './images/resort-b-3.jpg',
-      './images/resort-b-4.jpg'
-    ]
-  },
-  {
-    code: 'C',
-    nameAr: 'شاليه رافانا C',
-    nameEn: 'Ravana Chalet C',
-    resortValue: 'شاليه رافانا C',
-    descAr: 'مساحة خاصة تمنحكم الراحة والهدوء مع تجربة إقامة مناسبة للعائلة والأصدقاء.',
-    descEn: 'A private relaxing space designed for families and friends seeking calm and comfort.',
-    detailsAr: 'يوفر هذا الشاليه تجربة هادئة بأجواء خاصة ومرافق مناسبة لقضاء أوقات جميلة بعيداً عن الضغوط.',
-    detailsEn: 'This chalet delivers a calm private stay with useful amenities for beautiful moments away from daily stress.',
-    images: [
-      './images/resort-c-1.jpg',
-      './images/resort-c-2.jpg',
-      './images/resort-c-3.jpg',
-      './images/resort-c-4.jpg'
-    ]
-  }
-];
+    const CHALET_DATA = [
+      {
+        code: 'A',
+        nameAr: 'شاليه رافانا A',
+        nameEn: 'Ravana Chalet A',
+        resortValue: 'شاليه رافانا A',
+        descAr: 'إطلالة مريحة ومساحات خاصة مثالية لجلسات هادئة وتجربة إقامة دافئة.',
+        descEn: 'A warm private retreat with relaxing views and a calm, comfortable atmosphere.',
+        detailsAr: 'يتميز هذا الشاليه بخصوصية عالية وجلسات خارجية مريحة ومساحة مناسبة للعائلات الصغيرة والأصدقاء.',
+        detailsEn: 'This chalet offers strong privacy, cozy outdoor seating, and a comfortable layout for couples, friends, and small families.',
+        images: [
+          './images/resort-a-1.jpg',
+          './images/resort-a-2.jpg',
+          './images/resort-a-3.jpg',
+          './images/resort-a-4.jpg'
+        ]
+      },
+      {
+        code: 'B',
+        nameAr: 'شاليه رافانا B',
+        nameEn: 'Ravana Chalet B',
+        resortValue: 'شاليه رافانا B',
+        descAr: 'تصميم عصري وجلسات أنيقة تمنحكم أجواء هادئة ولحظات مميزة طوال الإقامة.',
+        descEn: 'A modern chalet with elegant seating and a peaceful mood for memorable stays.',
+        detailsAr: 'خيار مناسب لعشاق الأجواء الهادئة مع مساحات منظمة وتجربة إقامة مريحة في كل التفاصيل.',
+        detailsEn: 'A great choice for peaceful escapes with organized spaces and comfort in every detail.',
+        images: [
+          './images/resort-b-1.jpg',
+          './images/resort-b-2.jpg',
+          './images/resort-b-3.jpg',
+          './images/resort-b-4.jpg'
+        ]
+      },
+      {
+        code: 'C',
+        nameAr: 'شاليه رافانا C',
+        nameEn: 'Ravana Chalet C',
+        resortValue: 'شاليه رافانا C',
+        descAr: 'مساحة خاصة تمنحكم الراحة والهدوء مع تجربة إقامة مناسبة للعائلة والأصدقاء.',
+        descEn: 'A private relaxing space designed for families and friends seeking calm and comfort.',
+        detailsAr: 'يوفر هذا الشاليه تجربة هادئة بأجواء خاصة ومرافق مناسبة لقضاء أوقات جميلة بعيداً عن الضغوط.',
+        detailsEn: 'This chalet delivers a calm private stay with useful amenities for beautiful moments away from daily stress.',
+        images: [
+          './images/resort-c-1.jpg',
+          './images/resort-c-2.jpg',
+          './images/resort-c-3.jpg',
+          './images/resort-c-4.jpg'
+        ]
+      }
+    ];
 
     const COUNTRY_CODES = [
       { nameAr: 'عُمان', nameEn: 'Oman', code: '+968' },
@@ -1117,6 +1264,12 @@ const CHALET_DATA = [
         dir: 'rtl',
         langButton: 'EN',
         topbarBrand: 'شاليهات رافانا',
+        menuBtn: 'القائمة',
+        menuTitle: 'التنقل',
+        menuHome: 'الرئيسية',
+        menuChaletA: 'شاليه رافانا A',
+        menuChaletB: 'شاليه رافانا B',
+        menuChaletC: 'شاليه رافانا C',
         heroWelcome: 'مرحبا بكم في شاليهات رافانا',
         heroBook: 'احجز اقامتك الان',
         introTitle: 'تجربة إقامة لا تُنسى',
@@ -1152,7 +1305,7 @@ const CHALET_DATA = [
         noImages: 'لا توجد صور متاحة حالياً.',
         requiredError: 'يرجى تعبئة جميع الحقول المطلوبة.',
         pastDateError: 'لا يمكن الحجز في تاريخ سابق.',
-        bookedDateError: 'هذه الاستراحة محجوزة في هذا التاريخ.',
+        bookedDateError: 'هذا الشاليه محجوز في هذا التاريخ.',
         sending: 'جاري إرسال طلب الحجز...',
         readingError: 'تعذر قراءة رد الخدمة.'
       },
@@ -1160,6 +1313,12 @@ const CHALET_DATA = [
         dir: 'ltr',
         langButton: 'AR',
         topbarBrand: 'Ravana Chalets',
+        menuBtn: 'Menu',
+        menuTitle: 'Navigation',
+        menuHome: 'Home',
+        menuChaletA: 'Ravana Chalet A',
+        menuChaletB: 'Ravana Chalet B',
+        menuChaletC: 'Ravana Chalet C',
         heroWelcome: 'Welcome to Ravana Chalets',
         heroBook: 'Book Your Stay Now',
         introTitle: 'A Stay You Will Remember',
@@ -1222,6 +1381,10 @@ const CHALET_DATA = [
     const langToggle = document.getElementById('langToggle');
     const heroBookBtn = document.getElementById('heroBookBtn');
     const chaletsSection = document.getElementById('chaletsSection');
+    const menuToggle = document.getElementById('menuToggle');
+    const sideMenu = document.getElementById('sideMenu');
+    const sideMenuOverlay = document.getElementById('sideMenuOverlay');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
 
     let calendar = null;
     let bookingData = [];
@@ -1254,7 +1417,6 @@ const CHALET_DATA = [
     function normalizeToEnglishDigits(value) {
       const arabicIndic = '٠١٢٣٤٥٦٧٨٩';
       const easternArabicIndic = '۰۱۲۳۴۵۶۷۸۹';
-
       return String(value || '')
         .split('')
         .map(ch => {
@@ -1357,13 +1519,19 @@ const CHALET_DATA = [
       infoModal.classList.remove('active');
     }
 
+    function openMenu() {
+      document.body.classList.add('menu-open');
+    }
+
+    function closeMenu() {
+      document.body.classList.remove('menu-open');
+    }
+
     function buildGalleryHtml(images) {
       const validImages = (images || []).filter(Boolean);
-
       if (!validImages.length) {
         return '<div class="rules-box">' + t('noImages') + '</div>';
       }
-
       return '<div class="resort-gallery">' + validImages.map(src => {
         return '<img src="' + src + '" alt="Chalet" loading="lazy" onerror="this.outerHTML=\'<div class=&quot;rules-box&quot;>' + t('imageError') + '</div>\'">';
       }).join('') + '</div>';
@@ -1401,7 +1569,7 @@ const CHALET_DATA = [
       )).join('');
 
       return (
-        '<article class="chalet-card" data-chalet-card="' + chalet.code + '">' +
+        '<article class="chalet-card" id="chalet-section-' + chalet.code + '" data-chalet-card="' + chalet.code + '">' +
           '<div class="slider" data-slider="' + chalet.code + '">' +
             '<div class="slides">' + slides + '</div>' +
             '<div class="slider-nav">' +
@@ -1557,9 +1725,12 @@ const CHALET_DATA = [
           const date = normalizeDate(props.date);
           const resort = props.resort;
           const status = String(props.status || '').trim();
+
           if (isPastDate(date)) return;
+
           closeBooking();
           openBookingModal({ date, resort });
+
           if (status !== 'متاح') {
             showBookingStatus(t('bookedDateError'), 'error');
           }
@@ -1664,6 +1835,22 @@ const CHALET_DATA = [
     langToggle.addEventListener('click', () => {
       currentLang = currentLang === 'ar' ? 'en' : 'ar';
       applyLanguage();
+    });
+
+    menuToggle.addEventListener('click', openMenu);
+    closeMenuBtn.addEventListener('click', closeMenu);
+    sideMenuOverlay.addEventListener('click', closeMenu);
+
+    document.querySelectorAll('.menu-link').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const targetId = link.getAttribute('data-scroll-target');
+        const target = document.getElementById(targetId);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        closeMenu();
+      });
     });
 
     closeBookingModal.addEventListener('click', closeBooking);
