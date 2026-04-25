@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الشروط والضوابط - شاليهات رافانا</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #f5f2ec;
+      --surface: rgba(255,255,255,0.82);
+      --line: rgba(77, 58, 34, 0.10);
+      --text: #2c2218;
+      --muted: #76695a;
+      --brand: #8b6a48;
+      --brand-dark: #5f4630;
+      --danger: #c45c5c;
+      --success: #5f8b6a;
+      --shadow-xl: 0 24px 60px rgba(66, 43, 19, 0.10);
+      --shadow-md: 0 10px 22px rgba(66, 43, 19, 0.08);
+      --radius-2xl: 34px;
+      --radius-xl: 26px;
+      --radius-lg: 18px;
+      --header-h: 78px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(139,106,72,0.08), transparent 24%),
+        linear-gradient(180deg, #faf8f4 0%, #f5f2ec 100%);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      padding-top: var(--header-h);
+      position: relative;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.35;
+      background:
+        repeating-linear-gradient(
+          45deg,
+          rgba(139,106,72,0.035) 0px,
+          rgba(139,106,72,0.035) 1px,
+          transparent 1px,
+          transparent 28px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          rgba(95,70,48,0.025) 0px,
+          rgba(95,70,48,0.025) 1px,
+          transparent 1px,
+          transparent 28px
+        );
+    }
+
+    body > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    html[lang="ar"] body,
+    html[lang="ar"] button {
+      font-family: "Tajawal", "Segoe UI", Tahoma, Arial, sans-serif;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; }
+
+    .container {
+      width: min(1100px, calc(100% - 20px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      inset-inline: 0;
+      z-index: 2000;
+      width: 100%;
+    }
+
+    .topbar-inner {
+      width: 100%;
+      min-height: var(--header-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 18px;
+      background: rgba(255,255,255,0.84);
+      backdrop-filter: blur(18px) saturate(1.2);
+      -webkit-backdrop-filter: blur(18px) saturate(1.2);
+      border-bottom: 1px solid rgba(255,255,255,0.7);
+      box-shadow: var(--shadow-md);
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .logo-box {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, #fff, #f2ebe3);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.75);
+    }
+
+    .logo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .brand-text {
+      min-width: 0;
+    }
+
+    .brand-title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .lang-btn,
+    .back-btn {
+      min-height: 46px;
+      padding: 0 16px;
+      border-radius: 999px;
+      border: 0;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .lang-btn {
+      background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+      color: #fff;
+      box-shadow: 0 14px 28px rgba(95, 70, 48, 0.18);
+    }
+
+    .back-btn {
+      background: linear-gradient(180deg, #fff, #f6f0e8);
+      color: var(--text);
+      border: 1px solid rgba(95,70,48,0.10);
+      box-shadow: 0 8px 18px rgba(66,43,19,0.06);
+    }
+
+    .page {
+      padding: 18px 0 30px;
+    }
+
+    .hero-card,
+    .rules-card,
+    .note-card,
+    .contact-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-2xl);
+      box-shadow: var(--shadow-xl);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .hero-card {
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(246,240,232,0.82));
+      border: 1px solid rgba(95,70,48,0.08);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .hero-title {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 5vw, 40px);
+      letter-spacing: -0.03em;
+    }
+
+    .hero-copy {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.95;
+      max-width: 880px;
+    }
+
+    .rules-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .rules-card {
+      padding: 20px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .section-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, #fff, #f3ece3);
+      border: 1px solid rgba(95,70,48,0.08);
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .rule-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    .rule-item {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(246,240,232,0.82));
+      border: 1px solid rgba(95,70,48,0.07);
+    }
+
+    .rule-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      margin-top: 1px;
+    }
+
+    .rule-text {
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.9;
+    }
+
+    .rule-text strong {
+      color: var(--brand-dark);
+    }
+
+    .cards-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .note-card,
+    .contact-card {
+      padding: 20px;
+    }
+
+    .note-card h3,
+    .contact-card h3 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+    }
+
+    .note-card p,
+    .contact-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.9;
+      font-size: 15px;
+    }
+
+    .contact-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 16px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(246,240,232,0.86));
+      border: 1px solid rgba(95,70,48,0.10);
+      box-shadow: 0 8px 18px rgba(66,43,19,0.05);
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    @media (max-width: 780px) {
+      .cards-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      :root { --header-h: 72px; }
+
+      .container {
+        width: min(100%, calc(100% - 12px));
+      }
+
+      .topbar-inner {
+        padding: 10px 12px;
+      }
+
+      .logo-box {
+        width: 50px;
+        height: 50px;
+        border-radius: 16px;
+      }
+
+      .brand-title {
+        font-size: 18px;
+      }
+
+      .brand-subtitle {
+        font-size: 12px;
+      }
+
+      .topbar-actions {
+        gap: 8px;
+      }
+
+      .lang-btn,
+      .back-btn {
+        min-height: 42px;
+        padding: 0 14px;
+      }
+
+      .hero-card,
+      .rules-card,
+      .note-card,
+      .contact-card {
+        border-radius: 26px;
+      }
+
+      .hero-card,
+      .rules-card,
+      .note-card,
+      .contact-card {
+        padding: 16px;
+      }
+
+      .hero-title {
+        font-size: 28px;
+      }
+
+      .section-title {
+        font-size: 22px;
+      }
+
+      .rule-item {
+        grid-template-columns: 26px minmax(0, 1fr);
+        padding: 11px 12px;
+      }
+
+      .rule-badge {
+        width: 26px;
+        height: 26px;
+        font-size: 11px;
+      }
+
+      .rule-text,
+      .hero-copy,
+      .note-card p,
+      .contact-card p {
+        font-size: 14px;
+      }
+
+      .contact-actions {
+        flex-direction: column;
+      }
+
+      .contact-link {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand-wrap">
+        <div class="logo-box">
+          <img src="logo.png" alt="Ravana Chalets" onerror="this.style.display='none';this.parentNode.innerHTML='🏡'">
+        </div>
+        <div class="brand-text">
+          <div class="brand-title" data-i18n="brandTitle">شاليهات رافانا</div>
+          <div class="brand-subtitle" data-i18n="brandSubtitle">الشروط والضوابط</div>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <button class="lang-btn" id="langToggle" type="button">EN</button>
+        <button class="back-btn" id="backBtn" type="button" data-i18n="backBtn">العودة للرئيسية</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="page">
+    <div class="container">
+      <section class="hero-card">
+        <div class="hero-eyebrow" data-i18n="eyebrow">مهم قبل تأكيد الحجز</div>
+        <h1 class="hero-title" data-i18n="heroTitle">الشروط والضوابط</h1>
+        <p class="hero-copy" data-i18n="heroCopy">
+          يرجى قراءة الشروط التالية بعناية قبل إرسال طلب الحجز. تأكيدك للحجز يعني موافقتك على هذه البنود والالتزام بها طوال فترة الإقامة.
+        </p>
+      </section>
+
+      <div class="rules-grid">
+        <section class="rules-card">
+          <div class="section-head">
+            <div class="section-icon">📌</div>
+            <h2 class="section-title" data-i18n="section1Title">شروط الحجز</h2>
+          </div>
+
+          <ul class="rule-list" id="rulesSection1"></ul>
+        </section>
+
+        <section class="rules-card">
+          <div class="section-head">
+            <div class="section-icon">🏡</div>
+            <h2 class="section-title" data-i18n="section2Title">أثناء الإقامة</h2>
+          </div>
+
+          <ul class="rule-list" id="rulesSection2"></ul>
+        </section>
+
+        <section class="rules-card">
+          <div class="section-head">
+            <div class="section-icon">🕒</div>
+            <h2 class="section-title" data-i18n="section3Title">الدخول والخروج والإلغاء</h2>
+          </div>
+
+          <ul class="rule-list" id="rulesSection3"></ul>
+        </section>
+      </div>
+
+      <div class="cards-row">
+        <section class="note-card">
+          <h3 data-i18n="importantTitle">ملاحظة مهمة</h3>
+          <p data-i18n="importantCopy">
+            يتم تسجيل الحجز في البداية بحالة <strong>بانتظار التأكيد</strong>، ولا يعتبر الحجز نهائيًا إلا بعد اعتماده من إدارة الحجوزات.
+          </p>
+        </section>
+
+        <section class="contact-card">
+          <h3 data-i18n="contactTitle">للاستفسار والتواصل</h3>
+          <p data-i18n="contactCopy">
+            لأي استفسار عن الحجز أو الشروط أو المواعيد، يمكنكم التواصل معنا من خلال القنوات التالية.
+          </p>
+
+          <div class="contact-actions">
+            <a class="contact-link" id="waLink" href="https://wa.me/96800000000" target="_blank" rel="noopener noreferrer" data-i18n="contactWhatsapp">واتساب</a>
+            <a class="contact-link" id="igLink" href="https://instagram.com/youraccount" target="_blank" rel="noopener noreferrer" data-i18n="contactInstagram">انستجرام</a>
+            <a class="contact-link" id="callLink" href="tel:+96800000000" data-i18n="contactCall">اتصل بنا</a>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const BACK_URL = 'index.html';
+    const CONTACT_WHATSAPP_URL = 'https://wa.me/96800000000';
+    const CONTACT_INSTAGRAM_URL = 'https://instagram.com/youraccount';
+    const CONTACT_CALL_URL = 'tel:+96800000000';
+
+    const I18N = {
+      ar: {
+        dir: 'rtl',
+        langButton: 'EN',
+        brandTitle: 'شاليهات رافانا',
+        brandSubtitle: 'الشروط والضوابط',
+        backBtn: 'العودة للرئيسية',
+        eyebrow: 'مهم قبل تأكيد الحجز',
+        heroTitle: 'الشروط والضوابط',
+        heroCopy: 'يرجى قراءة الشروط التالية بعناية قبل إرسال طلب الحجز. تأكيدك للحجز يعني موافقتك على هذه البنود والالتزام بها طوال فترة الإقامة.',
+        section1Title: 'شروط الحجز',
+        section2Title: 'أثناء الإقامة',
+        section3Title: 'الدخول والخروج والإلغاء',
+        importantTitle: 'ملاحظة مهمة',
+        importantCopy: 'يتم تسجيل الحجز في البداية بحالة بانـتظار التأكيد، ولا يعتبر الحجز نهائيًا إلا بعد اعتماده من إدارة الحجوزات.',
+        contactTitle: 'للاستفسار والتواصل',
+        contactCopy: 'لأي استفسار عن الحجز أو الشروط أو المواعيد، يمكنكم التواصل معنا من خلال القنوات التالية.',
+        contactWhatsapp: 'واتساب',
+        contactInstagram: 'انستجرام',
+        contactCall: 'اتصل بنا',
+        rules1: [
+          'يتم إرسال الطلب أولًا بحالة <strong>بانتظار التأكيد</strong> إلى حين مراجعته واعتماده.',
+          'البيانات المدخلة عند الحجز يجب أن تكون صحيحة، خاصة <strong>الاسم ورقم الهاتف</strong>.',
+          'لا يعتبر الموعد محجوزًا نهائيًا إلا بعد تغيير الحالة إلى <strong>محجوز</strong> من قبل الإدارة.',
+          'يحق للإدارة رفض أي طلب حجز غير مكتمل أو في حال عدم توفر التاريخ المطلوب.'
+        ],
+        rules2: [
+          'يجب المحافظة على نظافة الشاليه والمرافق الداخلية والخارجية طوال فترة الاستخدام.',
+          'يمنع إحداث أي تلفيات أو إساءة استخدام للمحتويات أو المرافق، ويتحمل المستأجر أي أضرار ناتجة عن ذلك.',
+          'يلتزم الزائر بالهدوء واحترام خصوصية المكان وعدم التسبب في الإزعاج.',
+          'يمنع استخدام الشاليه لأي غرض مخالف للأنظمة أو الآداب العامة.'
+        ],
+        rules3: [
+          'يتم الالتزام بمواعيد <strong>الدخول والخروج</strong> المعتمدة من الإدارة.',
+          'في حال الرغبة في التعديل أو الإلغاء، يجب التواصل مع الإدارة قبل الموعد بوقت كافٍ.',
+          'في حال التأخر عن الخروج دون تنسيق مسبق، يحق للإدارة اتخاذ الإجراء المناسب حسب سياسة الحجز.',
+          'أي استثناءات أو ترتيبات خاصة تخضع لموافقة الإدارة المسبقة.'
+        ]
+      },
+      en: {
+        dir: 'ltr',
+        langButton: 'AR',
+        brandTitle: 'Ravana Chalets',
+        brandSubtitle: 'Terms & Rules',
+        backBtn: 'Back to Home',
+        eyebrow: 'Important before booking',
+        heroTitle: 'Terms & Rules',
+        heroCopy: 'Please read the following terms carefully before sending your booking request. Confirming your booking means you agree to these terms and commit to following them during your stay.',
+        section1Title: 'Booking Terms',
+        section2Title: 'During Your Stay',
+        section3Title: 'Check-in, Check-out & Cancellation',
+        importantTitle: 'Important Note',
+        importantCopy: 'A booking is initially recorded as pending confirmation and is not considered final until approved by the booking management.',
+        contactTitle: 'Questions & Contact',
+        contactCopy: 'For any questions about booking, rules, or schedule details, please contact us through the following channels.',
+        contactWhatsapp: 'WhatsApp',
+        contactInstagram: 'Instagram',
+        contactCall: 'Call Us',
+        rules1: [
+          'Every request is first submitted as <strong>Pending Confirmation</strong> until reviewed and approved.',
+          'All booking information must be accurate, especially the <strong>name and phone number</strong>.',
+          'A reservation is not final until its status is changed to <strong>Booked</strong> by management.',
+          'Management may reject incomplete requests or requests for unavailable dates.'
+        ],
+        rules2: [
+          'Guests must maintain the cleanliness of the chalet and all indoor and outdoor facilities during the stay.',
+          'Any misuse or damage to the property or its contents is the responsibility of the guest.',
+          'Guests must respect the peaceful atmosphere and privacy of the place and avoid causing disturbance.',
+          'The chalet may not be used for any purpose that violates regulations or public conduct.'
+        ],
+        rules3: [
+          'Approved <strong>check-in and check-out</strong> times must be followed.',
+          'For modifications or cancellations, guests must contact management in advance.',
+          'Late check-out without prior approval may result in action according to the booking policy.',
+          'Any exceptions or special arrangements require prior approval from management.'
+        ]
+      }
+    };
+
+    const langToggle = document.getElementById('langToggle');
+    const backBtn = document.getElementById('backBtn');
+    const rulesSection1 = document.getElementById('rulesSection1');
+    const rulesSection2 = document.getElementById('rulesSection2');
+    const rulesSection3 = document.getElementById('rulesSection3');
+    const waLink = document.getElementById('waLink');
+    const igLink = document.getElementById('igLink');
+    const callLink = document.getElementById('callLink');
+
+    let currentLang = 'ar';
+
+    function t(key) {
+      return I18N[currentLang][key] || key;
+    }
+
+    function buildRules(list) {
+      return list.map((item, index) => `
+        <li class="rule-item">
+          <div class="rule-badge">${index + 1}</div>
+          <div class="rule-text">${item}</div>
+        </li>
+      `).join('');
+    }
+
+    function applyLanguage() {
+      document.documentElement.lang = currentLang;
+      document.documentElement.dir = I18N[currentLang].dir;
+      document.body.dir = I18N[currentLang].dir;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        el.textContent = t(el.getAttribute('data-i18n'));
+      });
+
+      langToggle.textContent = t('langButton');
+
+      rulesSection1.innerHTML = buildRules(I18N[currentLang].rules1);
+      rulesSection2.innerHTML = buildRules(I18N[currentLang].rules2);
+      rulesSection3.innerHTML = buildRules(I18N[currentLang].rules3);
+    }
+
+    backBtn.addEventListener('click', () => {
+      window.location.href = BACK_URL;
+    });
+
+    langToggle.addEventListener('click', () => {
+      currentLang = currentLang === 'ar' ? 'en' : 'ar';
+      applyLanguage();
+    });
+
+    waLink.href = CONTACT_WHATSAPP_URL;
+    igLink.href = CONTACT_INSTAGRAM_URL;
+    callLink.href = CONTACT_CALL_URL;
+
+    applyLanguage();
+  </script>
+</body>
+</html>
