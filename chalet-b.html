@@ -23,7 +23,6 @@
       --brand-dark: #5f4630;
       --success: #24a46d;
       --danger: #d45454;
-      --warning: #d9a441;
       --shadow-xl: 0 24px 60px rgba(66, 43, 19, 0.10);
       --shadow-md: 0 10px 22px rgba(66, 43, 19, 0.08);
       --radius-2xl: 34px;
@@ -352,23 +351,16 @@
       padding: 18px 0 34px;
     }
 
-    .page-title-card {
-      padding: 24px;
-      border-radius: var(--radius-2xl);
-      margin-bottom: 16px;
+    .title-block {
+      padding: 10px 4px 8px;
+      margin-bottom: 10px;
     }
 
     .page-title {
       margin: 0;
-      font-size: clamp(28px, 5vw, 42px);
+      font-size: clamp(32px, 5vw, 46px);
       letter-spacing: -0.03em;
-    }
-
-    .page-subtitle {
-      margin: 10px 0 0;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.9;
+      line-height: 1.2;
     }
 
     .section-card {
@@ -383,15 +375,18 @@
       letter-spacing: -0.03em;
     }
 
+    .gallery-card {
+      padding: 0 0 16px;
+      overflow: hidden;
+    }
+
     .gallery-main {
       position: relative;
       width: 100%;
       aspect-ratio: 16 / 8.5;
-      border-radius: 28px;
       overflow: hidden;
       background: #ddd2c2;
-      box-shadow: var(--shadow-md);
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       touch-action: pan-y;
     }
 
@@ -407,41 +402,43 @@
       top: 50%;
       transform: translateY(-50%);
       z-index: 2;
-      width: 46px;
-      height: 46px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
       border: 0;
-      background: rgba(255,255,255,0.88);
-      color: var(--text);
-      font-size: 22px;
+      background: rgba(255,255,255,0.34);
+      color: #fff;
+      font-size: 18px;
       font-weight: 800;
       cursor: pointer;
-      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
     }
 
     .gallery-main-btn.prev {
-      inset-inline-start: 14px;
+      inset-inline-start: 10px;
     }
 
     .gallery-main-btn.next {
-      inset-inline-end: 14px;
+      inset-inline-end: 10px;
     }
 
     .thumbs-wrap {
       display: grid;
-      grid-template-columns: 46px minmax(0, 1fr) 46px;
+      grid-template-columns: 40px minmax(0, 1fr) 40px;
       gap: 10px;
       align-items: center;
+      padding: 0 14px;
     }
 
     .thumbs-nav {
-      width: 46px;
-      height: 46px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       border: 0;
-      background: linear-gradient(180deg, #fff, #f6f0e8);
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(246,240,232,0.84));
       color: var(--text);
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 800;
       cursor: pointer;
       box-shadow: var(--shadow-md);
@@ -452,7 +449,7 @@
       gap: 10px;
       overflow-x: auto;
       scroll-behavior: smooth;
-      padding: 4px 2px;
+      padding: 2px 2px 4px;
       scrollbar-width: none;
     }
 
@@ -461,11 +458,11 @@
     }
 
     .thumb-btn {
-      flex: 0 0 108px;
-      height: 78px;
+      flex: 0 0 102px;
+      height: 74px;
       padding: 0;
       border: 2px solid transparent;
-      border-radius: 18px;
+      border-radius: 16px;
       overflow: hidden;
       background: #ddd2c2;
       cursor: pointer;
@@ -485,36 +482,15 @@
       display: block;
     }
 
-    .amenities-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
+    .details-band {
+      width: 100vw;
+      margin-inline: calc(50% - 50vw);
+      margin-bottom: 16px;
     }
 
-    .amenity-card {
-      min-height: 112px;
-      border-radius: 22px;
-      padding: 14px 10px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(246,240,232,0.84));
-      border: 1px solid rgba(95,70,48,0.08);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      gap: 10px;
-    }
-
-    .amenity-icon {
-      font-size: 28px;
-      line-height: 1;
-    }
-
-    .amenity-label {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--text);
-      line-height: 1.5;
+    .details-full {
+      border-radius: 0;
+      padding: 28px 0;
     }
 
     .detail-copy {
@@ -524,46 +500,57 @@
       font-size: 15px;
     }
 
-    .prices-table {
+    .amenities-grid {
       display: grid;
-      gap: 10px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px 10px;
+      padding-top: 4px;
     }
 
-    .price-row {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr 1fr;
-      gap: 10px;
-      align-items: stretch;
-    }
-
-    .price-cell {
-      border-radius: 20px;
-      padding: 14px 16px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(246,240,232,0.82));
-      border: 1px solid rgba(95,70,48,0.08);
+    .amenity-item {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      min-height: 62px;
-      line-height: 1.7;
+      gap: 10px;
+      min-height: 88px;
     }
 
-    .price-head {
+    .amenity-icon {
+      font-size: 30px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-bedroom { color: #9b6a7f; }
+    .icon-bathroom { color: #5f8ba8; }
+    .icon-cinema { color: #a86f5f; }
+    .icon-kitchen { color: #7c8d57; }
+    .icon-pool { color: #4d9bb8; }
+    .icon-coffee { color: #9a7258; }
+    .icon-bbq { color: #b35f53; }
+    .icon-outdoor { color: #6b9a63; }
+    .icon-wifi { color: #6a78b8; }
+
+    .amenity-label {
+      font-size: 14px;
       font-weight: 800;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .price-paragraph {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 2.1;
+    }
+
+    .price-paragraph strong {
       color: var(--brand-dark);
-      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(240,233,223,0.86));
-    }
-
-    .price-type {
-      font-weight: 800;
-      color: var(--text);
-    }
-
-    .price-value {
-      font-weight: 800;
-      color: var(--text);
-      font-size: 16px;
     }
 
     .calendar-card {
@@ -897,10 +884,6 @@
           url('images/background-main.jpg') center center / cover no-repeat;
       }
 
-      .price-row {
-        grid-template-columns: 1fr;
-      }
-
       .gallery-main {
         aspect-ratio: 16 / 10.5;
       }
@@ -925,42 +908,46 @@
         padding: 0 14px;
       }
 
-      .page-title-card,
       .section-card,
       .calendar-card {
         border-radius: 26px;
       }
 
-      .page-title-card,
       .section-card {
         padding: 16px;
+      }
+
+      .gallery-card {
+        padding: 0 0 12px;
+      }
+
+      .title-block {
+        padding: 6px 2px 6px;
+      }
+
+      .page-title {
+        font-size: 32px;
       }
 
       .section-title {
         font-size: 24px;
       }
 
-      .page-title {
-        font-size: 30px;
-      }
-
-      .page-subtitle,
-      .detail-copy {
+      .detail-copy,
+      .price-paragraph {
         font-size: 14px;
       }
 
       .amenities-grid {
-        gap: 8px;
+        gap: 18px 4px;
       }
 
-      .amenity-card {
-        min-height: 98px;
-        border-radius: 18px;
-        padding: 10px 6px;
+      .amenity-item {
+        min-height: 80px;
       }
 
       .amenity-icon {
-        font-size: 24px;
+        font-size: 26px;
       }
 
       .amenity-label {
@@ -972,10 +959,16 @@
         height: 68px;
       }
 
-      .gallery-main-btn,
+      .gallery-main-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+      }
+
       .thumbs-nav {
-        width: 42px;
-        height: 42px;
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
       }
 
       .calendar-top {
@@ -1076,12 +1069,11 @@
 
   <main class="page-wrap">
     <div class="container">
-      <section class="page-title-card glass-card">
+      <section class="title-block">
         <h1 class="page-title" id="pageChaletName">شاليه رافانا</h1>
-        <p class="page-subtitle" id="pageChaletSubtitle"></p>
       </section>
 
-      <section class="section-card glass-card">
+      <section class="section-card glass-card gallery-card">
         <div class="gallery-main" id="galleryMain">
           <button class="gallery-main-btn prev" id="galleryPrevBtn" type="button">‹</button>
           <img id="mainGalleryImage" src="" alt="Chalet Image">
@@ -1094,20 +1086,26 @@
           <button class="thumbs-nav" id="thumbsNextBtn" type="button">›</button>
         </div>
       </section>
+    </div>
 
+    <section class="details-band">
+      <div class="details-full glass-card">
+        <div class="container">
+          <h2 class="section-title" data-i18n="detailsTitle">تفاصيل الشاليه</h2>
+          <p class="detail-copy" id="chaletDescription"></p>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
       <section class="section-card glass-card">
         <h2 class="section-title" data-i18n="amenitiesTitle">المرافق والخدمات</h2>
         <div class="amenities-grid" id="amenitiesGrid"></div>
       </section>
 
       <section class="section-card glass-card">
-        <h2 class="section-title" data-i18n="detailsTitle">تفاصيل الشاليه</h2>
-        <p class="detail-copy" id="chaletDescription"></p>
-      </section>
-
-      <section class="section-card glass-card">
         <h2 class="section-title" data-i18n="pricesTitle">أسعار الشاليه</h2>
-        <div class="prices-table" id="pricesTable"></div>
+        <p class="price-paragraph" id="priceParagraph"></p>
       </section>
 
       <section class="section">
@@ -1115,7 +1113,7 @@
           <div class="calendar-top">
             <div class="calendar-head">
               <h2 class="section-title" data-i18n="calendarTitle">التوفر والحجز</h2>
-              <span data-i18n="calendarSub">يمكنك الحجز من خلال التقويم ادناه</span>
+              <span data-i18n="calendarSub">يعرض هذا التقويم توفر الشاليه الحالي فقط</span>
             </div>
 
             <div class="legend">
@@ -1205,8 +1203,6 @@
         resortValue: 'شاليه رافانا A',
         nameAr: 'شاليه رافانا A',
         nameEn: 'Ravana Chalet A',
-        subtitleAr: 'تجربة هادئة بخصوصية وأناقة ومساحة تمنحكم راحة كاملة طوال الإقامة.',
-        subtitleEn: 'A calm, elegant, and private stay designed for complete comfort.',
         descriptionAr: 'شاليه رافانا A يمنحكم أجواء هادئة ومساحة خاصة مصممة بعناية لتناسب الاسترخاء والخصوصية. تفاصيله الدافئة وتوزيع مساحاته المريح يجعلان منه خيارًا مثاليًا لقضاء وقت جميل بعيدًا عن ضغوط الحياة اليومية، سواء كانت الزيارة للراحة أو لتجربة إقامة مميزة مع من تحبون.',
         descriptionEn: 'Ravana Chalet A offers a peaceful private atmosphere designed for relaxation and comfort. Its warm details and balanced layout make it a perfect choice for a memorable stay away from daily routine, whether for rest or quality time with the people you love.',
         images: [
@@ -1218,15 +1214,15 @@
           './images/resort-a-6.jpg'
         ],
         amenities: [
-          { icon: '🛏️', ar: 'غرفة نوم مريحة', en: 'Comfortable Bedroom' },
-          { icon: '🛋️', ar: 'جلسة داخلية', en: 'Indoor Seating' },
-          { icon: '🌿', ar: 'جلسة خارجية', en: 'Outdoor Seating' },
-          { icon: '❄️', ar: 'تكييف', en: 'Air Conditioning' },
-          { icon: '📶', ar: 'واي فاي', en: 'Wi-Fi' },
-          { icon: '🚿', ar: 'حمام خاص', en: 'Private Bathroom' },
-          { icon: '🍽️', ar: 'منطقة طعام', en: 'Dining Area' },
-          { icon: '🚗', ar: 'موقف سيارة', en: 'Parking' },
-          { icon: '☕', ar: 'ركن ضيافة', en: 'Hospitality Corner' }
+          { icon: '🛏️', key: 'bedroom', ar: 'غرفة نوم بسرير مزدوج', en: 'Double Bed Bedroom' },
+          { icon: '🚿', key: 'bathroom', ar: 'حمام', en: 'Bathroom' },
+          { icon: '🎬', key: 'cinema', ar: 'سينما', en: 'Cinema' },
+          { icon: '🍳', key: 'kitchen', ar: 'مطبخ', en: 'Kitchen' },
+          { icon: '🏊', key: 'pool', ar: 'مسبح', en: 'Pool' },
+          { icon: '☕', key: 'coffee', ar: 'مكينة قهوة', en: 'Coffee Machine' },
+          { icon: '🔥', key: 'bbq', ar: 'شواية', en: 'BBQ' },
+          { icon: '🌿', key: 'outdoor', ar: 'جلسات خارجية', en: 'Outdoor Seating' },
+          { icon: '📶', key: 'wifi', ar: 'واي فاي', en: 'Wi-Fi' }
         ],
         prices: {
           weekdaysDayUse: '35 ر.ع',
@@ -1239,8 +1235,6 @@
         resortValue: 'شاليه رافانا B',
         nameAr: 'شاليه رافانا B',
         nameEn: 'Ravana Chalet B',
-        subtitleAr: 'تصميم عصري وجلسات أنيقة تمنحكم إقامة مريحة وأجواء جميلة.',
-        subtitleEn: 'A modern chalet with elegant seating and a refined, relaxing atmosphere.',
         descriptionAr: 'شاليه رافانا B يجمع بين التصميم العصري والراحة العملية في مساحة أنيقة مناسبة للأوقات الجميلة. يوفّر توازنًا رائعًا بين الخصوصية والهدوء مع جلسات مريحة وتفاصيل تمنح الإقامة طابعًا راقيًا ومميزًا، ليكون خيارًا مثاليًا لكل من يبحث عن تجربة مختلفة وممتعة.',
         descriptionEn: 'Ravana Chalet B combines modern design with practical comfort in a stylish space made for memorable moments. It offers the right balance of privacy, calm, and refined details to create a premium and enjoyable stay.',
         images: [
@@ -1252,15 +1246,15 @@
           './images/resort-b-6.jpg'
         ],
         amenities: [
-          { icon: '🛏️', ar: 'غرفة نوم مريحة', en: 'Comfortable Bedroom' },
-          { icon: '🪑', ar: 'جلسة أنيقة', en: 'Elegant Seating' },
-          { icon: '🌇', ar: 'إطلالة جميلة', en: 'Nice View' },
-          { icon: '❄️', ar: 'تكييف', en: 'Air Conditioning' },
-          { icon: '📶', ar: 'واي فاي', en: 'Wi-Fi' },
-          { icon: '🚿', ar: 'حمام خاص', en: 'Private Bathroom' },
-          { icon: '🍽️', ar: 'منطقة طعام', en: 'Dining Area' },
-          { icon: '🚗', ar: 'موقف سيارة', en: 'Parking' },
-          { icon: '🎵', ar: 'أجواء مريحة', en: 'Relaxing Atmosphere' }
+          { icon: '🛏️', key: 'bedroom', ar: 'غرفة نوم بسرير مزدوج', en: 'Double Bed Bedroom' },
+          { icon: '🚿', key: 'bathroom', ar: 'حمام', en: 'Bathroom' },
+          { icon: '🎬', key: 'cinema', ar: 'سينما', en: 'Cinema' },
+          { icon: '🍳', key: 'kitchen', ar: 'مطبخ', en: 'Kitchen' },
+          { icon: '🏊', key: 'pool', ar: 'مسبح', en: 'Pool' },
+          { icon: '☕', key: 'coffee', ar: 'مكينة قهوة', en: 'Coffee Machine' },
+          { icon: '🔥', key: 'bbq', ar: 'شواية', en: 'BBQ' },
+          { icon: '🌿', key: 'outdoor', ar: 'جلسات خارجية', en: 'Outdoor Seating' },
+          { icon: '📶', key: 'wifi', ar: 'واي فاي', en: 'Wi-Fi' }
         ],
         prices: {
           weekdaysDayUse: '38 ر.ع',
@@ -1273,8 +1267,6 @@
         resortValue: 'شاليه رافانا C',
         nameAr: 'شاليه رافانا C',
         nameEn: 'Ravana Chalet C',
-        subtitleAr: 'مساحة عملية وهادئة مناسبة للعائلة والأصدقاء مع أجواء مميزة.',
-        subtitleEn: 'A calm and practical private space ideal for families and friends.',
         descriptionAr: 'شاليه رافانا C صُمم ليمنحكم تجربة إقامة مريحة تجمع بين الرحابة والخصوصية في آن واحد. الأجواء الهادئة وتوزيع المرافق بشكل عملي يجعلان منه مكانًا مناسبًا للعائلة والأصدقاء، مع تجربة إقامة بسيطة وراقية تمنحكم لحظات جميلة لا تُنسى.',
         descriptionEn: 'Ravana Chalet C is designed to offer a comfortable stay with both spaciousness and privacy. Its calm atmosphere and practical layout make it ideal for families and friends looking for a simple yet refined getaway.',
         images: [
@@ -1286,15 +1278,15 @@
           './images/resort-c-6.jpg'
         ],
         amenities: [
-          { icon: '🛏️', ar: 'غرفة نوم مريحة', en: 'Comfortable Bedroom' },
-          { icon: '👨‍👩‍👧‍👦', ar: 'مناسب للعائلة', en: 'Family Friendly' },
-          { icon: '🌴', ar: 'جلسة خارجية', en: 'Outdoor Seating' },
-          { icon: '❄️', ar: 'تكييف', en: 'Air Conditioning' },
-          { icon: '📶', ar: 'واي فاي', en: 'Wi-Fi' },
-          { icon: '🚿', ar: 'حمام خاص', en: 'Private Bathroom' },
-          { icon: '🍽️', ar: 'منطقة طعام', en: 'Dining Area' },
-          { icon: '🚗', ar: 'موقف سيارة', en: 'Parking' },
-          { icon: '✨', ar: 'خصوصية تامة', en: 'Full Privacy' }
+          { icon: '🛏️', key: 'bedroom', ar: 'غرفة نوم بسرير مزدوج', en: 'Double Bed Bedroom' },
+          { icon: '🚿', key: 'bathroom', ar: 'حمام', en: 'Bathroom' },
+          { icon: '🎬', key: 'cinema', ar: 'سينما', en: 'Cinema' },
+          { icon: '🍳', key: 'kitchen', ar: 'مطبخ', en: 'Kitchen' },
+          { icon: '🏊', key: 'pool', ar: 'مسبح', en: 'Pool' },
+          { icon: '☕', key: 'coffee', ar: 'مكينة قهوة', en: 'Coffee Machine' },
+          { icon: '🔥', key: 'bbq', ar: 'شواية', en: 'BBQ' },
+          { icon: '🌿', key: 'outdoor', ar: 'جلسات خارجية', en: 'Outdoor Seating' },
+          { icon: '📶', key: 'wifi', ar: 'واي فاي', en: 'Wi-Fi' }
         ],
         prices: {
           weekdaysDayUse: '36 ر.ع',
@@ -1318,14 +1310,13 @@
         menuChaletC: 'شاليه رافانا C',
         menuRules: 'الشروط والضوابط',
         menuContact: 'تواصل معنا',
-        amenitiesTitle: 'المرافق والخدمات',
         detailsTitle: 'تفاصيل الشاليه',
+        amenitiesTitle: 'المرافق والخدمات',
         pricesTitle: 'أسعار الشاليه',
-        pricesColumnType: 'نوع الحجز',
-        pricesColumnWeekdays: 'أيام الأسبوع',
-        pricesColumnHolidays: 'الإجازات الرسمية',
-        priceRowDayUse: 'بدون مبيت',
-        priceRowOvernight: 'مع المبيت',
+        pricesWeekdays: 'أيام الأسبوع',
+        pricesHolidays: 'الإجازات الرسمية',
+        priceDayUse: 'بدون مبيت',
+        priceOvernight: 'مع مبيت',
         calendarTitle: 'التوفر والحجز',
         calendarSub: 'يعرض هذا التقويم توفر الشاليه الحالي فقط',
         legendAvailable: 'متاح',
@@ -1352,14 +1343,13 @@
         menuChaletC: 'Ravana Chalet C',
         menuRules: 'Terms & Rules',
         menuContact: 'Contact Us',
-        amenitiesTitle: 'Amenities & Services',
         detailsTitle: 'Chalet Details',
+        amenitiesTitle: 'Amenities & Services',
         pricesTitle: 'Chalet Prices',
-        pricesColumnType: 'Booking Type',
-        pricesColumnWeekdays: 'Weekdays',
-        pricesColumnHolidays: 'Official Holidays',
-        priceRowDayUse: 'Without Overnight',
-        priceRowOvernight: 'With Overnight',
+        pricesWeekdays: 'Weekdays',
+        pricesHolidays: 'Official Holidays',
+        priceDayUse: 'Without Overnight',
+        priceOvernight: 'With Overnight',
         calendarTitle: 'Availability & Booking',
         calendarSub: 'This calendar shows availability for the current chalet only',
         legendAvailable: 'Available',
@@ -1384,7 +1374,6 @@
     const closeMenuBtn = document.getElementById('closeMenuBtn');
 
     const pageChaletName = document.getElementById('pageChaletName');
-    const pageChaletSubtitle = document.getElementById('pageChaletSubtitle');
     const mainGalleryImage = document.getElementById('mainGalleryImage');
     const galleryMain = document.getElementById('galleryMain');
     const galleryPrevBtn = document.getElementById('galleryPrevBtn');
@@ -1394,7 +1383,7 @@
     const thumbsNextBtn = document.getElementById('thumbsNextBtn');
     const amenitiesGrid = document.getElementById('amenitiesGrid');
     const chaletDescription = document.getElementById('chaletDescription');
-    const pricesTable = document.getElementById('pricesTable');
+    const priceParagraph = document.getElementById('priceParagraph');
 
     const contactWhatsapp = document.getElementById('contactWhatsapp');
     const contactInstagram = document.getElementById('contactInstagram');
@@ -1505,8 +1494,8 @@
 
     function renderAmenities() {
       amenitiesGrid.innerHTML = chalet().amenities.map(item => `
-        <div class="amenity-card">
-          <div class="amenity-icon">${item.icon}</div>
+        <div class="amenity-item">
+          <div class="amenity-icon icon-${item.key}">${item.icon}</div>
           <div class="amenity-label">${currentLang === 'ar' ? item.ar : item.en}</div>
         </div>
       `).join('');
@@ -1514,29 +1503,15 @@
 
     function renderDescription() {
       pageChaletName.textContent = currentLang === 'ar' ? chalet().nameAr : chalet().nameEn;
-      pageChaletSubtitle.textContent = currentLang === 'ar' ? chalet().subtitleAr : chalet().subtitleEn;
       chaletDescription.textContent = currentLang === 'ar' ? chalet().descriptionAr : chalet().descriptionEn;
       document.title = (currentLang === 'ar' ? chalet().nameAr : chalet().nameEn) + ' - ' + t('topbarBrand');
     }
 
     function renderPrices() {
-      const prices = chalet().prices;
-      pricesTable.innerHTML = `
-        <div class="price-row">
-          <div class="price-cell price-head">${t('pricesColumnType')}</div>
-          <div class="price-cell price-head">${t('pricesColumnWeekdays')}</div>
-          <div class="price-cell price-head">${t('pricesColumnHolidays')}</div>
-        </div>
-        <div class="price-row">
-          <div class="price-cell price-type">${t('priceRowDayUse')}</div>
-          <div class="price-cell price-value">${prices.weekdaysDayUse}</div>
-          <div class="price-cell price-value">${prices.holidaysDayUse}</div>
-        </div>
-        <div class="price-row">
-          <div class="price-cell price-type">${t('priceRowOvernight')}</div>
-          <div class="price-cell price-value">${prices.weekdaysOvernight}</div>
-          <div class="price-cell price-value">${prices.holidaysOvernight}</div>
-        </div>
+      const p = chalet().prices;
+      priceParagraph.innerHTML = `
+        <strong>${t('pricesWeekdays')}:</strong> ${t('priceDayUse')} ${p.weekdaysDayUse}، ${t('priceOvernight')} ${p.weekdaysOvernight}<br>
+        <strong>${t('pricesHolidays')}:</strong> ${t('priceDayUse')} ${p.holidaysDayUse}، ${t('priceOvernight')} ${p.holidaysOvernight}
       `;
     }
 
