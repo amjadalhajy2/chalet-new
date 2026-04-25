@@ -13,7 +13,6 @@
     :root {
       --bg: #f5f2ec;
       --surface: rgba(255,255,255,0.78);
-      --surface-strong: rgba(255,255,255,0.92);
       --line: rgba(77, 58, 34, 0.10);
       --text: #2c2218;
       --muted: #76695a;
@@ -24,9 +23,6 @@
       --shadow-xl: 0 24px 60px rgba(66, 43, 19, 0.10);
       --shadow-md: 0 10px 22px rgba(66, 43, 19, 0.08);
       --radius-2xl: 34px;
-      --radius-xl: 26px;
-      --radius-lg: 20px;
-      --radius-md: 16px;
       --header-h: 78px;
     }
 
@@ -132,25 +128,42 @@
 
     .lang-btn,
     .menu-btn {
-      border: 0;
       min-height: 48px;
-      padding: 0 18px;
-      border-radius: 999px;
       font-weight: 800;
       cursor: pointer;
       font-size: 14px;
+      border-radius: 999px;
     }
 
     .lang-btn {
+      border: 0;
+      padding: 0 18px;
       background: linear-gradient(135deg, var(--brand), var(--brand-dark));
       color: #fff;
       box-shadow: 0 14px 28px rgba(95, 70, 48, 0.18);
     }
 
     .menu-btn {
+      width: 48px;
+      min-width: 48px;
+      height: 48px;
+      padding: 0;
       border: 1px solid rgba(95,70,48,0.12);
       background: linear-gradient(180deg, #fff, #f6f0e8);
       color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .menu-btn span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      border-radius: 999px;
+      background: var(--text);
     }
 
     .side-menu-overlay {
@@ -166,7 +179,6 @@
     .side-menu {
       position: fixed;
       top: 0;
-      right: 0;
       z-index: 2100;
       width: min(88vw, 320px);
       height: 100vh;
@@ -174,10 +186,22 @@
       background: rgba(255,255,255,0.96);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
-      box-shadow: -16px 0 40px rgba(66,43,19,0.12);
-      transform: translateX(100%);
       transition: .25s ease;
       overflow-y: auto;
+    }
+
+    html[dir="rtl"] .side-menu {
+      right: 0;
+      left: auto;
+      box-shadow: -16px 0 40px rgba(66,43,19,0.12);
+      transform: translateX(100%);
+    }
+
+    html[dir="ltr"] .side-menu {
+      left: 0;
+      right: auto;
+      box-shadow: 16px 0 40px rgba(66,43,19,0.12);
+      transform: translateX(-100%);
     }
 
     body.menu-open .side-menu {
@@ -266,7 +290,8 @@
 
     .hero-btn,
     .primary-btn,
-    .secondary-btn {
+    .secondary-btn,
+    .contact-btn {
       min-height: 52px;
       padding: 14px 18px;
       border-radius: 18px;
@@ -328,7 +353,8 @@
     }
 
     .section-title,
-    .location-title {
+    .location-title,
+    .contact-title {
       margin: 0 0 10px;
       font-size: 28px;
       letter-spacing: -0.03em;
@@ -709,6 +735,34 @@
       display: block;
     }
 
+    .contact-section {
+      padding: 26px 2px 34px;
+    }
+
+    .contact-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .whatsapp-btn {
+      background: linear-gradient(135deg, #25d366, #1fb85a);
+      color: #fff;
+      box-shadow: 0 14px 28px rgba(37, 211, 102, 0.22);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .instagram-btn {
+      background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+      color: #fff;
+      box-shadow: 0 14px 28px rgba(253, 29, 29, 0.18);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     .modal {
       position: fixed;
       inset: 0;
@@ -895,25 +949,6 @@
       width: 100%;
     }
 
-    .floating-whatsapp {
-      position: fixed;
-      right: 16px;
-      bottom: 18px;
-      z-index: 2300;
-      width: 58px;
-      height: 58px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #2be07f, #25d366);
-      color: #ffffff;
-      box-shadow: 0 18px 34px rgba(37, 211, 102, 0.32);
-      text-decoration: none;
-      font-size: 28px;
-      border: 2px solid rgba(255,255,255,0.78);
-    }
-
     @media (min-width: 860px) {
       .resort-gallery {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -946,14 +981,22 @@
       .logo-box { width: 50px; height: 50px; border-radius: 16px; }
       .topbar-actions { gap: 8px; }
 
-      .menu-btn,
+      .menu-btn {
+        width: 44px;
+        min-width: 44px;
+        height: 44px;
+        padding: 0;
+      }
+
       .lang-btn {
         min-height: 44px;
         padding: 0 14px;
       }
 
       .section-title,
-      .location-title { font-size: 24px; }
+      .location-title,
+      .contact-title { font-size: 24px; }
+
       .section-copy { font-size: 14px; }
       .chalet-title { font-size: 22px; }
 
@@ -976,6 +1019,10 @@
 
       #calendar .fc {
         padding: 0 6px 6px;
+      }
+
+      .contact-actions {
+        grid-template-columns: 1fr;
       }
 
       .modal-card {
@@ -1002,7 +1049,6 @@
 
       .fc .fc-daygrid-day-frame { min-height: 78px; }
       .fc-daygrid-event { font-size: 10px; padding: 3px 5px; }
-      .floating-whatsapp { right: 12px; bottom: 14px; width: 54px; height: 54px; font-size: 26px; }
 
       .side-menu {
         width: min(90vw, 300px);
@@ -1021,8 +1067,13 @@
       </div>
 
       <div class="topbar-actions">
-        <button class="menu-btn" id="menuToggle" type="button" data-i18n="menuBtn">القائمة</button>
         <button class="lang-btn" id="langToggle" type="button">EN</button>
+
+        <button class="menu-btn" id="menuToggle" type="button" aria-label="Open menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
     </div>
   </div>
@@ -1113,6 +1164,15 @@
         </div>
       </a>
     </section>
+
+    <section class="contact-section">
+      <h2 class="contact-title" data-i18n="contactTitle">تواصل معنا</h2>
+
+      <div class="contact-actions">
+        <a class="contact-btn whatsapp-btn" id="contactWhatsapp" href="https://wa.me/96800000000" target="_blank" rel="noopener noreferrer" data-i18n="contactWhatsapp">واتساب</a>
+        <a class="contact-btn instagram-btn" id="contactInstagram" href="https://instagram.com/youraccount" target="_blank" rel="noopener noreferrer" data-i18n="contactInstagram">انستجرام</a>
+      </div>
+    </section>
   </main>
 
   <div class="modal" id="bookingModal">
@@ -1185,14 +1245,11 @@
     </div>
   </div>
 
-  <a class="floating-whatsapp" id="floatingWhatsapp" href="https://wa.me/96800000000" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-    <span>✆</span>
-  </a>
-
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbyOVAeXgIxLQycwo4uT66kQpgU6R9GzeDA9DIGGy1eel5uGbUJI4GZv3FH__TQvs7b8BA/exec';
     const GOOGLE_MAPS_URL = 'https://maps.google.com/?q=Nizwa,Oman';
-    const FLOATING_WHATSAPP_URL = 'https://wa.me/96800000000';
+    const CONTACT_WHATSAPP_URL = 'https://wa.me/96800000000';
+    const CONTACT_INSTAGRAM_URL = 'https://instagram.com/youraccount';
 
     const CHALET_DATA = [
       {
@@ -1264,7 +1321,6 @@
         dir: 'rtl',
         langButton: 'EN',
         topbarBrand: 'شاليهات رافانا',
-        menuBtn: 'القائمة',
         menuTitle: 'التنقل',
         menuHome: 'الرئيسية',
         menuChaletA: 'شاليه رافانا A',
@@ -1285,6 +1341,9 @@
         calendarError: 'تعذر تحميل التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.',
         locationTitle: 'موقعنا',
         locationPlace: 'نزوى، عمان',
+        contactTitle: 'تواصل معنا',
+        contactWhatsapp: 'واتساب',
+        contactInstagram: 'انستجرام',
         bookingTitle: 'إرسال طلب حجز',
         bookingNote: 'بعد إرسال الطلب سيتم تسجيله بحالة بانتظار التأكيد حتى يقوم مدير الحجوزات باعتماده.',
         fieldDate: 'التاريخ',
@@ -1313,7 +1372,6 @@
         dir: 'ltr',
         langButton: 'AR',
         topbarBrand: 'Ravana Chalets',
-        menuBtn: 'Menu',
         menuTitle: 'Navigation',
         menuHome: 'Home',
         menuChaletA: 'Ravana Chalet A',
@@ -1334,6 +1392,9 @@
         calendarError: 'Unable to load the calendar. Please check the service URL and your sheet data, then refresh the page.',
         locationTitle: 'Our Location',
         locationPlace: 'Nizwa, Oman',
+        contactTitle: 'Contact Us',
+        contactWhatsapp: 'WhatsApp',
+        contactInstagram: 'Instagram',
         bookingTitle: 'Send Booking Request',
         bookingNote: 'After sending your request, it will be registered as pending confirmation until approved by the booking manager.',
         fieldDate: 'Date',
@@ -1382,9 +1443,10 @@
     const heroBookBtn = document.getElementById('heroBookBtn');
     const chaletsSection = document.getElementById('chaletsSection');
     const menuToggle = document.getElementById('menuToggle');
-    const sideMenu = document.getElementById('sideMenu');
     const sideMenuOverlay = document.getElementById('sideMenuOverlay');
     const closeMenuBtn = document.getElementById('closeMenuBtn');
+    const contactWhatsapp = document.getElementById('contactWhatsapp');
+    const contactInstagram = document.getElementById('contactInstagram');
 
     let calendar = null;
     let bookingData = [];
@@ -1453,6 +1515,7 @@
       });
 
       langToggle.textContent = t('langButton');
+      menuToggle.setAttribute('aria-label', currentLang === 'ar' ? 'فتح القائمة' : 'Open menu');
       nameInput.placeholder = t('namePlaceholder');
       phoneInput.placeholder = t('phonePlaceholder');
       notesInput.placeholder = t('notesPlaceholder');
@@ -1826,7 +1889,8 @@
     }
 
     document.getElementById('mapLink').setAttribute('href', GOOGLE_MAPS_URL);
-    document.getElementById('floatingWhatsapp').setAttribute('href', FLOATING_WHATSAPP_URL);
+    contactWhatsapp.setAttribute('href', CONTACT_WHATSAPP_URL);
+    contactInstagram.setAttribute('href', CONTACT_INSTAGRAM_URL);
 
     heroBookBtn.addEventListener('click', () => {
       document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
