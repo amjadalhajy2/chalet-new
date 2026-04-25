@@ -865,12 +865,19 @@
       el.className = 'status-message';
     }
 
-    function getResortShortName(resort) {
-      if (resort === 'استراحة النخيل') return 'A';
-      if (resort === 'استراحة الوادي') return 'B';
-      if (resort === 'استراحة الريف') return 'C';
-      return resort;
-    }
+function getResortShortName(resort) {
+  const value = String(resort || '').trim();
+
+  if (value === 'شاليه رافانا A') return 'A';
+  if (value === 'شاليه رافانا B') return 'B';
+  if (value === 'شاليه رافانا C') return 'C';
+
+  if (value === 'استراحة النخيل') return 'A';
+  if (value === 'استراحة الوادي') return 'B';
+  if (value === 'استراحة الريف') return 'C';
+
+  return value;
+}
 
     function getEventColor(status) {
       if (status === 'متاح') return '#19a765';
