@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>شاليه رافانا A</title>
+  <style>
+    :root {
+      --bg: #f5f2ec;
+      --surface: rgba(255,255,255,0.88);
+      --line: rgba(77, 58, 34, 0.10);
+      --text: #2c2218;
+      --muted: #76695a;
+      --brand: #8b6a48;
+      --brand-dark: #5f4630;
+      --shadow-xl: 0 24px 60px rgba(66, 43, 19, 0.10);
+      --radius-2xl: 30px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; overflow-x: hidden; }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(139,106,72,0.08), transparent 24%),
+        linear-gradient(180deg, #faf8f4 0%, #f5f2ec 100%);
+      color: var(--text);
+    }
+
+    .container {
+      width: min(960px, calc(100% - 20px));
+      margin: 0 auto;
+      padding: 20px 0 28px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding: 10px 0 14px;
+      background: linear-gradient(180deg, rgba(245,242,236,0.95), rgba(245,242,236,0.70), transparent);
+      backdrop-filter: blur(10px);
+    }
+
+    .topbar-inner {
+      width: min(960px, calc(100% - 20px));
+      margin: 0 auto;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.84);
+      border: 1px solid rgba(255,255,255,0.72);
+      box-shadow: 0 10px 22px rgba(66, 43, 19, 0.08);
+    }
+
+    .topbar-title {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .back-btn {
+      min-height: 42px;
+      padding: 0 14px;
+      border: 0;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #fff, #f6f0e8);
+      color: var(--text);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .page-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-2xl);
+      box-shadow: var(--shadow-xl);
+      overflow: hidden;
+    }
+
+    .hero-image {
+      width: 100%;
+      aspect-ratio: 16 / 8;
+      object-fit: cover;
+      display: block;
+      background: #ddd;
+    }
+
+    .content {
+      padding: 20px;
+    }
+
+    .title {
+      margin: 0 0 8px;
+      font-size: 32px;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      margin: 0 0 16px;
+      color: var(--muted);
+      line-height: 1.9;
+      font-size: 15px;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 20px;
+      display: block;
+      background: #ddd;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .btn {
+      min-height: 52px;
+      border: 0;
+      border-radius: 18px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: linear-gradient(180deg, #fff, #f6f0e8);
+      color: var(--text);
+      border: 1px solid rgba(95,70,48,0.12);
+    }
+
+    @media (max-width: 560px) {
+      .gallery,
+      .actions {
+        grid-template-columns: 1fr;
+      }
+
+      .gallery img {
+        height: 190px;
+      }
+
+      .title {
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-title">شاليه رافانا A</div>
+      <button class="back-btn" onclick="window.location.href='index.html'">الرجوع</button>
+    </div>
+  </div>
+
+  <main class="container">
+    <section class="page-card">
+      <img class="hero-image" src="./images/resort-a-1.jpg" alt="شاليه رافانا A">
+      <div class="content">
+        <h1 class="title">شاليه رافانا A</h1>
+        <p class="subtitle">
+          تجربة إقامة هادئة بخصوصية عالية، وجلسات مريحة، ومساحة مثالية للأوقات الجميلة مع العائلة والأصدقاء.
+        </p>
+
+        <div class="gallery">
+          <img src="./images/resort-a-1.jpg" alt="">
+          <img src="./images/resort-a-2.jpg" alt="">
+          <img src="./images/resort-a-3.jpg" alt="">
+          <img src="./images/resort-a-4.jpg" alt="">
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" onclick="window.location.href='booking.html?resort=' + encodeURIComponent('شاليه رافانا A')">احجز الآن</button>
+          <button class="btn btn-secondary" onclick="window.location.href='index.html'">العودة للرئيسية</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
