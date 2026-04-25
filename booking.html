@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>حجز الإقامة - شاليهات رافانا</title>
+  <style>
+    :root {
+      --bg: #f5f2ec;
+      --surface: rgba(255,255,255,0.88);
+      --line: rgba(77, 58, 34, 0.10);
+      --text: #2c2218;
+      --muted: #76695a;
+      --brand: #8b6a48;
+      --brand-dark: #5f4630;
+      --success: #24a46d;
+      --danger: #d45454;
+      --shadow-xl: 0 24px 60px rgba(66, 43, 19, 0.10);
+      --radius-2xl: 30px;
+      --radius-lg: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; overflow-x: hidden; }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(139,106,72,0.08), transparent 24%),
+        linear-gradient(180deg, #faf8f4 0%, #f5f2ec 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .container {
+      width: min(760px, calc(100% - 20px));
+      margin: 0 auto;
+      padding: 20px 0 28px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding: 10px 0 14px;
+      background: linear-gradient(180deg, rgba(245,242,236,0.95), rgba(245,242,236,0.70), transparent);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .topbar-inner {
+      width: min(760px, calc(100% - 20px));
+      margin: 0 auto;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.84);
+      border: 1px solid rgba(255,255,255,0.72);
+      box-shadow: 0 10px 22px rgba(66, 43, 19, 0.08);
+    }
+
+    .topbar-title {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .back-btn {
+      min-height: 42px;
+      padding: 0 14px;
+      border: 0;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #fff, #f6f0e8);
+      color: var(--text);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .page-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-2xl);
+      box-shadow: var(--shadow-xl);
+      padding: 20px;
+    }
+
+    .page-title {
+      margin: 0 0 8px;
+      font-size: 28px;
+      letter-spacing: -0.03em;
+    }
+
+    .page-subtitle {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.9;
+      font-size: 14px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    input, select, textarea {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(95,70,48,0.12);
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(246,240,232,0.88));
+      color: var(--text);
+      font-size: 15px;
+      outline: none;
+    }
+
+    input[type="date"] {
+      direction: ltr;
+      text-align: right;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .double-field {
+      display: grid;
+      grid-template-columns: 120px minmax(0, 1fr);
+      gap: 8px;
+      align-items: end;
+    }
+
+    .status-box {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 14px;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .status-box.success {
+      display: block;
+      background: rgba(36,164,109,0.12);
+      border: 1px solid rgba(36,164,109,0.16);
+      color: #166644;
+    }
+
+    .status-box.error {
+      display: block;
+      background: rgba(212,84,84,0.12);
+      border: 1px solid rgba(212,84,84,0.16);
+      color: #992f2f;
+    }
+
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+      min-height: 52px;
+      border: 0;
+      border-radius: 18px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .primary-btn {
+      background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+      color: #fff;
+      box-shadow: 0 16px 28px rgba(95, 70, 48, 0.18);
+    }
+
+    .secondary-btn {
+      background: linear-gradient(180deg, #fff, #f6f0e8);
+      color: var(--text);
+      border: 1px solid rgba(95,70,48,0.12);
+    }
+
+    @media (max-width: 560px) {
+      .container {
+        width: min(100%, calc(100% - 12px));
+      }
+
+      .topbar-inner {
+        width: min(100%, calc(100% - 12px));
+      }
+
+      .page-title {
+        font-size: 24px;
+      }
+
+      .double-field {
+        grid-template-columns: 100px minmax(0, 1fr);
+      }
+
+      .btn-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-title">حجز الإقامة</div>
+      <button class="back-btn" type="button" onclick="window.location.href='index.html'">الرجوع</button>
+    </div>
+  </div>
+
+  <main class="container">
+    <section class="page-card">
+      <h1 class="page-title">احجز إقامتك</h1>
+      <p class="page-subtitle">
+        أدخل بيانات الحجز وسيتم تسجيل الطلب بحالة <strong>بانتظار التأكيد</strong> إلى حين اعتماد الحجز من قبل الإدارة.
+      </p>
+
+      <div class="status-box" id="bookingStatus"></div>
+
+      <div class="form-grid">
+        <div>
+          <label for="date">التاريخ</label>
+          <input type="date" id="date" />
+        </div>
+
+        <div>
+          <label for="resort">الشاليه</label>
+          <select id="resort">
+            <option value="">اختر الشاليه</option>
+            <option value="شاليه رافانا A">شاليه رافانا A</option>
+            <option value="شاليه رافانا B">شاليه رافانا B</option>
+            <option value="شاليه رافانا C">شاليه رافانا C</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="bookingType">نوع الحجز</label>
+          <select id="bookingType">
+            <option value="بدون مبيت" selected>بدون مبيت</option>
+            <option value="مع مبيت">مع مبيت</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="name">الاسم</label>
+          <input type="text" id="name" placeholder="أدخل الاسم" />
+        </div>
+
+        <div>
+          <label for="phone">رقم الهاتف</label>
+          <div class="double-field">
+            <select id="countryCode">
+              <option value="+968" selected>عُمان (+968)</option>
+              <option value="+971">الإمارات (+971)</option>
+              <option value="+966">السعودية (+966)</option>
+              <option value="+965">الكويت (+965)</option>
+              <option value="+973">البحرين (+973)</option>
+              <option value="+974">قطر (+974)</option>
+              <option value="+20">مصر (+20)</option>
+              <option value="+962">الأردن (+962)</option>
+              <option value="+1">USA (+1)</option>
+              <option value="+44">UK (+44)</option>
+            </select>
+            <input type="tel" id="phone" placeholder="أدخل رقم الهاتف" inputmode="numeric" autocomplete="tel" pattern="[0-9]*" dir="ltr" lang="en" />
+          </div>
+        </div>
+
+        <div>
+          <label for="notes">ملاحظات</label>
+          <textarea id="notes" placeholder="أي ملاحظات إضافية"></textarea>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="primary-btn" id="bookBtn" type="button">تأكيد الحجز</button>
+        <button class="secondary-btn" type="button" onclick="window.location.href='index.html'">إلغاء</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const API_URL = 'PUT_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+
+    const dateInput = document.getElementById('date');
+    const resortInput = document.getElementById('resort');
+    const bookingTypeInput = document.getElementById('bookingType');
+    const nameInput = document.getElementById('name');
+    const countryCodeInput = document.getElementById('countryCode');
+    const phoneInput = document.getElementById('phone');
+    const notesInput = document.getElementById('notes');
+    const bookingStatus = document.getElementById('bookingStatus');
+    const bookBtn = document.getElementById('bookBtn');
+
+    function normalizeDate(value) {
+      if (!value) return '';
+      if (typeof value === 'string') return value.trim().slice(0, 10);
+      const date = new Date(value);
+      if (isNaN(date.getTime())) return '';
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return year + '-' + month + '-' + day;
+    }
+
+    function todayString() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      return year + '-' + month + '-' + day;
+    }
+
+    function normalizeToEnglishDigits(value) {
+      const arabicIndic = '٠١٢٣٤٥٦٧٨٩';
+      const easternArabicIndic = '۰۱۲۳۴۵۶۷۸۹';
+
+      return String(value || '')
+        .split('')
+        .map(ch => {
+          const idx1 = arabicIndic.indexOf(ch);
+          if (idx1 > -1) return String(idx1);
+          const idx2 = easternArabicIndic.indexOf(ch);
+          if (idx2 > -1) return String(idx2);
+          return ch;
+        })
+        .join('');
+    }
+
+    function sanitizePhoneInput(value) {
+      return normalizeToEnglishDigits(value).replace(/[^0-9]/g, '');
+    }
+
+    function buildFullPhone() {
+      const code = String(countryCodeInput.value || '').replace('+', '');
+      const phone = sanitizePhoneInput(phoneInput.value || '');
+      return code + phone;
+    }
+
+    function showStatus(message, type) {
+      bookingStatus.textContent = message;
+      bookingStatus.className = 'status-box ' + type;
+    }
+
+    function getQueryParams() {
+      const params = new URLSearchParams(window.location.search);
+      return {
+        date: params.get('date') || '',
+        resort: params.get('resort') || ''
+      };
+    }
+
+    async function submitBooking() {
+      const date = normalizeDate(dateInput.value);
+      const resort = String(resortInput.value || '').trim();
+      const bookingType = String(bookingTypeInput.value || '').trim();
+      const name = String(nameInput.value || '').trim();
+      const rawPhone = sanitizePhoneInput(phoneInput.value.trim());
+      phoneInput.value = rawPhone;
+      const notes = String(notesInput.value || '').trim();
+      const phone = buildFullPhone();
+
+      if (!date || !resort || !bookingType || !name || !rawPhone) {
+        showStatus('يرجى تعبئة جميع الحقول المطلوبة.', 'error');
+        return;
+      }
+
+      if (date < todayString()) {
+        showStatus('لا يمكن الحجز في تاريخ سابق.', 'error');
+        return;
+      }
+
+      try {
+        bookBtn.disabled = true;
+        showStatus('جاري إرسال طلب الحجز...', 'success');
+
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+          },
+          body: JSON.stringify({
+            date,
+            resort,
+            bookingType,
+            name,
+            phone,
+            notes
+          })
+        });
+
+        const rawText = await res.text();
+        let json;
+
+        try {
+          json = JSON.parse(rawText);
+        } catch (e) {
+          throw new Error('تعذر قراءة رد الخدمة.');
+        }
+
+        if (!json.success) {
+          throw new Error(json.message || 'تعذر إرسال طلب الحجز');
+        }
+
+        showStatus(json.message || 'تم إرسال الطلب بنجاح.', 'success');
+
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1200);
+      } catch (error) {
+        console.error(error);
+        showStatus(error.message || 'حدث خطأ أثناء إرسال الطلب.', 'error');
+      } finally {
+        bookBtn.disabled = false;
+      }
+    }
+
+    phoneInput.addEventListener('input', () => {
+      const start = phoneInput.selectionStart;
+      const sanitized = sanitizePhoneInput(phoneInput.value);
+      phoneInput.value = sanitized;
+      try { phoneInput.setSelectionRange(start, start); } catch (e) {}
+    });
+
+    bookBtn.addEventListener('click', submitBooking);
+
+    const query = getQueryParams();
+    dateInput.min = todayString();
+
+    if (query.date) dateInput.value = query.date;
+    if (query.resort) resortInput.value = query.resort;
+  </script>
+</body>
+</html>
