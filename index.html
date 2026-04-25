@@ -19,7 +19,6 @@
       --muted: #76695a;
       --brand: #8b6a48;
       --brand-dark: #5f4630;
-      --sand: #ece4d8;
       --success: #24a46d;
       --danger: #d45454;
       --shadow-xl: 0 24px 60px rgba(66, 43, 19, 0.10);
@@ -47,9 +46,10 @@
         linear-gradient(180deg, #faf8f4 0%, #f5f2ec 100%);
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
+      padding-top: var(--header-h);
     }
 
-    a { color: inherit; }
+    a { color: inherit; text-decoration: none; }
     button { font-family: inherit; }
 
     @keyframes spin {
@@ -62,11 +62,11 @@
     }
 
     .topbar {
-      position: sticky;
+      position: fixed;
       top: 0;
-      z-index: 1100;
+      inset-inline: 0;
+      z-index: 2000;
       width: 100%;
-      padding-top: 0;
     }
 
     .topbar-inner {
@@ -77,8 +77,7 @@
       justify-content: space-between;
       gap: 12px;
       padding: 12px 18px;
-      border-radius: 0;
-      background: rgba(255,255,255,0.78);
+      background: rgba(255,255,255,0.84);
       backdrop-filter: blur(18px) saturate(1.2);
       -webkit-backdrop-filter: blur(18px) saturate(1.2);
       border-bottom: 1px solid rgba(255,255,255,0.7);
@@ -134,7 +133,6 @@
     }
 
     .hero {
-      padding-top: 0;
       width: 100vw;
       margin-inline: calc(50% - 50vw);
     }
@@ -144,9 +142,7 @@
       width: 100%;
       aspect-ratio: 19 / 6;
       min-height: 320px;
-      border-radius: 0;
       overflow: hidden;
-      box-shadow: var(--shadow-xl);
       background: #d8cfc1;
     }
 
@@ -223,7 +219,6 @@
 
     .intro-card,
     .calendar-card,
-    .location-card,
     .chalet-card {
       background: var(--surface);
       border: 1px solid var(--line);
@@ -234,8 +229,7 @@
     }
 
     .intro-card,
-    .calendar-card,
-    .location-card {
+    .calendar-card {
       padding: 22px;
     }
 
@@ -258,17 +252,17 @@
     }
 
     .chalet-card {
-      padding: 16px;
+      padding: 0;
       overflow: hidden;
     }
 
     .slider {
       position: relative;
-      border-radius: 24px;
       overflow: hidden;
       background: #d8cfc1;
       aspect-ratio: 16 / 8.2;
       touch-action: pan-y;
+      border-radius: 34px 34px 0 0;
     }
 
     .slides {
@@ -342,7 +336,7 @@
     }
 
     .chalet-body {
-      padding: 16px 2px 2px;
+      padding: 16px;
     }
 
     .chalet-title {
@@ -364,8 +358,7 @@
       gap: 10px;
     }
 
-    .calendar-head,
-    .location-head {
+    .calendar-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -374,8 +367,7 @@
       margin-bottom: 14px;
     }
 
-    .calendar-head span,
-    .location-head span {
+    .calendar-head span {
       color: var(--muted);
       font-size: 13px;
     }
@@ -579,6 +571,23 @@
       background: rgba(236,228,216,0.74) !important;
     }
 
+    .location-section {
+      padding: 24px 2px 8px;
+    }
+
+    .location-title {
+      margin: 0 0 6px;
+      font-size: 28px;
+      letter-spacing: -0.03em;
+    }
+
+    .location-place {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
     .map-link {
       display: block;
       text-decoration: none;
@@ -590,6 +599,7 @@
       border-radius: 24px;
       overflow: hidden;
       background: #d7d1c8;
+      box-shadow: var(--shadow-xl);
     }
 
     .map-thumb img {
@@ -597,24 +607,6 @@
       height: 100%;
       object-fit: cover;
       display: block;
-    }
-
-    .location-copy {
-      margin-top: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .location-copy strong {
-      font-size: 20px;
-    }
-
-    .location-copy span {
-      color: var(--muted);
-      font-size: 14px;
     }
 
     .modal {
@@ -723,14 +715,8 @@
       background: #e8e0d5;
     }
 
-    .price-table {
-      display: grid;
-      gap: 10px;
-    }
-
-    .price-item,
-    .rules-box,
-    .details-box {
+    .details-box,
+    .rules-box {
       padding: 15px;
       border-radius: 20px;
       border: 1px solid rgba(95,70,48,0.08);
@@ -740,17 +726,10 @@
       box-shadow: 0 8px 18px rgba(66,43,19,0.05);
     }
 
-    .price-item strong,
     .details-box strong {
       display: block;
       margin-bottom: 8px;
       color: var(--text);
-    }
-
-    .rules-box ul {
-      margin: 0;
-      padding-inline-start: 18px;
-      line-height: 1.9;
     }
 
     .form-grid {
@@ -866,11 +845,11 @@
       .brand-title { font-size: 18px; }
       .lang-btn { min-height: 44px; padding: 0 14px; }
       .logo-box { width: 50px; height: 50px; border-radius: 16px; }
-      .section-title { font-size: 24px; }
+      .section-title,
+      .location-title { font-size: 24px; }
       .section-copy { font-size: 14px; }
       .chalet-title { font-size: 22px; }
 
-      .chalet-actions,
       .btn-row,
       .form-grid {
         grid-template-columns: 1fr !important;
@@ -977,25 +956,15 @@
       </div>
     </section>
 
-    <section class="section">
-      <div class="location-card">
-        <div class="location-head">
-          <h2 class="section-title" data-i18n="locationTitle">موقعنا</h2>
-        </div>
+    <section class="location-section">
+      <h2 class="location-title" data-i18n="locationTitle">موقعنا</h2>
+      <p class="location-place" data-i18n="locationPlace">نزوى، عمان</p>
 
-        <a class="map-link" id="mapLink" href="https://maps.google.com/?q=Nizwa,Oman" target="_blank" rel="noopener noreferrer">
-          <div class="map-thumb">
-            <img src="images/location-satellite.jpg" alt="Nizwa, Oman" onerror="this.src='https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1600&q=80'">
-          </div>
-          <div class="location-copy">
-            <div>
-              <strong data-i18n="locationPlace">نزوى، عمان</strong><br>
-              <span data-i18n="locationOpen">اضغط لفتح الموقع في خرائط جوجل</span>
-            </div>
-            <button class="ghost-btn" type="button" data-i18n="locationBtn">فتح الموقع</button>
-          </div>
-        </a>
-      </div>
+      <a class="map-link" id="mapLink" href="https://maps.google.com/?q=Nizwa,Oman" target="_blank" rel="noopener noreferrer">
+        <div class="map-thumb">
+          <img src="images/location-satellite.jpg" alt="Nizwa, Oman" onerror="this.src='https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1600&q=80'">
+        </div>
+      </a>
     </section>
   </main>
 
@@ -1163,8 +1132,6 @@
         calendarError: 'تعذر تحميل التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.',
         locationTitle: 'موقعنا',
         locationPlace: 'نزوى، عمان',
-        locationOpen: 'اضغط لفتح الموقع في خرائط جوجل',
-        locationBtn: 'فتح الموقع',
         bookingTitle: 'إرسال طلب حجز',
         bookingNote: 'بعد إرسال الطلب سيتم تسجيله بحالة بانتظار التأكيد حتى يقوم مدير الحجوزات باعتماده.',
         fieldDate: 'التاريخ',
@@ -1208,8 +1175,6 @@
         calendarError: 'Unable to load the calendar. Please check the service URL and your sheet data, then refresh the page.',
         locationTitle: 'Our Location',
         locationPlace: 'Nizwa, Oman',
-        locationOpen: 'Tap to open in Google Maps',
-        locationBtn: 'Open Map',
         bookingTitle: 'Send Booking Request',
         bookingNote: 'After sending your request, it will be registered as pending confirmation until approved by the booking manager.',
         fieldDate: 'Date',
