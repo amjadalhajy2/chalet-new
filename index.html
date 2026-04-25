@@ -15,9 +15,7 @@
 
   <style>
     :root {
-      --bg: #f5f2ec;
       --surface: rgba(255,255,255,0.80);
-      --surface-strong: rgba(255,255,255,0.88);
       --line: rgba(77, 58, 34, 0.10);
       --text: #2c2218;
       --muted: #76695a;
@@ -361,21 +359,70 @@
       background: #d8cfc1;
     }
 
-    .hero-media img {
+    .hero-slideshow {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: scale(1.02);
+      transition: opacity 1.6s ease, transform 6s ease;
+      will-change: opacity, transform;
+    }
+
+    .hero-slide.active {
+      opacity: 1;
+      transform: scale(1.08);
+    }
+
+    .hero-slide img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
+      filter: saturate(1.03) contrast(1.01);
     }
 
     .hero-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.30));
+      background: linear-gradient(180deg, rgba(0,0,0,0.10), rgba(0,0,0,0.32));
+      z-index: 2;
+    }
+
+    .hero-dots {
+      position: absolute;
+      left: 50%;
+      bottom: 102px;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 3;
+    }
+
+    .hero-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      border: 0;
+      background: rgba(255,255,255,0.45);
+      padding: 0;
+      cursor: pointer;
+      transition: all .25s ease;
+    }
+
+    .hero-dot.active {
+      width: 26px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.95);
     }
 
     .hero-card {
-      z-index: 2;
+      z-index: 4;
       position: absolute;
       left: 50%;
       bottom: 20px;
@@ -898,17 +945,9 @@
       color: var(--muted);
     }
 
-    .whatsapp-link .contact-icon {
-      color: #3f8a63;
-    }
-
-    .instagram-link .contact-icon {
-      color: #9b6a7f;
-    }
-
-    .call-link .contact-icon {
-      color: #8b6a48;
-    }
+    .whatsapp-link .contact-icon { color: #3f8a63; }
+    .instagram-link .contact-icon { color: #9b6a7f; }
+    .call-link .contact-icon { color: #8b6a48; }
 
     @media (max-width: 720px) {
       :root { --header-h: 72px; }
@@ -922,6 +961,10 @@
       .hero-media {
         aspect-ratio: 6 / 9.8;
         min-height: 500px;
+      }
+
+      .hero-dots {
+        bottom: 96px;
       }
 
       .hero-card {
@@ -1062,8 +1105,10 @@
 
   <section class="hero" id="heroSection">
     <div class="hero-media">
-      <img src="images/hero-cover.jpg" alt="شاليهات رافانا" onerror="this.src='https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80'">
+      <div class="hero-slideshow" id="heroSlideshow"></div>
       <div class="hero-overlay"></div>
+      <div class="hero-dots" id="heroDots"></div>
+
       <div class="hero-card">
         <h1 data-i18n="heroWelcome">مرحبا بكم في شاليهات رافانا</h1>
         <button class="hero-btn" id="heroBookBtn" type="button" data-i18n="heroBook">احجز اقامتك الان</button>
@@ -1219,6 +1264,15 @@
       }
     ];
 
+    const HERO_IMAGES = [
+      './images/resort-a-1.jpg',
+      './images/resort-a-2.jpg',
+      './images/resort-b-1.jpg',
+      './images/resort-b-2.jpg',
+      './images/resort-c-1.jpg',
+      './images/resort-c-2.jpg'
+    ];
+
     const I18N = {
       ar: {
         dir: 'rtl',
@@ -1297,10 +1351,14 @@
     const contactWhatsapp = document.getElementById('contactWhatsapp');
     const contactInstagram = document.getElementById('contactInstagram');
     const contactCall = document.getElementById('contactCall');
+    const heroSlideshow = document.getElementById('heroSlideshow');
+    const heroDots = document.getElementById('heroDots');
 
     let calendar = null;
     let bookingData = [];
     let currentLang = 'ar';
+    let heroIndex = 0;
+    let heroTimer = null;
     const sliders = new Map();
 
     function normalizeDate(value) {
@@ -1366,6 +1424,63 @@
 
     function closeMenu() {
       document.body.classList.remove('menu-open');
+    }
+
+    function renderHeroSlides() {
+      heroSlideshow.innerHTML = HERO_IMAGES.map((src, index) => `
+        <div class="hero-slide ${index === 0 ? 'active' : ''}" data-hero-index="${index}">
+          <img src="${src}" alt="Ravana Chalet"
+               onerror="this.src='https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80'">
+        </div>
+      `).join('');
+
+      heroDots.innerHTML = HERO_IMAGES.map((_, index) => `
+        <button class="hero-dot ${index === 0 ? 'active' : ''}" type="button" data-hero-dot="${index}"></button>
+      `).join('');
+
+      heroDots.querySelectorAll('[data-hero-dot]').forEach(dot => {
+        dot.addEventListener('click', () => {
+          const index = Number(dot.getAttribute('data-hero-dot'));
+          showHeroSlide(index);
+          restartHeroAutoplay();
+        });
+      });
+    }
+
+    function showHeroSlide(index) {
+      const slides = heroSlideshow.querySelectorAll('.hero-slide');
+      const dots = heroDots.querySelectorAll('.hero-dot');
+      if (!slides.length) return;
+
+      heroIndex = (index + slides.length) % slides.length;
+
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === heroIndex);
+      });
+
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === heroIndex);
+      });
+    }
+
+    function nextHeroSlide() {
+      showHeroSlide(heroIndex + 1);
+    }
+
+    function startHeroAutoplay() {
+      stopHeroAutoplay();
+      heroTimer = setInterval(nextHeroSlide, 4500);
+    }
+
+    function stopHeroAutoplay() {
+      if (heroTimer) {
+        clearInterval(heroTimer);
+        heroTimer = null;
+      }
+    }
+
+    function restartHeroAutoplay() {
+      startHeroAutoplay();
     }
 
     function createSliderHtml(chalet) {
@@ -1462,11 +1577,8 @@
 
       root.addEventListener('touchend', () => {
         if (Math.abs(state.deltaX) > 40) {
-          if (state.deltaX < 0) {
-            setSliderIndex(code, state.index + 1);
-          } else if (state.deltaX > 0) {
-            setSliderIndex(code, state.index - 1);
-          }
+          if (state.deltaX < 0) setSliderIndex(code, state.index + 1);
+          if (state.deltaX > 0) setSliderIndex(code, state.index - 1);
         }
       });
     }
@@ -1603,6 +1715,14 @@
         }
       });
     });
+
+    renderHeroSlides();
+    startHeroAutoplay();
+
+    heroSlideshow.addEventListener('mouseenter', stopHeroAutoplay);
+    heroSlideshow.addEventListener('mouseleave', startHeroAutoplay);
+    heroSlideshow.addEventListener('touchstart', stopHeroAutoplay, { passive: true });
+    heroSlideshow.addEventListener('touchend', startHeroAutoplay, { passive: true });
 
     renderChaletCards();
     applyLanguage();
