@@ -47,6 +47,36 @@
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
       padding-top: var(--header-h);
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.35;
+      background:
+        repeating-linear-gradient(
+          45deg,
+          rgba(139,106,72,0.035) 0px,
+          rgba(139,106,72,0.035) 1px,
+          transparent 1px,
+          transparent 28px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          rgba(95,70,48,0.025) 0px,
+          rgba(95,70,48,0.025) 1px,
+          transparent 1px,
+          transparent 28px
+        );
+    }
+
+    body > * {
+      position: relative;
+      z-index: 1;
     }
 
     html[lang="ar"] body,
@@ -269,6 +299,40 @@
     }
 
     .menu-link:hover {
+      color: var(--brand-dark);
+      padding-inline-start: 6px;
+    }
+
+    .menu-group {
+      padding: 8px 0 4px;
+    }
+
+    .menu-group-title {
+      display: block;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--muted);
+      margin-bottom: 6px;
+      padding: 6px 0;
+    }
+
+    .menu-sub-links {
+      display: grid;
+      gap: 4px;
+      padding-inline-start: 16px;
+    }
+
+    .menu-sub-link {
+      display: block;
+      padding: 9px 0;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      border-bottom: 1px solid rgba(95,70,48,0.05);
+      transition: .2s ease;
+    }
+
+    .menu-sub-link:hover {
       color: var(--brand-dark);
       padding-inline-start: 6px;
     }
@@ -837,6 +901,10 @@
       color: #9b6a7f;
     }
 
+    .call-link .contact-icon {
+      color: #8b6a48;
+    }
+
     @media (max-width: 720px) {
       :root { --header-h: 72px; }
 
@@ -909,7 +977,8 @@
         width: min(90vw, 300px);
       }
 
-      .menu-link {
+      .menu-link,
+      .menu-sub-link {
         font-size: 16px;
       }
 
@@ -965,9 +1034,18 @@
 
     <nav class="side-menu-links">
       <a href="#" class="menu-link" data-scroll-target="heroSection" data-i18n="menuHome">الرئيسية</a>
-      <a href="chalet-a.html" class="menu-link" data-i18n="menuChaletA">شاليه رافانا A</a>
-      <a href="chalet-b.html" class="menu-link" data-i18n="menuChaletB">شاليه رافانا B</a>
-      <a href="chalet-c.html" class="menu-link" data-i18n="menuChaletC">شاليه رافانا C</a>
+
+      <div class="menu-group">
+        <span class="menu-group-title" data-i18n="menuOurChalets">شاليهاتنا</span>
+        <div class="menu-sub-links">
+          <a href="chalet-a.html" class="menu-sub-link" data-i18n="menuChaletA">شاليه رافانا A</a>
+          <a href="chalet-b.html" class="menu-sub-link" data-i18n="menuChaletB">شاليه رافانا B</a>
+          <a href="chalet-c.html" class="menu-sub-link" data-i18n="menuChaletC">شاليه رافانا C</a>
+        </div>
+      </div>
+
+      <a href="rules.html" class="menu-link" data-i18n="menuRules">الشروط والضوابط</a>
+      <a href="#" class="menu-link" data-scroll-target="contactSection" data-i18n="menuContact">تواصل معنا</a>
     </nav>
   </aside>
 
@@ -1044,7 +1122,7 @@
       </div>
     </section>
 
-    <section class="contact-section">
+    <section class="contact-section" id="contactSection">
       <h2 class="contact-title" data-i18n="contactTitle">تواصل معنا</h2>
 
       <div class="contact-actions">
@@ -1065,6 +1143,15 @@
           </span>
           <span class="contact-label" data-i18n="contactInstagram">انستجرام</span>
         </a>
+
+        <a class="contact-link call-link" id="contactCall" href="tel:+96800000000">
+          <span class="contact-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6.62 10.79a15.54 15.54 0 0 0 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5c.55 0 1 .45 1 1 0 1.24.19 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2Z"/>
+            </svg>
+          </span>
+          <span class="contact-label" data-i18n="contactCall">اتصل بنا</span>
+        </a>
       </div>
     </section>
   </main>
@@ -1074,6 +1161,7 @@
     const GOOGLE_MAPS_URL = 'https://maps.google.com/?q=Nizwa,Oman';
     const CONTACT_WHATSAPP_URL = 'https://wa.me/96800000000';
     const CONTACT_INSTAGRAM_URL = 'https://instagram.com/youraccount';
+    const CONTACT_CALL_URL = 'tel:+96800000000';
 
     const CHALET_DATA = [
       {
@@ -1127,9 +1215,12 @@
         topbarBrand: 'شاليهات رافانا',
         menuTitle: 'التنقل',
         menuHome: 'الرئيسية',
+        menuOurChalets: 'شاليهاتنا',
         menuChaletA: 'شاليه رافانا A',
         menuChaletB: 'شاليه رافانا B',
         menuChaletC: 'شاليه رافانا C',
+        menuRules: 'الشروط والضوابط',
+        menuContact: 'تواصل معنا',
         heroWelcome: 'مرحبا بكم في شاليهات رافانا',
         heroBook: 'احجز اقامتك الان',
         introTitle: 'تجربة إقامة لا تُنسى',
@@ -1147,7 +1238,8 @@
         locationPlace: 'نزوى، عمان',
         contactTitle: 'تواصل معنا',
         contactWhatsapp: 'واتساب',
-        contactInstagram: 'انستجرام'
+        contactInstagram: 'انستجرام',
+        contactCall: 'اتصل بنا'
       },
       en: {
         dir: 'ltr',
@@ -1155,9 +1247,12 @@
         topbarBrand: 'Ravana Chalets',
         menuTitle: 'Navigation',
         menuHome: 'Home',
+        menuOurChalets: 'Our Chalets',
         menuChaletA: 'Ravana Chalet A',
         menuChaletB: 'Ravana Chalet B',
         menuChaletC: 'Ravana Chalet C',
+        menuRules: 'Terms & Rules',
+        menuContact: 'Contact Us',
         heroWelcome: 'Welcome to Ravana Chalets',
         heroBook: 'Book Your Stay Now',
         introTitle: 'A Stay You Will Remember',
@@ -1175,7 +1270,8 @@
         locationPlace: 'Nizwa, Oman',
         contactTitle: 'Contact Us',
         contactWhatsapp: 'WhatsApp',
-        contactInstagram: 'Instagram'
+        contactInstagram: 'Instagram',
+        contactCall: 'Call Us'
       }
     };
 
@@ -1189,6 +1285,7 @@
     const closeMenuBtn = document.getElementById('closeMenuBtn');
     const contactWhatsapp = document.getElementById('contactWhatsapp');
     const contactInstagram = document.getElementById('contactInstagram');
+    const contactCall = document.getElementById('contactCall');
 
     let calendar = null;
     let bookingData = [];
@@ -1354,8 +1451,11 @@
 
       root.addEventListener('touchend', () => {
         if (Math.abs(state.deltaX) > 40) {
-          if (state.deltaX < 0) setSliderIndex(code, state.index + 1);
-          if (state.deltaX > 0) setSliderIndex(code, state.index - 1);
+          if (state.deltaX < 0) {
+            setSliderIndex(code, state.index + 1);
+          } else if (state.deltaX > 0) {
+            setSliderIndex(code, state.index - 1);
+          }
         }
       });
     }
@@ -1462,6 +1562,7 @@
     document.getElementById('mapLink').setAttribute('href', GOOGLE_MAPS_URL);
     contactWhatsapp.setAttribute('href', CONTACT_WHATSAPP_URL);
     contactInstagram.setAttribute('href', CONTACT_INSTAGRAM_URL);
+    contactCall.setAttribute('href', CONTACT_CALL_URL);
 
     heroBookBtn.addEventListener('click', () => {
       document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
