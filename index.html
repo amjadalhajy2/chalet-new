@@ -16,7 +16,8 @@
   <style>
     :root {
       --bg: #f5f2ec;
-      --surface: rgba(255,255,255,0.78);
+      --surface: rgba(255,255,255,0.80);
+      --surface-strong: rgba(255,255,255,0.88);
       --line: rgba(77, 58, 34, 0.10);
       --text: #2c2218;
       --muted: #76695a;
@@ -42,12 +43,21 @@
       font-family: "Segoe UI", Tahoma, Arial, sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top right, rgba(139,106,72,0.08), transparent 24%),
-        linear-gradient(180deg, #faf8f4 0%, #f5f2ec 100%);
+        linear-gradient(rgba(250,248,244,0.78), rgba(245,242,236,0.82)),
+        url('images/background-main.jpg') center center / cover no-repeat fixed;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
       padding-top: var(--header-h);
       position: relative;
+      min-height: 100vh;
+    }
+
+    html[lang="ar"] body,
+    html[lang="ar"] button,
+    html[lang="ar"] input,
+    html[lang="ar"] select,
+    html[lang="ar"] textarea {
+      font-family: "Tajawal", "Segoe UI", Tahoma, Arial, sans-serif;
     }
 
     body::before {
@@ -56,7 +66,7 @@
       inset: 0;
       pointer-events: none;
       z-index: 0;
-      opacity: 0.35;
+      opacity: 0.16;
       background:
         repeating-linear-gradient(
           45deg,
@@ -79,14 +89,6 @@
       z-index: 1;
     }
 
-    html[lang="ar"] body,
-    html[lang="ar"] button,
-    html[lang="ar"] input,
-    html[lang="ar"] select,
-    html[lang="ar"] textarea {
-      font-family: "Tajawal", "Segoe UI", Tahoma, Arial, sans-serif;
-    }
-
     body.menu-open {
       overflow: hidden;
     }
@@ -101,6 +103,14 @@
     .container {
       width: min(1180px, calc(100% - 20px));
       margin: 0 auto;
+    }
+
+    .glass-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-xl);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
     .topbar {
@@ -426,12 +436,7 @@
     .intro-card,
     .calendar-card,
     .chalet-card {
-      background: var(--surface);
-      border: 1px solid var(--line);
       border-radius: var(--radius-2xl);
-      box-shadow: var(--shadow-xl);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
     }
 
     .intro-card {
@@ -908,6 +913,12 @@
     @media (max-width: 720px) {
       :root { --header-h: 72px; }
 
+      body {
+        background:
+          linear-gradient(rgba(250,248,244,0.78), rgba(245,242,236,0.82)),
+          url('images/background-main.jpg') center center / cover no-repeat;
+      }
+
       .hero-media {
         aspect-ratio: 6 / 9.8;
         min-height: 500px;
@@ -1061,7 +1072,7 @@
   </section>
 
   <section class="intro-band">
-    <div class="intro-card intro-full">
+    <div class="intro-card intro-full glass-card">
       <div class="container">
         <h2 class="section-title" data-i18n="introTitle">تجربة إقامة لا تُنسى</h2>
         <p class="section-copy" data-i18n="introCopy">
@@ -1075,7 +1086,7 @@
     <section class="section chalet-stack" id="chaletsSection"></section>
 
     <section class="section">
-      <div class="calendar-card" id="bookingSection">
+      <div class="calendar-card glass-card" id="bookingSection">
         <div class="calendar-top">
           <div class="calendar-head">
             <h2 class="section-title" data-i18n="calendarTitle">التوفر والحجز</h2>
@@ -1370,7 +1381,7 @@
       )).join('');
 
       return (
-        '<article class="chalet-card" id="chalet-section-' + chalet.code + '" data-chalet-card="' + chalet.code + '">' +
+        '<article class="chalet-card glass-card" id="chalet-section-' + chalet.code + '" data-chalet-card="' + chalet.code + '">' +
           '<div class="slider" data-slider="' + chalet.code + '">' +
             '<div class="slides">' + slides + '</div>' +
             '<div class="slider-nav">' +
