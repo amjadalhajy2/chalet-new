@@ -431,7 +431,8 @@
 
     .thumbs-wrap {
       position: relative;
-      padding: 0 0 0;
+      padding: 0;
+      direction: ltr;
     }
 
     .thumbs-track {
@@ -441,6 +442,9 @@
       scroll-behavior: smooth;
       padding: 2px 54px 4px;
       scrollbar-width: none;
+      direction: ltr;
+      justify-content: flex-start;
+      scroll-snap-type: x proximity;
     }
 
     .thumbs-track::-webkit-scrollbar {
@@ -457,6 +461,8 @@
       background: #ddd2c2;
       cursor: pointer;
       transition: .2s ease;
+      direction: ltr;
+      scroll-snap-align: center;
     }
 
     .thumb-btn.active {
@@ -491,8 +497,8 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      background: rgba(255,255,255,0.30);
-      color: rgba(255,255,255,0.88);
+      background: rgba(255,255,255,0.26);
+      color: rgba(255,255,255,0.90);
       font-size: 16px;
       font-weight: 800;
       backdrop-filter: blur(3px);
@@ -501,12 +507,12 @@
 
     .thumbs-hint-start {
       inset-inline-start: 0;
-      background: linear-gradient(90deg, rgba(245,242,236,0.82) 0%, rgba(245,242,236,0) 100%);
+      background: linear-gradient(90deg, rgba(245,242,236,0.86) 0%, rgba(245,242,236,0) 100%);
     }
 
     .thumbs-hint-end {
       inset-inline-end: 0;
-      background: linear-gradient(270deg, rgba(245,242,236,0.82) 0%, rgba(245,242,236,0) 100%);
+      background: linear-gradient(270deg, rgba(245,242,236,0.86) 0%, rgba(245,242,236,0) 100%);
     }
 
     .details-band {
@@ -569,20 +575,57 @@
       line-height: 1.6;
     }
 
-    .price-paragraph {
-      margin: 0;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 2.15;
+    .price-box {
+      padding-top: 2px;
     }
 
-    .price-paragraph strong {
+    .prices-layout {
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .prices-divider {
+      width: 1px;
+      background: rgba(95,70,48,0.12);
+      min-height: 118px;
+      align-self: stretch;
+    }
+
+    .price-col-weekdays {
+      grid-column: 3;
+    }
+
+    .price-col-holidays {
+      grid-column: 1;
+    }
+
+    html[dir="ltr"] .price-col-weekdays {
+      grid-column: 1;
+    }
+
+    html[dir="ltr"] .price-col-holidays {
+      grid-column: 3;
+    }
+
+    .prices-column {
+      text-align: start;
+    }
+
+    .price-title {
+      display: block;
+      margin: 0 0 10px;
       color: var(--brand-dark);
+      font-size: 16px;
+      font-weight: 800;
     }
 
     .price-line {
       display: block;
-      margin-top: 2px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 2.15;
     }
 
     .omr-inline {
@@ -981,7 +1024,7 @@
       }
 
       .detail-copy,
-      .price-paragraph {
+      .price-line {
         font-size: 14px;
       }
 
@@ -1018,6 +1061,15 @@
 
       .thumbs-track {
         padding-inline: 44px;
+      }
+
+      .price-title {
+        font-size: 15px;
+      }
+
+      .omr-symbol-img {
+        width: 14px;
+        height: 14px;
       }
 
       .calendar-top {
@@ -1065,11 +1117,6 @@
 
       .contact-label {
         font-size: 13px;
-      }
-
-      .omr-symbol-img {
-        width: 14px;
-        height: 14px;
       }
     }
   </style>
@@ -1159,7 +1206,13 @@
 
       <section class="section-card glass-card">
         <h2 class="section-title" data-i18n="pricesTitle">أسعار الشاليه</h2>
-        <p class="price-paragraph" id="priceParagraph"></p>
+        <div class="price-box">
+          <div class="prices-layout">
+            <div class="prices-column price-col-weekdays" id="priceWeekdays"></div>
+            <div class="prices-divider" aria-hidden="true"></div>
+            <div class="prices-column price-col-holidays" id="priceHolidays"></div>
+          </div>
+        </div>
       </section>
 
       <section class="section">
@@ -1435,7 +1488,8 @@
     const thumbTrack = document.getElementById('thumbTrack');
     const amenitiesGrid = document.getElementById('amenitiesGrid');
     const chaletDescription = document.getElementById('chaletDescription');
-    const priceParagraph = document.getElementById('priceParagraph');
+    const priceWeekdays = document.getElementById('priceWeekdays');
+    const priceHolidays = document.getElementById('priceHolidays');
 
     const contactWhatsapp = document.getElementById('contactWhatsapp');
     const contactInstagram = document.getElementById('contactInstagram');
@@ -1606,21 +1660,24 @@
 
     function formatPriceWithSymbol(value) {
       return `
+        ${value}
         <span class="omr-inline">
           <img class="omr-symbol-img" src="images/omr-symbol.svg" alt="OMR">
         </span>
-        ${value}
       `;
     }
 
     function renderPrices() {
       const p = chalet().prices;
-      priceParagraph.innerHTML = `
-        <strong>${t('pricesWeekdays')}</strong>
+
+      priceWeekdays.innerHTML = `
+        <strong class="price-title">${t('pricesWeekdays')}</strong>
         <span class="price-line">- ${t('priceDayUse')} ${formatPriceWithSymbol(p.weekdaysDayUse)}</span>
         <span class="price-line">- ${t('priceOvernight')} ${formatPriceWithSymbol(p.weekdaysOvernight)}</span>
-        <br>
-        <strong>${t('pricesHolidays')}</strong>
+      `;
+
+      priceHolidays.innerHTML = `
+        <strong class="price-title">${t('pricesHolidays')}</strong>
         <span class="price-line">- ${t('priceDayUse')} ${formatPriceWithSymbol(p.holidaysDayUse)}</span>
         <span class="price-line">- ${t('priceOvernight')} ${formatPriceWithSymbol(p.holidaysOvernight)}</span>
       `;
