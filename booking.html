@@ -871,7 +871,7 @@
         <div class="selected-resort-name" id="selectedResortHeading">شاليه رافانا A</div>
         <h1 class="page-title" data-i18n="bookingTitle">احجز إقامتك</h1>
         <p class="page-copy" data-i18n="bookingCopy">
-          اختر التاريخ المناسب من التقويم ثم اكمال البيانات لارسال طلب الحجز.
+          اختر التاريخ المناسب من التقويم ادناه ثم اكمال البيانات لارسال طلب الحجز.
         </p>
       </header>
 
@@ -993,7 +993,7 @@
         menuRules: 'الشروط والضوابط',
         menuContact: 'تواصل معنا',
         bookingTitle: 'احجز إقامتك',
-        bookingCopy: 'اختر التاريخ المناسب من التقويم ثم اكمال البيانات لارسال طلب الحجز.',
+        bookingCopy: 'اختر التاريخ المناسب من التقويم ادناه ثم اكمال البيانات لارسال طلب الحجز.',
         loadingTitle: 'جاري تحميل التقويم',
         loadingSub: 'يرجى الانتظار قليلاً',
         calendarError: 'تعذر تحميل التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.',
@@ -1010,10 +1010,9 @@
         submitBooking: 'إرسال طلب الحجز',
         notesPlaceholder: 'اكتب أي ملاحظات تود إضافتها',
         selectDateFirst: 'يرجى اختيار تاريخ الحجز من التقويم أولاً.',
-        unavailableDate: 'هذا التاريخ غير متاح للحجز.',
+        unavailableDate: 'التاريخ غير متاح.',
         invalidPastDate: 'لا يمكن الحجز في تاريخ سابق.',
         requiredFields: 'يرجى تعبئة جميع الحقول المطلوبة.',
-        submitSuccess: 'تم إرسال طلب الحجز بنجاح، وسيتم التواصل معكم بعد المراجعة.',
         submitError: 'تعذر إرسال الطلب حاليًا. يرجى المحاولة مرة أخرى.',
         loadingSubmit: 'جاري الإرسال...',
         availableEvent: 'متاح',
@@ -1032,7 +1031,7 @@
         menuRules: 'Terms & Rules',
         menuContact: 'Contact Us',
         bookingTitle: 'Book Your Stay',
-        bookingCopy: 'Choose a suitable date from the calendar, then complete the details to send the booking request.',
+        bookingCopy: 'Choose a suitable date from the calendar below, then complete the details to send the booking request.',
         loadingTitle: 'Loading Calendar',
         loadingSub: 'Please wait a moment',
         calendarError: 'Unable to load the calendar. Please check the service URL and your sheet data, then refresh the page.',
@@ -1049,10 +1048,9 @@
         submitBooking: 'Send Booking Request',
         notesPlaceholder: 'Add any notes you would like to include',
         selectDateFirst: 'Please choose the booking date from the calendar first.',
-        unavailableDate: 'This date is not available for booking.',
+        unavailableDate: 'This date is unavailable.',
         invalidPastDate: 'Booking cannot be made for a past date.',
         requiredFields: 'Please complete all required fields.',
-        submitSuccess: 'Your booking request was sent successfully. You will be contacted after review.',
         submitError: 'Unable to send the request right now. Please try again.',
         loadingSubmit: 'Sending...',
         availableEvent: 'Available',
@@ -1290,7 +1288,7 @@
           if (clickedDate < todayString()) return;
 
           if (!isSelectableDate(clickedDate)) {
-            showMessage('error', t('unavailableDate'));
+            alert(t('unavailableDate'));
             return;
           }
 
@@ -1302,7 +1300,7 @@
           const date = normalizeDate(props.date);
 
           if (!props.available) {
-            showMessage('error', t('unavailableDate'));
+            alert(t('unavailableDate'));
             return;
           }
 
@@ -1367,7 +1365,7 @@
       }
 
       if (!isSelectableDate(date)) {
-        showMessage('error', t('unavailableDate'));
+        alert(t('unavailableDate'));
         return;
       }
 
@@ -1409,13 +1407,10 @@
           throw new Error((json && json.message) || 'Request failed');
         }
 
-        bookingForm.reset();
-        countryCode.value = '+968';
-        bookingType.value = 'بدون مبيت';
-        selectedDate = '';
-        updateSelectedDateUI();
-        showMessage('success', t('submitSuccess'));
-        loadBookings();
+        saveLanguagePreference();
+        window.location.href = 'index.html';
+        return;
+
       } catch (error) {
         console.error(error);
         showMessage('error', t('submitError'));
