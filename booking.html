@@ -23,12 +23,9 @@
       --brand-dark: #5f4630;
       --success: #24a46d;
       --danger: #d45454;
-      --warning: #d4a327;
       --shadow-xl: 0 24px 60px rgba(66, 43, 19, 0.10);
       --shadow-md: 0 10px 22px rgba(66, 43, 19, 0.08);
       --radius-2xl: 34px;
-      --radius-xl: 24px;
-      --radius-lg: 18px;
       --header-h: 78px;
     }
 
@@ -649,47 +646,13 @@
       align-items: stretch;
     }
 
-    .hint {
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.7;
-    }
-
     .submit-row {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-end;
       gap: 14px;
       flex-wrap: wrap;
       padding-top: 18px;
-    }
-
-    .message {
-      display: none;
-      width: 100%;
-      padding: 14px 16px;
-      border-radius: 18px;
-      font-size: 14px;
-      font-weight: 700;
-      line-height: 1.8;
-      margin-bottom: 12px;
-    }
-
-    .message.show {
-      display: block;
-    }
-
-    .message.success {
-      background: rgba(36,164,109,0.10);
-      color: #1f7e57;
-      border: 1px solid rgba(36,164,109,0.16);
-    }
-
-    .message.error {
-      background: rgba(212,84,84,0.10);
-      color: #992f2f;
-      border: 1px solid rgba(212,84,84,0.16);
     }
 
     .submit-btn {
@@ -708,12 +671,6 @@
     .submit-btn:disabled {
       opacity: 0.7;
       cursor: default;
-    }
-
-    .helper-link {
-      color: var(--brand-dark);
-      font-weight: 800;
-      font-size: 14px;
     }
 
     @media (max-width: 720px) {
@@ -899,8 +856,6 @@
       <section class="booking-shell" id="bookingFormSection">
         <div class="booking-surface">
           <form id="bookingForm" class="booking-form" novalidate>
-            <div id="formMessage" class="message"></div>
-
             <div class="form-grid">
               <div class="field">
                 <label class="label" for="bookingDateDisplay" data-i18n="fieldDate">تاريخ الحجز</label>
@@ -948,9 +903,6 @@
                     placeholder="90000000"
                   >
                 </div>
-                <div class="hint" data-i18n="phoneHint">
-                  يرجى كتابة الرقم بالأرقام الإنجليزية فقط حتى يعمل رابط الواتساب بشكل صحيح.
-                </div>
               </div>
 
               <div class="field full">
@@ -960,7 +912,6 @@
             </div>
 
             <div class="submit-row">
-              <a href="index.html" class="helper-link nav-link" data-i18n="backHome">العودة للرئيسية</a>
               <button class="submit-btn" id="submitBtn" type="submit" data-i18n="submitBooking">إرسال طلب الحجز</button>
             </div>
           </form>
@@ -1005,8 +956,6 @@
         fieldNotes: 'ملاحظات إضافية',
         bookingTypeDay: 'بدون مبيت',
         bookingTypeNight: 'مع مبيت',
-        phoneHint: 'يرجى كتابة الرقم بالأرقام الإنجليزية فقط حتى يعمل رابط الواتساب بشكل صحيح.',
-        backHome: 'العودة للرئيسية',
         submitBooking: 'إرسال طلب الحجز',
         notesPlaceholder: 'اكتب أي ملاحظات تود إضافتها',
         selectDateFirst: 'يرجى اختيار تاريخ الحجز من التقويم أولاً.',
@@ -1043,8 +992,6 @@
         fieldNotes: 'Additional Notes',
         bookingTypeDay: 'Without Overnight',
         bookingTypeNight: 'With Overnight',
-        phoneHint: 'Please use English digits only so the WhatsApp link works correctly.',
-        backHome: 'Back to Home',
         submitBooking: 'Send Booking Request',
         notesPlaceholder: 'Add any notes you would like to include',
         selectDateFirst: 'Please choose the booking date from the calendar first.',
@@ -1075,7 +1022,6 @@
     const countryCode = document.getElementById('countryCode');
     const phoneInput = document.getElementById('phoneInput');
     const notesInput = document.getElementById('notesInput');
-    const formMessage = document.getElementById('formMessage');
     const submitBtn = document.getElementById('submitBtn');
 
     const calendarLoading = document.getElementById('calendarLoading');
@@ -1162,15 +1108,11 @@
       bookingDateValue.value = selectedDate || '';
     }
 
-    function showMessage(type, text) {
-      formMessage.className = 'message show ' + type;
-      formMessage.textContent = text;
+    function showError(text) {
+      alert(text);
     }
 
-    function clearMessage() {
-      formMessage.className = 'message';
-      formMessage.textContent = '';
-    }
+    function clearMessage() {}
 
     function getDateStatus(dateStr) {
       const record = bookingData.find(item => {
@@ -1179,7 +1121,11 @@
       });
 
       if (!record) return 'متاح';
-      return String(record['الحالة'] || '').trim() || 'متاح';
+      return String(itemOrRecordStatus(record)).trim() || 'متاح';
+    }
+
+    function itemOrRecordStatus(record) {
+      return record['الحالة'] || '';
     }
 
     function isSelectableDate(dateStr) {
@@ -1355,12 +1301,12 @@
       const notes = notesInput.value.trim();
 
       if (!date) {
-        showMessage('error', t('selectDateFirst'));
+        showError(t('selectDateFirst'));
         return;
       }
 
       if (date < todayString()) {
-        showMessage('error', t('invalidPastDate'));
+        showError(t('invalidPastDate'));
         return;
       }
 
@@ -1370,7 +1316,7 @@
       }
 
       if (!name || !fullPhone || !bookingTypeValue) {
-        showMessage('error', t('requiredFields'));
+        showError(t('requiredFields'));
         return;
       }
 
@@ -1410,10 +1356,9 @@
         saveLanguagePreference();
         window.location.href = 'index.html';
         return;
-
       } catch (error) {
         console.error(error);
-        showMessage('error', t('submitError'));
+        showError(t('submitError'));
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = t('submitBooking');
