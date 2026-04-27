@@ -26,8 +26,6 @@
       --shadow-xl: 0 24px 60px rgba(66, 43, 19, 0.10);
       --shadow-md: 0 10px 22px rgba(66, 43, 19, 0.08);
       --radius-2xl: 34px;
-      --radius-xl: 26px;
-      --radius-lg: 18px;
       --header-h: 78px;
     }
 
@@ -390,18 +388,26 @@
       touch-action: pan-y;
     }
 
-    .gallery-main img {
+    .gallery-main-image {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
+      opacity: 1;
+      transform: scale(1);
+      transition: opacity .38s ease, transform .65s ease;
+    }
+
+    .gallery-main-image.changing {
+      opacity: .18;
+      transform: scale(1.03);
     }
 
     .gallery-main-btn {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      z-index: 2;
+      z-index: 3;
       width: 34px;
       height: 34px;
       border-radius: 50%;
@@ -424,24 +430,8 @@
     }
 
     .thumbs-wrap {
-      display: grid;
-      grid-template-columns: 40px minmax(0, 1fr) 40px;
-      gap: 10px;
-      align-items: center;
-      padding: 0 14px;
-    }
-
-    .thumbs-nav {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: 0;
-      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(246,240,232,0.84));
-      color: var(--text);
-      font-size: 18px;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: var(--shadow-md);
+      position: relative;
+      padding: 0 0 0;
     }
 
     .thumbs-track {
@@ -449,7 +439,7 @@
       gap: 10px;
       overflow-x: auto;
       scroll-behavior: smooth;
-      padding: 2px 2px 4px;
+      padding: 2px 54px 4px;
       scrollbar-width: none;
     }
 
@@ -480,6 +470,43 @@
       height: 100%;
       object-fit: cover;
       display: block;
+    }
+
+    .thumbs-hint {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .thumbs-hint span {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.30);
+      color: rgba(255,255,255,0.88);
+      font-size: 16px;
+      font-weight: 800;
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+    }
+
+    .thumbs-hint-start {
+      inset-inline-start: 0;
+      background: linear-gradient(90deg, rgba(245,242,236,0.82) 0%, rgba(245,242,236,0) 100%);
+    }
+
+    .thumbs-hint-end {
+      inset-inline-end: 0;
+      background: linear-gradient(270deg, rgba(245,242,236,0.82) 0%, rgba(245,242,236,0) 100%);
     }
 
     .details-band {
@@ -546,11 +573,31 @@
       margin: 0;
       color: var(--muted);
       font-size: 15px;
-      line-height: 2.1;
+      line-height: 2.15;
     }
 
     .price-paragraph strong {
       color: var(--brand-dark);
+    }
+
+    .price-line {
+      display: block;
+      margin-top: 2px;
+    }
+
+    .omr-inline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+      margin-inline: 4px 0;
+    }
+
+    .omr-symbol-img {
+      width: 16px;
+      height: 16px;
+      object-fit: contain;
+      display: block;
     }
 
     .calendar-card {
@@ -965,10 +1012,12 @@
         font-size: 16px;
       }
 
-      .thumbs-nav {
-        width: 36px;
-        height: 36px;
-        font-size: 16px;
+      .thumbs-hint {
+        width: 44px;
+      }
+
+      .thumbs-track {
+        padding-inline: 44px;
       }
 
       .calendar-top {
@@ -1016,6 +1065,11 @@
 
       .contact-label {
         font-size: 13px;
+      }
+
+      .omr-symbol-img {
+        width: 14px;
+        height: 14px;
       }
     }
   </style>
@@ -1076,14 +1130,14 @@
       <section class="section-card glass-card gallery-card">
         <div class="gallery-main" id="galleryMain">
           <button class="gallery-main-btn prev" id="galleryPrevBtn" type="button">‹</button>
-          <img id="mainGalleryImage" src="" alt="Chalet Image">
+          <img id="mainGalleryImage" class="gallery-main-image" src="" alt="Chalet Image">
           <button class="gallery-main-btn next" id="galleryNextBtn" type="button">›</button>
         </div>
 
         <div class="thumbs-wrap">
-          <button class="thumbs-nav" id="thumbsPrevBtn" type="button">‹</button>
+          <div class="thumbs-hint thumbs-hint-start"><span>‹</span></div>
           <div class="thumbs-track" id="thumbTrack"></div>
-          <button class="thumbs-nav" id="thumbsNextBtn" type="button">›</button>
+          <div class="thumbs-hint thumbs-hint-end"><span>›</span></div>
         </div>
       </section>
     </div>
@@ -1225,10 +1279,10 @@
           { icon: '📶', key: 'wifi', ar: 'واي فاي', en: 'Wi-Fi' }
         ],
         prices: {
-          weekdaysDayUse: '35 ر.ع',
-          weekdaysOvernight: '55 ر.ع',
-          holidaysDayUse: '45 ر.ع',
-          holidaysOvernight: '70 ر.ع'
+          weekdaysDayUse: '35',
+          weekdaysOvernight: '55',
+          holidaysDayUse: '45',
+          holidaysOvernight: '70'
         }
       },
       B: {
@@ -1257,10 +1311,10 @@
           { icon: '📶', key: 'wifi', ar: 'واي فاي', en: 'Wi-Fi' }
         ],
         prices: {
-          weekdaysDayUse: '38 ر.ع',
-          weekdaysOvernight: '58 ر.ع',
-          holidaysDayUse: '48 ر.ع',
-          holidaysOvernight: '74 ر.ع'
+          weekdaysDayUse: '38',
+          weekdaysOvernight: '58',
+          holidaysDayUse: '48',
+          holidaysOvernight: '74'
         }
       },
       C: {
@@ -1289,10 +1343,10 @@
           { icon: '📶', key: 'wifi', ar: 'واي فاي', en: 'Wi-Fi' }
         ],
         prices: {
-          weekdaysDayUse: '36 ر.ع',
-          weekdaysOvernight: '56 ر.ع',
-          holidaysDayUse: '46 ر.ع',
-          holidaysOvernight: '72 ر.ع'
+          weekdaysDayUse: '36',
+          weekdaysOvernight: '56',
+          holidaysDayUse: '46',
+          holidaysOvernight: '72'
         }
       }
     };
@@ -1313,8 +1367,8 @@
         detailsTitle: 'تفاصيل الشاليه',
         amenitiesTitle: 'المرافق والخدمات',
         pricesTitle: 'أسعار الشاليه',
-        pricesWeekdays: 'أيام الأسبوع',
-        pricesHolidays: 'الإجازات الرسمية',
+        pricesWeekdays: 'أيام الأسبوع:',
+        pricesHolidays: 'الإجازات الرسمية:',
         priceDayUse: 'بدون مبيت',
         priceOvernight: 'مع مبيت',
         calendarTitle: 'التوفر والحجز',
@@ -1346,8 +1400,8 @@
         detailsTitle: 'Chalet Details',
         amenitiesTitle: 'Amenities & Services',
         pricesTitle: 'Chalet Prices',
-        pricesWeekdays: 'Weekdays',
-        pricesHolidays: 'Official Holidays',
+        pricesWeekdays: 'Weekdays:',
+        pricesHolidays: 'Official Holidays:',
         priceDayUse: 'Without Overnight',
         priceOvernight: 'With Overnight',
         calendarTitle: 'Availability & Booking',
@@ -1379,8 +1433,6 @@
     const galleryPrevBtn = document.getElementById('galleryPrevBtn');
     const galleryNextBtn = document.getElementById('galleryNextBtn');
     const thumbTrack = document.getElementById('thumbTrack');
-    const thumbsPrevBtn = document.getElementById('thumbsPrevBtn');
-    const thumbsNextBtn = document.getElementById('thumbsNextBtn');
     const amenitiesGrid = document.getElementById('amenitiesGrid');
     const chaletDescription = document.getElementById('chaletDescription');
     const priceParagraph = document.getElementById('priceParagraph');
@@ -1394,6 +1446,7 @@
     let bookingData = [];
     let calendar = null;
     let touchStartX = 0;
+    let isAnimatingMainImage = false;
 
     function detectChaletCode() {
       const path = window.location.pathname.toLowerCase();
@@ -1451,16 +1504,45 @@
       window.location.href = 'booking.html' + (qs ? '?' + qs : '');
     }
 
+    function centerActiveThumb() {
+      const activeThumb = thumbTrack.querySelector('.thumb-btn.active');
+      if (!activeThumb) return;
+
+      const targetScroll = activeThumb.offsetLeft - (thumbTrack.clientWidth / 2) + (activeThumb.clientWidth / 2);
+      thumbTrack.scrollTo({
+        left: Math.max(0, targetScroll),
+        behavior: 'smooth'
+      });
+    }
+
+    function switchMainImage(src, altText) {
+      if (isAnimatingMainImage) return;
+      isAnimatingMainImage = true;
+
+      mainGalleryImage.classList.add('changing');
+
+      setTimeout(() => {
+        mainGalleryImage.src = src;
+        mainGalleryImage.alt = altText;
+        mainGalleryImage.onerror = function () {
+          this.src = 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80';
+        };
+
+        const finish = () => {
+          mainGalleryImage.classList.remove('changing');
+          isAnimatingMainImage = false;
+        };
+
+        mainGalleryImage.onload = finish;
+        setTimeout(finish, 320);
+      }, 120);
+    }
+
     function renderGallery() {
       const images = chalet().images || [];
       if (!images.length) return;
 
       currentGalleryIndex = Math.max(0, Math.min(currentGalleryIndex, images.length - 1));
-      mainGalleryImage.src = images[currentGalleryIndex];
-      mainGalleryImage.alt = currentLang === 'ar' ? chalet().nameAr : chalet().nameEn;
-      mainGalleryImage.onerror = function () {
-        this.src = 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80';
-      };
 
       thumbTrack.innerHTML = images.map((src, index) => `
         <button class="thumb-btn ${index === currentGalleryIndex ? 'active' : ''}" type="button" data-thumb-index="${index}">
@@ -1469,13 +1551,28 @@
         </button>
       `).join('');
 
+      const currentImageSrc = images[currentGalleryIndex];
+      const altText = currentLang === 'ar' ? chalet().nameAr : chalet().nameEn;
+
+      if (!mainGalleryImage.getAttribute('src')) {
+        mainGalleryImage.src = currentImageSrc;
+        mainGalleryImage.alt = altText;
+        mainGalleryImage.onerror = function () {
+          this.src = 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80';
+        };
+      } else {
+        switchMainImage(currentImageSrc, altText);
+      }
+
       thumbTrack.querySelectorAll('[data-thumb-index]').forEach(btn => {
         btn.addEventListener('click', () => {
           currentGalleryIndex = Number(btn.getAttribute('data-thumb-index'));
           renderGallery();
-          btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+          centerActiveThumb();
         });
       });
+
+      setTimeout(centerActiveThumb, 30);
     }
 
     function nextGalleryImage() {
@@ -1507,11 +1604,25 @@
       document.title = (currentLang === 'ar' ? chalet().nameAr : chalet().nameEn) + ' - ' + t('topbarBrand');
     }
 
+    function formatPriceWithSymbol(value) {
+      return `
+        <span class="omr-inline">
+          <img class="omr-symbol-img" src="images/omr-symbol.svg" alt="OMR">
+        </span>
+        ${value}
+      `;
+    }
+
     function renderPrices() {
       const p = chalet().prices;
       priceParagraph.innerHTML = `
-        <strong>${t('pricesWeekdays')}:</strong> ${t('priceDayUse')} ${p.weekdaysDayUse}، ${t('priceOvernight')} ${p.weekdaysOvernight}<br>
-        <strong>${t('pricesHolidays')}:</strong> ${t('priceDayUse')} ${p.holidaysDayUse}، ${t('priceOvernight')} ${p.holidaysOvernight}
+        <strong>${t('pricesWeekdays')}</strong>
+        <span class="price-line">- ${t('priceDayUse')} ${formatPriceWithSymbol(p.weekdaysDayUse)}</span>
+        <span class="price-line">- ${t('priceOvernight')} ${formatPriceWithSymbol(p.weekdaysOvernight)}</span>
+        <br>
+        <strong>${t('pricesHolidays')}</strong>
+        <span class="price-line">- ${t('priceDayUse')} ${formatPriceWithSymbol(p.holidaysDayUse)}</span>
+        <span class="price-line">- ${t('priceOvernight')} ${formatPriceWithSymbol(p.holidaysOvernight)}</span>
       `;
     }
 
@@ -1621,14 +1732,6 @@
 
     galleryPrevBtn.addEventListener('click', prevGalleryImage);
     galleryNextBtn.addEventListener('click', nextGalleryImage);
-
-    thumbsPrevBtn.addEventListener('click', () => {
-      thumbTrack.scrollBy({ left: -260, behavior: 'smooth' });
-    });
-
-    thumbsNextBtn.addEventListener('click', () => {
-      thumbTrack.scrollBy({ left: 260, behavior: 'smooth' });
-    });
 
     galleryMain.addEventListener('touchstart', (e) => {
       touchStartX = e.touches[0].clientX;
