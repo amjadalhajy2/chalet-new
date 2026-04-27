@@ -15,7 +15,7 @@
 
   <style>
     :root {
-      --surface: rgba(255,255,255,0.82);
+      --surface: rgba(255,255,255,0.80);
       --line: rgba(77, 58, 34, 0.10);
       --text: #2c2218;
       --muted: #76695a;
@@ -26,8 +26,6 @@
       --shadow-xl: 0 24px 60px rgba(66, 43, 19, 0.10);
       --shadow-md: 0 10px 22px rgba(66, 43, 19, 0.08);
       --radius-2xl: 34px;
-      --radius-xl: 26px;
-      --radius-lg: 18px;
       --header-h: 78px;
     }
 
@@ -208,7 +206,6 @@
       justify-content: center;
       flex-direction: column;
       gap: 4px;
-      box-shadow: 0 14px 28px rgba(95, 70, 48, 0.10);
     }
 
     .menu-btn span {
@@ -309,8 +306,7 @@
       background: transparent;
     }
 
-    .menu-link:hover,
-    .menu-sub-link:hover {
+    .menu-link:hover {
       color: var(--brand-dark);
       padding-inline-start: 6px;
     }
@@ -344,229 +340,297 @@
       transition: .2s ease;
     }
 
-    .hero-band,
-    .intro-band {
+    .menu-sub-link:hover {
+      color: var(--brand-dark);
+      padding-inline-start: 6px;
+    }
+
+    .hero {
       width: 100vw;
       margin-inline: calc(50% - 50vw);
     }
 
-    .hero-band {
-      margin-bottom: 0;
-    }
-
-    .hero-wrap {
+    .hero-media {
       position: relative;
       width: 100%;
       aspect-ratio: 19 / 6;
+      min-height: 320px;
       overflow: hidden;
-      background: #d8cfbf;
+      background: #d8cfc1;
     }
 
-    .hero-image {
+    .hero-slideshow {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: scale(1.02);
+      transition: opacity 1.6s ease, transform 6s ease;
+      will-change: opacity, transform;
+    }
+
+    .hero-slide.active {
+      opacity: 1;
+      transform: scale(1.08);
+    }
+
+    .hero-slide img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
-      transform: scale(1);
-      opacity: 1;
-      transition: opacity .7s ease, transform 6s ease;
-    }
-
-    .hero-image.is-changing {
-      opacity: .2;
-      transform: scale(1.04);
-    }
-
-    .hero-gradient {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(32,23,16,0.30), rgba(32,23,16,0.04) 45%, rgba(32,23,16,0.02));
-      pointer-events: none;
+      filter: saturate(1.03) contrast(1.01);
     }
 
     .hero-overlay {
       position: absolute;
-      inset-inline: 0;
-      bottom: 28px;
-      display: flex;
-      justify-content: center;
-      padding: 0 16px;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.10), rgba(0,0,0,0.32));
+      z-index: 2;
     }
 
-    .hero-overlay-box {
-      min-width: min(92vw, 430px);
-      max-width: min(92vw, 520px);
+    .hero-dots {
+      position: absolute;
+      left: 50%;
+      bottom: 102px;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 3;
+    }
+
+    .hero-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      border: 0;
+      background: rgba(255,255,255,0.45);
+      padding: 0;
+      cursor: pointer;
+      transition: all .25s ease;
+    }
+
+    .hero-dot.active {
+      width: 26px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.95);
+    }
+
+    .hero-card {
+      z-index: 4;
+      position: absolute;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%);
+      width: min(92%, 460px);
       text-align: center;
-      padding: 18px 18px 16px;
+      padding: 16px;
       border-radius: 24px;
-      background: rgba(255,255,255,0.72);
-      border: 1px solid rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.82);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      box-shadow: var(--shadow-xl);
+      box-shadow: var(--shadow-md);
     }
 
-    .hero-title {
-      margin: 0 0 10px;
-      font-size: clamp(22px, 3vw, 32px);
-      font-weight: 800;
+    .hero-card h1 {
+      margin: 0 0 12px;
+      font-size: clamp(24px, 4vw, 34px);
       letter-spacing: -0.03em;
-      color: #2f2419;
     }
 
-    .hero-cta {
-      min-height: 48px;
+    .hero-btn,
+    .primary-btn,
+    .secondary-btn {
+      min-height: 52px;
+      padding: 14px 18px;
+      border-radius: 18px;
       border: 0;
-      border-radius: 999px;
-      padding: 0 22px;
-      background: linear-gradient(135deg, var(--brand), var(--brand-dark));
-      color: #fff;
       font-size: 15px;
       font-weight: 800;
       cursor: pointer;
+      width: 100%;
+    }
+
+    .hero-btn,
+    .primary-btn {
+      background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+      color: #fff;
       box-shadow: 0 16px 28px rgba(95, 70, 48, 0.18);
     }
 
-    .intro-card {
-      border-radius: 0;
-      padding: 24px 22px;
-      margin-top: 0;
-      margin-bottom: 22px;
-    }
-
-    .intro-text {
-      width: min(1040px, 100%);
-      margin: 0 auto;
-      color: var(--muted);
-      font-size: 16px;
-      line-height: 2;
-    }
-
-    .page-wrap {
-      padding: 0 0 34px;
-    }
-
-    .section-block {
-      margin-bottom: 18px;
-    }
-
-    .section-card {
-      border-radius: var(--radius-2xl);
-      padding: 18px;
-    }
-
-    .section-title {
-      margin: 0 0 14px;
-      font-size: 28px;
-      letter-spacing: -0.03em;
-    }
-
-    .section-subtext {
-      margin: -4px 0 14px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .chalets-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .chalet-card {
-      overflow: hidden;
-      padding: 0 0 18px;
-      border-radius: var(--radius-2xl);
-    }
-
-    .chalet-media {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16 / 11;
-      overflow: hidden;
-      background: #d8cfbf;
-      touch-action: pan-y;
-    }
-
-    .chalet-media img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform .45s ease, opacity .35s ease;
-    }
-
-    .chalet-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 2;
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      border: 0;
-      background: rgba(255,255,255,0.34);
-      color: #fff;
-      font-size: 18px;
-      font-weight: 800;
-      cursor: pointer;
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-    }
-
-    .chalet-arrow.prev { left: 10px; }
-    .chalet-arrow.next { right: 10px; }
-
-    .chalet-body {
-      padding: 18px 18px 0;
-    }
-
-    .chalet-name {
-      margin: 0 0 8px;
-      font-size: 24px;
-      letter-spacing: -0.03em;
-    }
-
-    .chalet-desc {
-      margin: 0 0 16px;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.9;
-      min-height: 78px;
-    }
-
-    .chalet-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .action-btn {
-      min-height: 46px;
-      border-radius: 999px;
-      border: 0;
-      font-size: 14px;
-      font-weight: 800;
-      cursor: pointer;
-      padding: 0 14px;
-    }
-
-    .action-btn.primary {
-      background: linear-gradient(135deg, var(--brand), var(--brand-dark));
-      color: #fff;
-      box-shadow: 0 14px 24px rgba(95, 70, 48, 0.16);
-    }
-
-    .action-btn.secondary {
-      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(246,240,232,0.88));
+    .secondary-btn {
+      background: linear-gradient(180deg, #fff, #f6f0e8);
       color: var(--text);
-      box-shadow: 0 10px 18px rgba(66,43,19,0.06);
+      border: 1px solid rgba(95,70,48,0.12);
+    }
+
+    .section {
+      padding: 18px 0 0;
+    }
+
+    .intro-band {
+      width: 100vw;
+      margin-inline: calc(50% - 50vw);
+      margin-top: 0;
+      padding-top: 0;
+    }
+
+    .intro-card,
+    .calendar-card,
+    .chalet-card {
+      border-radius: var(--radius-2xl);
+    }
+
+    .intro-card {
+      padding: 22px;
+    }
+
+    .intro-full {
+      border-radius: 0;
+      margin-top: 0;
+      padding: 28px 0;
     }
 
     .calendar-card {
       padding: 0;
       overflow: hidden;
-      border-radius: var(--radius-2xl);
+    }
+
+    .section-title,
+    .location-title,
+    .contact-title {
+      margin: 0 0 10px;
+      font-size: 28px;
+      letter-spacing: -0.03em;
+    }
+
+    .section-copy,
+    .location-place {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.95;
+    }
+
+    .chalet-stack {
+      display: grid;
+      gap: 16px;
+    }
+
+    .chalet-card {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .slider {
+      position: relative;
+      overflow: hidden;
+      background: #d8cfc1;
+      aspect-ratio: 16 / 8.2;
+      touch-action: pan-y;
+      border-radius: 34px 34px 0 0;
+      direction: ltr;
+    }
+
+    .slides {
+      display: flex;
+      flex-direction: row;
+      direction: ltr;
+      height: 100%;
+      transition: transform .35s ease;
+      will-change: transform;
+    }
+
+    .slide {
+      min-width: 100%;
+      height: 100%;
+      flex: 0 0 100%;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .slider-nav {
+      position: absolute;
+      inset-inline: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      justify-content: space-between;
+      padding: 0 10px;
+      pointer-events: none;
+    }
+
+    .nav-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 0;
+      background: rgba(255,255,255,0.82);
+      color: var(--text);
+      font-size: 20px;
+      font-weight: 800;
+      cursor: pointer;
+      pointer-events: auto;
+      box-shadow: var(--shadow-md);
+    }
+
+    .dots {
+      position: absolute;
+      left: 50%;
+      bottom: 12px;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      z-index: 5;
+    }
+
+    .dot-btn {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.55);
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .dot-btn.active {
+      width: 24px;
+      border-radius: 999px;
+      background: #fff;
+    }
+
+    .chalet-body {
+      padding: 16px;
+    }
+
+    .chalet-title {
+      margin: 0 0 6px;
+      font-size: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .chalet-copy {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.85;
+    }
+
+    .chalet-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
     }
 
     .calendar-top {
@@ -621,6 +685,11 @@
       position: relative;
       min-height: 360px;
       overflow: hidden;
+      border-radius: 0;
+      margin: 0;
+      border-left: 0;
+      border-right: 0;
+      border-bottom: 0;
       background: linear-gradient(180deg, rgba(255,255,255,0.52), rgba(255,255,255,0.24));
       border-top: 1px solid rgba(95,70,48,0.08);
     }
@@ -763,13 +832,11 @@
     }
 
     .fc .fc-daygrid-day-frame {
-      min-height: 96px;
+      min-height: 92px;
       padding: 2px;
     }
 
-    .fc-daygrid-day-top {
-      padding: 2px 4px;
-    }
+    .fc-daygrid-day-top { padding: 2px 4px; }
 
     .fc-daygrid-event {
       border: 0;
@@ -801,14 +868,7 @@
     }
 
     .location-section {
-      padding: 8px 2px 8px;
-      margin-bottom: 14px;
-    }
-
-    .location-place {
-      margin: 0 0 14px;
-      color: var(--muted);
-      font-size: 16px;
+      padding: 24px 2px 8px;
     }
 
     .location-media {
@@ -838,7 +898,7 @@
     }
 
     .contact-section {
-      padding: 8px 2px 34px;
+      padding: 26px 2px 34px;
     }
 
     .contact-actions {
@@ -889,20 +949,6 @@
     .instagram-link .contact-icon { color: #9b6a7f; }
     .call-link .contact-icon { color: #8b6a48; }
 
-    @media (max-width: 980px) {
-      .chalets-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .chalet-desc {
-        min-height: unset;
-      }
-
-      .hero-wrap {
-        aspect-ratio: 16 / 9;
-      }
-    }
-
     @media (max-width: 720px) {
       :root { --header-h: 72px; }
 
@@ -912,20 +958,22 @@
           url('images/background-main.jpg') center center / cover no-repeat;
       }
 
-      .hero-wrap {
-        aspect-ratio: 16 / 10.4;
+      .hero-media {
+        aspect-ratio: 6 / 9.8;
+        min-height: 500px;
       }
 
-      .hero-overlay {
-        bottom: 18px;
+      .hero-dots {
+        bottom: 96px;
       }
 
-      .hero-overlay-box {
-        padding: 16px 16px 14px;
+      .hero-card {
+        bottom: 14px;
+        width: calc(100% - 24px);
       }
 
-      .intro-card {
-        padding: 20px 16px;
+      .hero-card h1 {
+        font-size: 24px;
       }
     }
 
@@ -940,6 +988,7 @@
         width: 44px;
         min-width: 44px;
         height: 44px;
+        padding: 0;
       }
 
       .lang-btn {
@@ -947,59 +996,15 @@
         padding: 0 14px;
       }
 
-      .section-card,
-      .calendar-card,
-      .chalet-card {
-        border-radius: 26px;
-      }
+      .section-title,
+      .location-title,
+      .contact-title { font-size: 24px; }
 
-      .section-card {
-        padding: 16px;
-      }
+      .section-copy { font-size: 14px; }
+      .chalet-title { font-size: 22px; }
 
-      .section-title {
-        font-size: 24px;
-      }
-
-      .hero-title {
-        font-size: 22px;
-      }
-
-      .hero-cta {
-        min-height: 44px;
-        font-size: 14px;
-      }
-
-      .intro-text {
-        font-size: 15px;
-      }
-
-      .chalet-body {
-        padding: 16px 16px 0;
-      }
-
-      .chalet-name {
-        font-size: 22px;
-      }
-
-      .chalet-desc {
-        font-size: 13px;
-      }
-
-      .chalet-actions {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .action-btn {
-        min-height: 44px;
-        font-size: 13px;
-        padding: 0 10px;
-      }
-
-      .chalet-arrow {
-        width: 30px;
-        height: 30px;
-        font-size: 16px;
+      .intro-full {
+        padding: 22px 0;
       }
 
       .calendar-top {
@@ -1063,6 +1068,7 @@
 
       <div class="topbar-actions">
         <button class="lang-btn" id="langToggle" type="button">EN</button>
+
         <button class="menu-btn" id="menuToggle" type="button" aria-label="Open menu">
           <span></span>
           <span></span>
@@ -1081,7 +1087,7 @@
     </div>
 
     <nav class="side-menu-links">
-      <a href="index.html" class="menu-link nav-link" data-i18n="menuHome">الرئيسية</a>
+      <a href="#" class="menu-link" data-scroll-target="heroSection" data-i18n="menuHome">الرئيسية</a>
 
       <div class="menu-group">
         <span class="menu-group-title" data-i18n="menuOurChalets">شاليهاتنا</span>
@@ -1097,116 +1103,113 @@
     </nav>
   </aside>
 
-  <section class="hero-band">
-    <div class="hero-wrap">
-      <img id="heroImage" class="hero-image" src="" alt="Hero Image">
-      <div class="hero-gradient"></div>
+  <section class="hero" id="heroSection">
+    <div class="hero-media">
+      <div class="hero-slideshow" id="heroSlideshow"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-dots" id="heroDots"></div>
 
-      <div class="hero-overlay">
-        <div class="hero-overlay-box">
-          <h1 class="hero-title" id="heroTitle">مرحبا بكم في شاليهات رافانا</h1>
-          <button class="hero-cta" id="heroBookingBtn" type="button">احجز اقامتك الان</button>
-        </div>
+      <div class="hero-card">
+        <h1 data-i18n="heroWelcome">مرحبا بكم في شاليهات رافانا</h1>
+        <button class="hero-btn" id="heroBookBtn" type="button" data-i18n="heroBook">احجز اقامتك الان</button>
       </div>
     </div>
   </section>
 
   <section class="intro-band">
-    <div class="intro-card glass-card">
-      <p class="intro-text" id="introText">
-        استمتعوا بإقامة هادئة وتجربة لا تُنسى في شاليهات رافانا، حيث الخصوصية والراحة والأجواء الراقية في مكان صُمم ليمنحكم لحظات جميلة بعيدًا عن ضغوط الحياة اليومية.
-      </p>
+    <div class="intro-card intro-full glass-card">
+      <div class="container">
+        <h2 class="section-title" data-i18n="introTitle">تجربة إقامة لا تُنسى</h2>
+        <p class="section-copy" data-i18n="introCopy">
+          في شاليهات رافانا ستجدون مساحة خاصة لأجمل اللحظات، حيث الهدوء والخصوصية والتصميم الدافئ في بيئة تمنحكم الراحة والاسترخاء. تجربة مثالية للعائلات والأصدقاء ولكل من يبحث عن إقامة مميزة بعيداً عن صخب الحياة اليومية.
+        </p>
+      </div>
     </div>
   </section>
 
-  <main class="page-wrap">
-    <div class="container">
-      <section class="section-block">
-        <div class="chalets-grid" id="chaletsGrid"></div>
-      </section>
+  <main class="container">
+    <section class="section chalet-stack" id="chaletsSection"></section>
 
-      <section class="section-block">
-        <div class="calendar-card glass-card">
-          <div class="calendar-top">
-            <div class="calendar-head">
-              <h2 class="section-title" data-i18n="calendarTitle">التوفر والحجز</h2>
-              <span data-i18n="calendarSub">يمكنك الحجز من خلال التقويم أدناه</span>
-            </div>
-
-            <div class="legend">
-              <span class="legend-item"><i class="legend-dot success"></i><span data-i18n="legendAvailable">متاح</span></span>
-              <span class="legend-item"><i class="legend-dot danger"></i><span data-i18n="legendBooked">محجوز</span></span>
-              <span class="legend-item" data-i18n="legendCodes">A / B / C ترمز إلى الشاليهات</span>
-            </div>
+    <section class="section">
+      <div class="calendar-card glass-card" id="bookingSection">
+        <div class="calendar-top">
+          <div class="calendar-head">
+            <h2 class="section-title" data-i18n="calendarTitle">التوفر والحجز</h2>
+            <span data-i18n="calendarSub">يمكنك الحجز من خلال التقويم ادناه</span>
           </div>
 
-          <div class="calendar-wrapper">
-            <div class="loading-overlay" id="calendarLoading">
-              <div class="loading-box">
-                <div class="loading-logo">
-                  <img src="logo.png" alt="Ravana Chalets" onerror="this.style.display='none'; this.parentNode.innerHTML='🏡'">
-                </div>
-                <div class="loading-spinner"></div>
-                <div class="loading-text" data-i18n="loadingTitle">جاري تحميل التقويم</div>
-                <div class="loading-subtext" data-i18n="loadingSub">يرجى الانتظار قليلاً</div>
+          <div class="legend">
+            <span class="legend-item"><i class="legend-dot success"></i><span data-i18n="legendAvailable">متاح</span></span>
+            <span class="legend-item"><i class="legend-dot danger"></i><span data-i18n="legendBooked">محجوز</span></span>
+          </div>
+        </div>
+
+        <div class="calendar-wrapper">
+          <div class="loading-overlay" id="calendarLoading">
+            <div class="loading-box">
+              <div class="loading-logo">
+                <img src="logo.png" alt="Ravana Chalets" onerror="this.style.display='none'; this.parentNode.innerHTML='🏡'">
               </div>
+              <div class="loading-spinner"></div>
+              <div class="loading-text" data-i18n="loadingTitle">جاري تحميل التقويم</div>
+              <div class="loading-subtext" data-i18n="loadingSub">يرجى الانتظار قليلاً</div>
             </div>
-
-            <div id="calendar"></div>
           </div>
 
-          <div class="fallback" id="calendarError" data-i18n="calendarError">
-            تعذر تحميل التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.
+          <div id="calendar"></div>
+        </div>
+
+        <div class="fallback" id="calendarError" data-i18n="calendarError">
+          تعذر تحميل التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.
+        </div>
+      </div>
+    </section>
+
+    <section class="location-section">
+      <h2 class="location-title" data-i18n="locationTitle">موقعنا</h2>
+      <p class="location-place" data-i18n="locationPlace">نزوى، عمان</p>
+
+      <div class="location-media">
+        <a class="map-link" id="mapLink" href="https://maps.google.com/?q=Nizwa,Oman" target="_blank" rel="noopener noreferrer">
+          <div class="map-thumb">
+            <img src="images/location-satellite.jpg" alt="Nizwa, Oman" onerror="this.src='https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1600&q=80'">
           </div>
-        </div>
-      </section>
+        </a>
+      </div>
+    </section>
 
-      <section class="location-section" id="locationSection">
-        <h2 class="section-title" data-i18n="locationTitle">موقعنا</h2>
-        <p class="location-place" data-i18n="locationPlace">نزوى، عمان</p>
+    <section class="contact-section" id="contactSection">
+      <h2 class="contact-title" data-i18n="contactTitle">تواصل معنا</h2>
 
-        <div class="location-media">
-          <a class="map-link" id="mapLink" href="https://maps.google.com/?q=Nizwa,Oman" target="_blank" rel="noopener noreferrer">
-            <div class="map-thumb">
-              <img src="images/location-satellite.jpg" alt="Nizwa, Oman" onerror="this.src='https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1600&q=80'">
-            </div>
-          </a>
-        </div>
-      </section>
+      <div class="contact-actions">
+        <a class="contact-link whatsapp-link" id="contactWhatsapp" href="https://wa.me/96800000000" target="_blank" rel="noopener noreferrer">
+          <span class="contact-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.52 3.48A11.82 11.82 0 0 0 12.07 0C5.55 0 .24 5.3.24 11.82c0 2.08.55 4.12 1.6 5.92L0 24l6.46-1.7a11.8 11.8 0 0 0 5.61 1.43h.01c6.52 0 11.83-5.3 11.83-11.82 0-3.16-1.23-6.12-3.39-8.43ZM12.08 21.7h-.01a9.84 9.84 0 0 1-5.01-1.37l-.36-.21-3.83 1 1.03-3.73-.23-.38a9.8 9.8 0 0 1-1.5-5.2c0-5.44 4.43-9.87 9.88-9.87 2.63 0 5.11 1.02 6.97 2.89a9.78 9.78 0 0 1 2.89 6.98c0 5.44-4.43 9.87-9.87 9.87Zm5.42-7.4c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.95 1.17-.17.2-.35.22-.65.07-.3-.15-1.28-.47-2.43-1.5-.9-.8-1.5-1.8-1.68-2.1-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.38-.02-.53-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.53.08-.8.38-.28.3-1.05 1.03-1.05 2.52s1.08 2.93 1.23 3.13c.15.2 2.12 3.25 5.13 4.56.72.31 1.28.5 1.72.64.72.23 1.38.2 1.9.12.58-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35Z"/>
+            </svg>
+          </span>
+          <span class="contact-label" data-i18n="contactWhatsapp">واتساب</span>
+        </a>
 
-      <section class="contact-section" id="contactSection">
-        <h2 class="section-title" data-i18n="contactTitle">تواصل معنا</h2>
+        <a class="contact-link instagram-link" id="contactInstagram" href="https://instagram.com/youraccount" target="_blank" rel="noopener noreferrer">
+          <span class="contact-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2Zm8.5 1.8h-8.5A3.95 3.95 0 0 0 3.8 7.75v8.5a3.95 3.95 0 0 0 3.95 3.95h8.5a3.95 3.95 0 0 0 3.95-3.95v-8.5a3.95 3.95 0 0 0-3.95-3.95ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.8A3.2 3.2 0 1 0 12 15.2 3.2 3.2 0 0 0 12 8.8Zm5.15-2.4a1.15 1.15 0 1 1 0 2.3 1.15 1.15 0 0 1 0-2.3Z"/>
+            </svg>
+          </span>
+          <span class="contact-label" data-i18n="contactInstagram">انستجرام</span>
+        </a>
 
-        <div class="contact-actions">
-          <a class="contact-link whatsapp-link" id="contactWhatsapp" href="https://wa.me/96800000000" target="_blank" rel="noopener noreferrer">
-            <span class="contact-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M20.52 3.48A11.82 11.82 0 0 0 12.07 0C5.55 0 .24 5.3.24 11.82c0 2.08.55 4.12 1.6 5.92L0 24l6.46-1.7a11.8 11.8 0 0 0 5.61 1.43h.01c6.52 0 11.83-5.3 11.83-11.82 0-3.16-1.23-6.12-3.39-8.43ZM12.08 21.7h-.01a9.84 9.84 0 0 1-5.01-1.37l-.36-.21-3.83 1 1.03-3.73-.23-.38a9.8 9.8 0 0 1-1.5-5.2c0-5.44 4.43-9.87 9.88-9.87 2.63 0 5.11 1.02 6.97 2.89a9.78 9.78 0 0 1 2.89 6.98c0 5.44-4.43 9.87-9.87 9.87Zm5.42-7.4c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.95 1.17-.17.2-.35.22-.65.07-.3-.15-1.28-.47-2.43-1.5-.9-.8-1.5-1.8-1.68-2.1-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.38-.02-.53-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.53.08-.8.38-.28.3-1.05 1.03-1.05 2.52s1.08 2.93 1.23 3.13c.15.2 2.12 3.25 5.13 4.56.72.31 1.28.5 1.72.64.72.23 1.38.2 1.9.12.58-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35Z"/>
-              </svg>
-            </span>
-            <span class="contact-label" data-i18n="contactWhatsapp">واتساب</span>
-          </a>
-
-          <a class="contact-link instagram-link" id="contactInstagram" href="https://instagram.com/youraccount" target="_blank" rel="noopener noreferrer">
-            <span class="contact-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2Zm8.5 1.8h-8.5A3.95 3.95 0 0 0 3.8 7.75v8.5a3.95 3.95 0 0 0 3.95 3.95h8.5a3.95 3.95 0 0 0 3.95-3.95v-8.5a3.95 3.95 0 0 0-3.95-3.95ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.8A3.2 3.2 0 1 0 12 15.2 3.2 3.2 0 0 0 12 8.8Zm5.15-2.4a1.15 1.15 0 1 1 0 2.3 1.15 1.15 0 0 1 0-2.3Z"/>
-              </svg>
-            </span>
-            <span class="contact-label" data-i18n="contactInstagram">انستجرام</span>
-          </a>
-
-          <a class="contact-link call-link" id="contactCall" href="tel:+96800000000">
-            <span class="contact-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M6.62 10.79a15.54 15.54 0 0 0 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5c.55 0 1 .45 1 1 0 1.24.19 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2Z"/>
-              </svg>
-            </span>
-            <span class="contact-label" data-i18n="contactCall">اتصل بنا</span>
-          </a>
-        </div>
-      </section>
-    </div>
+        <a class="contact-link call-link" id="contactCall" href="tel:+96800000000">
+          <span class="contact-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6.62 10.79a15.54 15.54 0 0 0 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5c.55 0 1 .45 1 1 0 1.24.19 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2Z"/>
+            </svg>
+          </span>
+          <span class="contact-label" data-i18n="contactCall">اتصل بنا</span>
+        </a>
+      </div>
+    </section>
   </main>
 
   <script>
@@ -1217,64 +1220,58 @@
     const CONTACT_CALL_URL = 'tel:+96800000000';
     const LANGUAGE_STORAGE_KEY = 'ravana_lang';
 
-    const CHALET_DATA = {
-      A: {
+    const CHALET_DATA = [
+      {
         code: 'A',
-        resortValue: 'شاليه رافانا A',
         nameAr: 'شاليه رافانا A',
         nameEn: 'Ravana Chalet A',
-        shortAr: 'مساحة خاصة بأجواء هادئة وتجربة إقامة أنيقة ومريحة تمنحكم خصوصية ولحظات لا تُنسى.',
-        shortEn: 'A private, peaceful stay with elegant comfort and memorable moments.',
+        resortValue: 'شاليه رافانا A',
+        descAr: 'إطلالة مريحة ومساحات خاصة مثالية لجلسات هادئة وتجربة إقامة دافئة.',
+        descEn: 'A warm private retreat with relaxing views and a calm, comfortable atmosphere.',
         images: [
-          'images/resort-a-1.jpg',
-          'images/resort-a-2.jpg',
-          'images/resort-a-3.jpg',
-          'images/resort-a-4.jpg',
-          'images/resort-a-5.jpg'
-        ],
-        detailsUrl: 'chalet-a.html'
+          './images/resort-a-1.jpg',
+          './images/resort-a-2.jpg',
+          './images/resort-a-3.jpg',
+          './images/resort-a-4.jpg'
+        ]
       },
-      B: {
+      {
         code: 'B',
-        resortValue: 'شاليه رافانا B',
         nameAr: 'شاليه رافانا B',
         nameEn: 'Ravana Chalet B',
-        shortAr: 'تصميم عصري وجلسات مريحة ومساحات متوازنة لتجربة هادئة ومميزة طوال الإقامة.',
-        shortEn: 'Modern design, comfortable seating, and a balanced layout for a premium stay.',
+        resortValue: 'شاليه رافانا B',
+        descAr: 'تصميم عصري وجلسات أنيقة تمنحكم أجواء هادئة ولحظات مميزة طوال الإقامة.',
+        descEn: 'A modern chalet with elegant seating and a peaceful mood for memorable stays.',
         images: [
-          'images/resort-b-1.jpg',
-          'images/resort-b-2.jpg',
-          'images/resort-b-3.jpg',
-          'images/resort-b-4.jpg',
-          'images/resort-b-5.jpg'
-        ],
-        detailsUrl: 'chalet-b.html'
+          './images/resort-b-1.jpg',
+          './images/resort-b-2.jpg',
+          './images/resort-b-3.jpg',
+          './images/resort-b-4.jpg'
+        ]
       },
-      C: {
+      {
         code: 'C',
-        resortValue: 'شاليه رافانا C',
         nameAr: 'شاليه رافانا C',
         nameEn: 'Ravana Chalet C',
-        shortAr: 'أجواء رحبة وخصوصية جميلة ومرافق متكاملة لتجربة إقامة مريحة تناسب أجمل اللحظات.',
-        shortEn: 'Spacious atmosphere, privacy, and complete amenities for a comfortable getaway.',
+        resortValue: 'شاليه رافانا C',
+        descAr: 'مساحة خاصة تمنحكم الراحة والهدوء مع تجربة إقامة مناسبة للعائلة والأصدقاء.',
+        descEn: 'A private relaxing space designed for families and friends seeking calm and comfort.',
         images: [
-          'images/resort-c-1.jpg',
-          'images/resort-c-2.jpg',
-          'images/resort-c-3.jpg',
-          'images/resort-c-4.jpg',
-          'images/resort-c-5.jpg'
-        ],
-        detailsUrl: 'chalet-c.html'
+          './images/resort-c-1.jpg',
+          './images/resort-c-2.jpg',
+          './images/resort-c-3.jpg',
+          './images/resort-c-4.jpg'
+        ]
       }
-    };
+    ];
 
     const HERO_IMAGES = [
-      'images/resort-a-1.jpg',
-      'images/resort-b-1.jpg',
-      'images/resort-c-1.jpg',
-      'images/resort-a-2.jpg',
-      'images/resort-b-2.jpg',
-      'images/resort-c-2.jpg'
+      './images/resort-a-1.jpg',
+      './images/resort-a-2.jpg',
+      './images/resort-b-1.jpg',
+      './images/resort-b-2.jpg',
+      './images/resort-c-1.jpg',
+      './images/resort-c-2.jpg'
     ];
 
     const I18N = {
@@ -1290,16 +1287,16 @@
         menuChaletC: 'شاليه رافانا C',
         menuRules: 'الشروط والضوابط',
         menuContact: 'تواصل معنا',
-        heroTitle: 'مرحبا بكم في شاليهات رافانا',
+        heroWelcome: 'مرحبا بكم في شاليهات رافانا',
         heroBook: 'احجز اقامتك الان',
-        introText: 'استمتعوا بإقامة هادئة وتجربة لا تُنسى في شاليهات رافانا، حيث الخصوصية والراحة والأجواء الراقية في مكان صُمم ليمنحكم لحظات جميلة بعيدًا عن ضغوط الحياة اليومية.',
-        bookNow: 'احجز الان',
+        introTitle: 'تجربة إقامة لا تُنسى',
+        introCopy: 'في شاليهات رافانا ستجدون مساحة خاصة لأجمل اللحظات، حيث الهدوء والخصوصية والتصميم الدافئ في بيئة تمنحكم الراحة والاسترخاء. تجربة مثالية للعائلات والأصدقاء ولكل من يبحث عن إقامة مميزة بعيداً عن صخب الحياة اليومية.',
+        chaletBook: 'احجز الان',
         chaletDetails: 'تفاصيل الشاليه',
         calendarTitle: 'التوفر والحجز',
-        calendarSub: 'يمكنك الحجز من خلال التقويم أدناه',
+        calendarSub: 'يمكنك الحجز من خلال التقويم ادناه',
         legendAvailable: 'متاح',
         legendBooked: 'محجوز',
-        legendCodes: 'A / B / C ترمز إلى الشاليهات',
         loadingTitle: 'جاري تحميل التقويم',
         loadingSub: 'يرجى الانتظار قليلاً',
         calendarError: 'تعذر تحميل التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.',
@@ -1322,16 +1319,16 @@
         menuChaletC: 'Ravana Chalet C',
         menuRules: 'Terms & Rules',
         menuContact: 'Contact Us',
-        heroTitle: 'Welcome to Ravana Chalets',
+        heroWelcome: 'Welcome to Ravana Chalets',
         heroBook: 'Book Your Stay Now',
-        introText: 'Enjoy a calm stay and a memorable experience at Ravana Chalets, where privacy, comfort, and elegant atmosphere come together in a place designed for beautiful moments away from daily stress.',
-        bookNow: 'Book Now',
+        introTitle: 'A Stay You Will Remember',
+        introCopy: 'At Ravana Chalets, you will discover a private space for your most beautiful moments, where calm, privacy, and warm design come together to create a truly relaxing escape. It is the perfect stay for families, friends, and anyone seeking comfort away from everyday stress.',
+        chaletBook: 'Book Now',
         chaletDetails: 'Chalet Details',
         calendarTitle: 'Availability & Booking',
-        calendarSub: 'You can book using the calendar below',
+        calendarSub: 'You can book through the calendar below',
         legendAvailable: 'Available',
         legendBooked: 'Booked',
-        legendCodes: 'A / B / C refer to the chalets',
         loadingTitle: 'Loading Calendar',
         loadingSub: 'Please wait a moment',
         calendarError: 'Unable to load the calendar. Please check the service URL and your sheet data, then refresh the page.',
@@ -1344,32 +1341,26 @@
       }
     };
 
-    const heroImage = document.getElementById('heroImage');
-    const heroTitle = document.getElementById('heroTitle');
-    const heroBookingBtn = document.getElementById('heroBookingBtn');
-    const introText = document.getElementById('introText');
-    const chaletsGrid = document.getElementById('chaletsGrid');
     const calendarLoading = document.getElementById('calendarLoading');
     const calendarError = document.getElementById('calendarError');
     const langToggle = document.getElementById('langToggle');
+    const heroBookBtn = document.getElementById('heroBookBtn');
+    const chaletsSection = document.getElementById('chaletsSection');
     const menuToggle = document.getElementById('menuToggle');
     const sideMenuOverlay = document.getElementById('sideMenuOverlay');
     const closeMenuBtn = document.getElementById('closeMenuBtn');
-
     const contactWhatsapp = document.getElementById('contactWhatsapp');
     const contactInstagram = document.getElementById('contactInstagram');
     const contactCall = document.getElementById('contactCall');
+    const heroSlideshow = document.getElementById('heroSlideshow');
+    const heroDots = document.getElementById('heroDots');
 
-    let currentLang = 'ar';
-    let heroIndex = 0;
-    let heroInterval = null;
     let calendar = null;
     let bookingData = [];
-    const cardImageIndex = { A: 0, B: 0, C: 0 };
-
-    function t(key) {
-      return I18N[currentLang][key] || key;
-    }
+    let currentLang = 'ar';
+    let heroIndex = 0;
+    let heroTimer = null;
+    const sliders = new Map();
 
     function saveLanguagePreference() {
       try {
@@ -1380,16 +1371,10 @@
     function loadLanguagePreference() {
       try {
         const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
-        if (saved && I18N[saved]) currentLang = saved;
+        if (saved && I18N[saved]) {
+          currentLang = saved;
+        }
       } catch (e) {}
-    }
-
-    function openMenu() {
-      document.body.classList.add('menu-open');
-    }
-
-    function closeMenu() {
-      document.body.classList.remove('menu-open');
     }
 
     function normalizeDate(value) {
@@ -1397,29 +1382,26 @@
       if (typeof value === 'string') return value.trim().slice(0, 10);
       const date = new Date(value);
       if (isNaN(date.getTime())) return '';
-      return [
-        date.getFullYear(),
-        String(date.getMonth() + 1).padStart(2, '0'),
-        String(date.getDate()).padStart(2, '0')
-      ].join('-');
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return year + '-' + month + '-' + day;
     }
 
     function todayString() {
       const now = new Date();
-      return [
-        now.getFullYear(),
-        String(now.getMonth() + 1).padStart(2, '0'),
-        String(now.getDate()).padStart(2, '0')
-      ].join('-');
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      return year + '-' + month + '-' + day;
     }
 
     function isPastDate(dateStr) {
       return dateStr < todayString();
     }
 
-    function saveLangAndGo(url) {
-      saveLanguagePreference();
-      window.location.href = url;
+    function t(key) {
+      return I18N[currentLang][key] || key;
     }
 
     function goToBooking(params = {}) {
@@ -1431,159 +1413,232 @@
       window.location.href = 'booking.html' + (qs ? '?' + qs : '');
     }
 
-    function updateHeroImage(nextSrc) {
-      if (!heroImage.getAttribute('src')) {
-        heroImage.src = nextSrc;
-        heroImage.onerror = function () {
-          this.src = 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80';
-        };
-        return;
-      }
-
-      heroImage.classList.add('is-changing');
-
-      setTimeout(() => {
-        heroImage.src = nextSrc;
-        heroImage.onerror = function () {
-          this.src = 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80';
-        };
-
-        const finish = () => heroImage.classList.remove('is-changing');
-        heroImage.onload = finish;
-        setTimeout(finish, 350);
-      }, 180);
+    function goToChaletDetails(code) {
+      saveLanguagePreference();
+      if (code === 'A') window.location.href = 'chalet-a.html';
+      if (code === 'B') window.location.href = 'chalet-b.html';
+      if (code === 'C') window.location.href = 'chalet-c.html';
     }
 
-    function renderHero() {
-      heroTitle.textContent = t('heroTitle');
-      heroBookingBtn.textContent = t('heroBook');
-      updateHeroImage(HERO_IMAGES[heroIndex % HERO_IMAGES.length]);
+    function applyLanguage() {
+      document.documentElement.lang = currentLang;
+      document.documentElement.dir = I18N[currentLang].dir;
+      document.body.dir = I18N[currentLang].dir;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        el.textContent = t(el.getAttribute('data-i18n'));
+      });
+
+      langToggle.textContent = t('langButton');
+      menuToggle.setAttribute('aria-label', currentLang === 'ar' ? 'فتح القائمة' : 'Open menu');
+
+      saveLanguagePreference();
+      renderChaletCards();
+      renderCalendar();
+    }
+
+    function openMenu() {
+      document.body.classList.add('menu-open');
+    }
+
+    function closeMenu() {
+      document.body.classList.remove('menu-open');
+    }
+
+    function renderHeroSlides() {
+      heroSlideshow.innerHTML = HERO_IMAGES.map((src, index) => `
+        <div class="hero-slide ${index === 0 ? 'active' : ''}" data-hero-index="${index}">
+          <img src="${src}" alt="Ravana Chalet"
+               onerror="this.src='https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80'">
+        </div>
+      `).join('');
+
+      heroDots.innerHTML = HERO_IMAGES.map((_, index) => `
+        <button class="hero-dot ${index === 0 ? 'active' : ''}" type="button" data-hero-dot="${index}"></button>
+      `).join('');
+
+      heroDots.querySelectorAll('[data-hero-dot]').forEach(dot => {
+        dot.addEventListener('click', () => {
+          const index = Number(dot.getAttribute('data-hero-dot'));
+          showHeroSlide(index);
+          restartHeroAutoplay();
+        });
+      });
+    }
+
+    function showHeroSlide(index) {
+      const slides = heroSlideshow.querySelectorAll('.hero-slide');
+      const dots = heroDots.querySelectorAll('.hero-dot');
+      if (!slides.length) return;
+
+      heroIndex = (index + slides.length) % slides.length;
+
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === heroIndex);
+      });
+
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === heroIndex);
+      });
+    }
+
+    function nextHeroSlide() {
+      showHeroSlide(heroIndex + 1);
     }
 
     function startHeroAutoplay() {
-      if (heroInterval) clearInterval(heroInterval);
-      heroInterval = setInterval(() => {
-        heroIndex = (heroIndex + 1) % HERO_IMAGES.length;
-        renderHero();
-      }, 5000);
+      stopHeroAutoplay();
+      heroTimer = setInterval(nextHeroSlide, 4500);
+    }
+
+    function stopHeroAutoplay() {
+      if (heroTimer) {
+        clearInterval(heroTimer);
+        heroTimer = null;
+      }
+    }
+
+    function restartHeroAutoplay() {
+      startHeroAutoplay();
+    }
+
+    function createSliderHtml(chalet) {
+      const title = currentLang === 'ar' ? chalet.nameAr : chalet.nameEn;
+      const desc = currentLang === 'ar' ? chalet.descAr : chalet.descEn;
+
+      const slides = chalet.images.map(src => (
+        '<div class="slide"><img src="' + src + '" alt="' + title + '" onerror="this.src=\'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80\'"></div>'
+      )).join('');
+
+      const dots = chalet.images.map((_, index) => (
+        '<button class="dot-btn ' + (index === 0 ? 'active' : '') + '" type="button" data-dot-index="' + index + '"></button>'
+      )).join('');
+
+      return (
+        '<article class="chalet-card glass-card" id="chalet-section-' + chalet.code + '" data-chalet-card="' + chalet.code + '">' +
+          '<div class="slider" data-slider="' + chalet.code + '">' +
+            '<div class="slides">' + slides + '</div>' +
+            '<div class="slider-nav">' +
+              '<button class="nav-btn" type="button" data-nav="prev">‹</button>' +
+              '<button class="nav-btn" type="button" data-nav="next">›</button>' +
+            '</div>' +
+            '<div class="dots">' + dots + '</div>' +
+          '</div>' +
+          '<div class="chalet-body">' +
+            '<h3 class="chalet-title">' + title + '</h3>' +
+            '<p class="chalet-copy">' + desc + '</p>' +
+            '<div class="chalet-actions">' +
+              '<button class="primary-btn" type="button" data-book-chalet="' + chalet.code + '">' + t('chaletBook') + '</button>' +
+              '<button class="secondary-btn" type="button" data-details-chalet="' + chalet.code + '">' + t('chaletDetails') + '</button>' +
+            '</div>' +
+          '</div>' +
+        '</article>'
+      );
     }
 
     function renderChaletCards() {
-      const items = Object.values(CHALET_DATA);
+      chaletsSection.innerHTML = CHALET_DATA.map(createSliderHtml).join('');
+      initAllSliders();
 
-      chaletsGrid.innerHTML = items.map(item => {
-        const activeImage = item.images[cardImageIndex[item.code] % item.images.length];
-        const name = currentLang === 'ar' ? item.nameAr : item.nameEn;
-        const short = currentLang === 'ar' ? item.shortAr : item.shortEn;
-
-        return `
-          <article class="chalet-card glass-card" data-chalet-code="${item.code}">
-            <div class="chalet-media" data-media-code="${item.code}">
-              <button class="chalet-arrow prev" type="button" data-prev="${item.code}">‹</button>
-              <img src="${activeImage}" alt="${name}" data-image-code="${item.code}"
-                   onerror="this.src='https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80'">
-              <button class="chalet-arrow next" type="button" data-next="${item.code}">›</button>
-            </div>
-
-            <div class="chalet-body">
-              <h3 class="chalet-name">${name}</h3>
-              <p class="chalet-desc">${short}</p>
-
-              <div class="chalet-actions">
-                <button class="action-btn primary" type="button" data-book-code="${item.code}">${t('bookNow')}</button>
-                <button class="action-btn secondary" type="button" data-details-code="${item.code}">${t('chaletDetails')}</button>
-              </div>
-            </div>
-          </article>
-        `;
-      }).join('');
-
-      chaletsGrid.querySelectorAll('[data-prev]').forEach(btn => {
-        btn.addEventListener('click', () => moveCardImage(btn.getAttribute('data-prev'), -1));
-      });
-
-      chaletsGrid.querySelectorAll('[data-next]').forEach(btn => {
-        btn.addEventListener('click', () => moveCardImage(btn.getAttribute('data-next'), 1));
-      });
-
-      chaletsGrid.querySelectorAll('[data-book-code]').forEach(btn => {
+      document.querySelectorAll('[data-book-chalet]').forEach(btn => {
         btn.addEventListener('click', () => {
-          const code = btn.getAttribute('data-book-code');
-          goToBooking({ resort: CHALET_DATA[code].resortValue });
+          const chalet = CHALET_DATA.find(item => item.code === btn.getAttribute('data-book-chalet'));
+          if (!chalet) return;
+          goToBooking({ resort: chalet.resortValue });
         });
       });
 
-      chaletsGrid.querySelectorAll('[data-details-code]').forEach(btn => {
+      document.querySelectorAll('[data-details-chalet]').forEach(btn => {
         btn.addEventListener('click', () => {
-          const code = btn.getAttribute('data-details-code');
-          saveLangAndGo(CHALET_DATA[code].detailsUrl);
+          goToChaletDetails(btn.getAttribute('data-details-chalet'));
         });
       });
+    }
 
-      chaletsGrid.querySelectorAll('[data-media-code]').forEach(media => {
-        let startX = 0;
-        const code = media.getAttribute('data-media-code');
-
-        media.addEventListener('touchstart', e => {
-          startX = e.touches[0].clientX;
-        }, { passive: true });
-
-        media.addEventListener('touchend', e => {
-          const deltaX = e.changedTouches[0].clientX - startX;
-          if (Math.abs(deltaX) > 40) {
-            if (deltaX < 0) moveCardImage(code, 1);
-            if (deltaX > 0) moveCardImage(code, -1);
-          }
-        }, { passive: true });
+    function setSliderIndex(code, index) {
+      const slider = sliders.get(code);
+      if (!slider) return;
+      slider.index = (index + slider.count) % slider.count;
+      slider.track.style.transform = 'translateX(' + (-slider.index * 100) + '%)';
+      slider.dots.forEach((dot, dotIndex) => {
+        dot.classList.toggle('active', dotIndex === slider.index);
       });
     }
 
-    function moveCardImage(code, direction) {
-      const item = CHALET_DATA[code];
-      const nextIndex = (cardImageIndex[code] + direction + item.images.length) % item.images.length;
-      cardImageIndex[code] = nextIndex;
-      renderChaletCards();
+    function initSlider(code) {
+      const root = document.querySelector('[data-slider="' + code + '"]');
+      if (!root) return;
+
+      const track = root.querySelector('.slides');
+      const dots = Array.from(root.querySelectorAll('.dot-btn'));
+      const slides = Array.from(root.querySelectorAll('.slide'));
+      const prev = root.querySelector('[data-nav="prev"]');
+      const next = root.querySelector('[data-nav="next"]');
+
+      const state = { root, track, dots, count: slides.length, index: 0, startX: 0, deltaX: 0 };
+      sliders.set(code, state);
+
+      prev.addEventListener('click', () => setSliderIndex(code, state.index - 1));
+      next.addEventListener('click', () => setSliderIndex(code, state.index + 1));
+
+      dots.forEach(dot => {
+        dot.addEventListener('click', () => setSliderIndex(code, Number(dot.getAttribute('data-dot-index'))));
+      });
+
+      root.addEventListener('touchstart', e => {
+        state.startX = e.touches[0].clientX;
+        state.deltaX = 0;
+      }, { passive: true });
+
+      root.addEventListener('touchmove', e => {
+        state.deltaX = e.touches[0].clientX - state.startX;
+      }, { passive: true });
+
+      root.addEventListener('touchend', () => {
+        if (Math.abs(state.deltaX) > 40) {
+          if (state.deltaX < 0) setSliderIndex(code, state.index + 1);
+          if (state.deltaX > 0) setSliderIndex(code, state.index - 1);
+        }
+      });
     }
 
-    function resortCodeFromName(name) {
-      const clean = String(name || '').trim();
-      if (clean === 'شاليه رافانا A') return 'A';
-      if (clean === 'شاليه رافانا B') return 'B';
-      if (clean === 'شاليه رافانا C') return 'C';
-      return '';
+    function initAllSliders() {
+      sliders.clear();
+      CHALET_DATA.forEach(item => initSlider(item.code));
     }
 
-    function isAvailableStatus(status) {
-      return String(status || '').trim() === 'متاح';
+    function getResortShortName(resort) {
+      const chalet = CHALET_DATA.find(item => item.resortValue === resort);
+      return chalet ? chalet.code : resort;
+    }
+
+    function getEventColor(status) {
+      return status === 'متاح' ? '#24a46d' : '#d45454';
+    }
+
+    function buildCalendarEvents(data) {
+      return data
+        .filter(item => !isPastDate(normalizeDate(item['التاريخ'])))
+        .map(item => {
+          const status = String(item['الحالة'] || '').trim();
+          const resort = String(item['الاستراحة'] || '').trim();
+          const date = normalizeDate(item['التاريخ']);
+
+          return {
+            title: getResortShortName(resort),
+            start: date,
+            allDay: true,
+            backgroundColor: getEventColor(status),
+            borderColor: getEventColor(status),
+            textColor: '#ffffff',
+            extendedProps: { status, resort, date }
+          };
+        });
     }
 
     function renderCalendar() {
       const calendarEl = document.getElementById('calendar');
-
-      const events = bookingData
-        .filter(item => !isPastDate(normalizeDate(item['التاريخ'])))
-        .map(item => {
-          const code = resortCodeFromName(item['الاستراحة']);
-          const status = String(item['الحالة'] || '').trim();
-          const available = isAvailableStatus(status);
-
-          return {
-            title: code,
-            start: normalizeDate(item['التاريخ']),
-            allDay: true,
-            backgroundColor: available ? '#24a46d' : '#d45454',
-            borderColor: available ? '#24a46d' : '#d45454',
-            textColor: '#ffffff',
-            extendedProps: {
-              code,
-              resort: String(item['الاستراحة'] || '').trim(),
-              date: normalizeDate(item['التاريخ']),
-              status,
-              available
-            }
-          };
-        })
-        .filter(item => item.extendedProps.code);
+      const events = buildCalendarEvents(bookingData);
 
       if (calendar) calendar.destroy();
 
@@ -1600,7 +1655,7 @@
         buttonText: currentLang === 'ar' ? { today: 'اليوم' } : { today: 'Today' },
         editable: false,
         selectable: false,
-        events,
+        events: events,
         dateClick(info) {
           const clickedDate = normalizeDate(info.dateStr);
           if (isPastDate(clickedDate)) return;
@@ -1608,16 +1663,11 @@
         },
         eventClick(info) {
           info.jsEvent.preventDefault();
-          const props = info.event.extendedProps;
-          if (!props || !props.available || isPastDate(props.date)) return;
-          goToBooking({ date: props.date, resort: props.resort });
-        },
-        eventDidMount(info) {
-          const props = info.event.extendedProps;
-          const label = currentLang === 'ar'
-            ? `${props.resort} - ${props.available ? 'متاح' : 'محجوز'}`
-            : `${props.resort} - ${props.available ? 'Available' : 'Booked'}`;
-          info.el.setAttribute('title', label);
+          const props = info.event.extendedProps || {};
+          const date = normalizeDate(props.date);
+          const resort = props.resort;
+          if (isPastDate(date)) return;
+          goToBooking({ date, resort });
         }
       });
 
@@ -1636,7 +1686,7 @@
         try {
           json = JSON.parse(rawText);
         } catch (e) {
-          throw new Error('Invalid JSON');
+          throw new Error('تعذر قراءة رد الخدمة.');
         }
 
         if (!json.success) throw new Error(json.message || 'Load error');
@@ -1651,27 +1701,13 @@
       }
     }
 
-    function applyLanguage() {
-      document.documentElement.lang = currentLang;
-      document.documentElement.dir = I18N[currentLang].dir;
-      document.body.dir = I18N[currentLang].dir;
+    document.getElementById('mapLink').setAttribute('href', GOOGLE_MAPS_URL);
+    contactWhatsapp.setAttribute('href', CONTACT_WHATSAPP_URL);
+    contactInstagram.setAttribute('href', CONTACT_INSTAGRAM_URL);
+    contactCall.setAttribute('href', CONTACT_CALL_URL);
 
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        el.textContent = t(el.getAttribute('data-i18n'));
-      });
-
-      langToggle.textContent = t('langButton');
-      menuToggle.setAttribute('aria-label', currentLang === 'ar' ? 'فتح القائمة' : 'Open menu');
-      introText.textContent = t('introText');
-
-      saveLanguagePreference();
-      renderHero();
-      renderChaletCards();
-      renderCalendar();
-    }
-
-    heroBookingBtn.addEventListener('click', () => {
-      goToBooking();
+    heroBookBtn.addEventListener('click', () => {
+      document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
     langToggle.addEventListener('click', () => {
@@ -1690,7 +1726,9 @@
         if (targetId) {
           e.preventDefault();
           const target = document.getElementById(targetId);
-          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
           closeMenu();
         } else {
           saveLanguagePreference();
@@ -1705,14 +1743,17 @@
       });
     });
 
-    document.getElementById('mapLink').setAttribute('href', GOOGLE_MAPS_URL);
-    contactWhatsapp.setAttribute('href', CONTACT_WHATSAPP_URL);
-    contactInstagram.setAttribute('href', CONTACT_INSTAGRAM_URL);
-    contactCall.setAttribute('href', CONTACT_CALL_URL);
+    renderHeroSlides();
+    startHeroAutoplay();
+
+    heroSlideshow.addEventListener('mouseenter', stopHeroAutoplay);
+    heroSlideshow.addEventListener('mouseleave', startHeroAutoplay);
+    heroSlideshow.addEventListener('touchstart', stopHeroAutoplay, { passive: true });
+    heroSlideshow.addEventListener('touchend', startHeroAutoplay, { passive: true });
 
     loadLanguagePreference();
+    renderChaletCards();
     applyLanguage();
-    startHeroAutoplay();
     loadBookings();
   </script>
 </body>
