@@ -422,11 +422,13 @@
     }
 
     .gallery-main-btn.prev {
-      inset-inline-start: 10px;
+      left: 10px;
+      right: auto;
     }
 
     .gallery-main-btn.next {
-      inset-inline-end: 10px;
+      right: 10px;
+      left: auto;
     }
 
     .thumbs-wrap {
@@ -1675,6 +1677,11 @@
       renderGallery();
     }
 
+    function updateGalleryArrowDirection() {
+      galleryPrevBtn.textContent = '‹';
+      galleryNextBtn.textContent = '›';
+    }
+
     function renderAmenities() {
       amenitiesGrid.innerHTML = chalet().amenities.map(item => `
         <div class="amenity-item">
@@ -1818,6 +1825,7 @@
       langToggle.textContent = t('langButton');
       menuToggle.setAttribute('aria-label', currentLang === 'ar' ? 'فتح القائمة' : 'Open menu');
 
+      updateGalleryArrowDirection();
       renderDescription();
       renderAmenities();
       renderPrices();
