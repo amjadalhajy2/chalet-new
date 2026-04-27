@@ -106,6 +106,10 @@
       font-family: inherit;
     }
 
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
     .container {
       width: min(1040px, calc(100% - 20px));
       margin: 0 auto;
@@ -383,66 +387,11 @@
       margin-top: 16px;
     }
 
-    .calendar-top {
-      padding: 22px 20px 14px;
-    }
-
-    .calendar-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
-    }
-
-    .calendar-title {
-      margin: 0;
-      font-size: 28px;
-      letter-spacing: -0.03em;
-    }
-
-    .calendar-head span {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 0;
-    }
-
-    .legend-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 12px;
-      border-radius: 999px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.72));
-      border: 1px solid rgba(95,70,48,0.10);
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .legend-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-
-    .legend-dot.success { background: var(--success); }
-    .legend-dot.danger { background: var(--danger); }
-
     .calendar-wrapper {
       position: relative;
       min-height: 360px;
       overflow: hidden;
       background: linear-gradient(180deg, rgba(255,255,255,0.52), rgba(255,255,255,0.24));
-      border-top: 1px solid rgba(95,70,48,0.08);
     }
 
     #calendar {
@@ -630,48 +579,8 @@
       overflow: hidden;
     }
 
-    .booking-summary {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      padding: 18px 20px;
-      border-bottom: 1px solid rgba(95,70,48,0.08);
-      background: linear-gradient(180deg, rgba(255,255,255,0.54), rgba(255,255,255,0.28));
-    }
-
-    .summary-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 42px;
-      padding: 0 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.86);
-      border: 1px solid rgba(95,70,48,0.08);
-      color: var(--text);
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .summary-chip strong {
-      color: var(--brand-dark);
-      font-weight: 800;
-    }
-
-    .status-note {
-      margin: 0;
-      padding: 18px 20px 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.9;
-    }
-
-    .status-note strong {
-      color: var(--warning);
-    }
-
     .booking-form {
-      padding: 8px 20px 20px;
+      padding: 0 20px 20px;
     }
 
     .form-grid {
@@ -822,16 +731,8 @@
         grid-template-columns: 1fr;
       }
 
-      .booking-summary {
-        padding: 16px 14px;
-      }
-
       .booking-form {
-        padding: 8px 14px 18px;
-      }
-
-      .status-note {
-        padding: 16px 14px 0;
+        padding: 0 14px 18px;
       }
 
       .submit-row {
@@ -875,11 +776,6 @@
         border-radius: 26px;
       }
 
-      .summary-chip {
-        width: 100%;
-        justify-content: flex-start;
-      }
-
       .input,
       .select,
       .textarea {
@@ -894,10 +790,6 @@
       .phone-wrap {
         grid-template-columns: 104px minmax(0, 1fr);
         gap: 8px;
-      }
-
-      .calendar-top {
-        padding: 18px 14px 12px;
       }
 
       .fc .fc-toolbar {
@@ -979,23 +871,11 @@
         <div class="selected-resort-name" id="selectedResortHeading">شاليه رافانا A</div>
         <h1 class="page-title" data-i18n="bookingTitle">احجز إقامتك</h1>
         <p class="page-copy" data-i18n="bookingCopy">
-          أكمل البيانات التالية لإرسال طلب الحجز، ثم اختر التاريخ المناسب من التقويم أدناه لإكمال بقية البيانات.
+          اختر التاريخ المناسب من التقويم ثم اكمال البيانات لارسال طلب الحجز.
         </p>
       </header>
 
       <section class="calendar-card">
-        <div class="calendar-top">
-          <div class="calendar-head">
-            <h2 class="calendar-title" data-i18n="calendarTitle">اختر التاريخ من التقويم</h2>
-            <span data-i18n="calendarSub">يعرض هذا التقويم توفر الشاليه المختار فقط</span>
-          </div>
-
-          <div class="legend">
-            <span class="legend-item"><i class="legend-dot success"></i><span data-i18n="legendAvailable">متاح</span></span>
-            <span class="legend-item"><i class="legend-dot danger"></i><span data-i18n="legendBooked">غير متاح</span></span>
-          </div>
-        </div>
-
         <div class="calendar-wrapper">
           <div class="loading-overlay" id="calendarLoading">
             <div class="loading-box">
@@ -1018,25 +898,6 @@
 
       <section class="booking-shell" id="bookingFormSection">
         <div class="booking-surface">
-          <div class="booking-summary">
-            <div class="summary-chip">
-              <strong data-i18n="summaryDate">التاريخ:</strong>
-              <span id="summaryDateValue">-</span>
-            </div>
-            <div class="summary-chip">
-              <strong data-i18n="summaryResort">الشاليه:</strong>
-              <span id="summaryResortValue">-</span>
-            </div>
-            <div class="summary-chip">
-              <strong data-i18n="summaryStatus">الحالة:</strong>
-              <span data-i18n="pendingStatus">بانتظار التأكيد</span>
-            </div>
-          </div>
-
-          <p class="status-note" data-i18n-html="statusNote">
-            سيتم إرسال الطلب بحالة <strong>بانتظار التأكيد</strong> إلى أن تتم مراجعته واعتماده.
-          </p>
-
           <form id="bookingForm" class="booking-form" novalidate>
             <div id="formMessage" class="message"></div>
 
@@ -1132,19 +993,10 @@
         menuRules: 'الشروط والضوابط',
         menuContact: 'تواصل معنا',
         bookingTitle: 'احجز إقامتك',
-        bookingCopy: 'أكمل البيانات التالية لإرسال طلب الحجز، ثم اختر التاريخ المناسب من التقويم أدناه لإكمال بقية البيانات.',
-        calendarTitle: 'اختر التاريخ من التقويم',
-        calendarSub: 'يعرض هذا التقويم توفر الشاليه المختار فقط',
-        legendAvailable: 'متاح',
-        legendBooked: 'غير متاح',
+        bookingCopy: 'اختر التاريخ المناسب من التقويم ثم اكمال البيانات لارسال طلب الحجز.',
         loadingTitle: 'جاري تحميل التقويم',
         loadingSub: 'يرجى الانتظار قليلاً',
         calendarError: 'تعذر تحميل التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.',
-        summaryDate: 'التاريخ:',
-        summaryResort: 'الشاليه:',
-        summaryStatus: 'الحالة:',
-        pendingStatus: 'بانتظار التأكيد',
-        statusNote: 'سيتم إرسال الطلب بحالة <strong>بانتظار التأكيد</strong> إلى أن تتم مراجعته واعتماده.',
         fieldDate: 'تاريخ الحجز',
         fieldResort: 'الشاليه',
         fieldName: 'الاسم',
@@ -1180,19 +1032,10 @@
         menuRules: 'Terms & Rules',
         menuContact: 'Contact Us',
         bookingTitle: 'Book Your Stay',
-        bookingCopy: 'Complete the form below, then choose your preferred date from the calendar to continue the booking.',
-        calendarTitle: 'Choose the Date from the Calendar',
-        calendarSub: 'This calendar shows availability for the selected chalet only',
-        legendAvailable: 'Available',
-        legendBooked: 'Unavailable',
+        bookingCopy: 'Choose a suitable date from the calendar, then complete the details to send the booking request.',
         loadingTitle: 'Loading Calendar',
         loadingSub: 'Please wait a moment',
         calendarError: 'Unable to load the calendar. Please check the service URL and your sheet data, then refresh the page.',
-        summaryDate: 'Date:',
-        summaryResort: 'Chalet:',
-        summaryStatus: 'Status:',
-        pendingStatus: 'Pending Confirmation',
-        statusNote: 'Your request will be sent with status <strong>Pending Confirmation</strong> until it is reviewed and approved.',
         fieldDate: 'Booking Date',
         fieldResort: 'Chalet',
         fieldName: 'Name',
@@ -1224,8 +1067,6 @@
 
     const selectedResortHeading = document.getElementById('selectedResortHeading');
     const selectedResortInput = document.getElementById('selectedResortInput');
-    const summaryDateValue = document.getElementById('summaryDateValue');
-    const summaryResortValue = document.getElementById('summaryResortValue');
 
     const bookingFormSection = document.getElementById('bookingFormSection');
     const bookingForm = document.getElementById('bookingForm');
@@ -1316,13 +1157,11 @@
       const name = getResortDisplayName(currentResort);
       selectedResortHeading.textContent = name;
       selectedResortInput.value = name;
-      summaryResortValue.textContent = name;
     }
 
     function updateSelectedDateUI() {
       bookingDateDisplay.value = selectedDate || '';
       bookingDateValue.value = selectedDate || '';
-      summaryDateValue.textContent = selectedDate || '-';
     }
 
     function showMessage(type, text) {
@@ -1367,10 +1206,6 @@
         el.textContent = t(el.getAttribute('data-i18n'));
       });
 
-      document.querySelectorAll('[data-i18n-html]').forEach(el => {
-        el.innerHTML = t(el.getAttribute('data-i18n-html'));
-      });
-
       langToggle.textContent = t('langButton');
       menuToggle.setAttribute('aria-label', currentLang === 'ar' ? 'فتح القائمة' : 'Open menu');
       notesInput.placeholder = t('notesPlaceholder');
@@ -1407,7 +1242,7 @@
     function buildCalendarEvents() {
       return bookingData
         .filter(item => String(item['الاستراحة'] || '').trim() === currentResort.ar)
-        .filter(item => ! (normalizeDate(item['التاريخ']) < todayString()))
+        .filter(item => !(normalizeDate(item['التاريخ']) < todayString()))
         .map(item => {
           const status = String(item['الحالة'] || '').trim() || 'متاح';
           const date = normalizeDate(item['التاريخ']);
