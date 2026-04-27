@@ -1678,8 +1678,13 @@
     }
 
     function updateGalleryArrowDirection() {
-      galleryPrevBtn.textContent = '‹';
-      galleryNextBtn.textContent = '›';
+      if (currentLang === 'ar') {
+        galleryPrevBtn.textContent = '›';
+        galleryNextBtn.textContent = '‹';
+      } else {
+        galleryPrevBtn.textContent = '‹';
+        galleryNextBtn.textContent = '›';
+      }
     }
 
     function renderAmenities() {
