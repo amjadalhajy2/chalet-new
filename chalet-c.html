@@ -576,49 +576,53 @@
     }
 
     .price-box {
-      padding-top: 2px;
+      padding-top: 4px;
     }
 
     .prices-layout {
       display: grid;
-      grid-template-columns: 1fr 1px 1fr;
-      gap: 18px;
+      grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
       align-items: start;
+      gap: 18px;
+    }
+
+    .prices-column {
+      min-width: 0;
+    }
+
+    .prices-column.weekdays {
+      order: 2;
+      text-align: right;
+    }
+
+    .prices-column.holidays {
+      order: 1;
+      text-align: left;
+    }
+
+    html[dir="ltr"] .prices-column.weekdays {
+      order: 1;
+      text-align: left;
+    }
+
+    html[dir="ltr"] .prices-column.holidays {
+      order: 2;
+      text-align: right;
     }
 
     .prices-divider {
       width: 1px;
-      background: rgba(95,70,48,0.12);
-      min-height: 118px;
       align-self: stretch;
-    }
-
-    .price-col-weekdays {
-      grid-column: 3;
-    }
-
-    .price-col-holidays {
-      grid-column: 1;
-    }
-
-    html[dir="ltr"] .price-col-weekdays {
-      grid-column: 1;
-    }
-
-    html[dir="ltr"] .price-col-holidays {
-      grid-column: 3;
-    }
-
-    .prices-column {
-      text-align: start;
+      background: rgba(95,70,48,0.12);
     }
 
     .price-title {
       display: block;
-      margin: 0 0 10px;
+      margin: 0 0 12px;
       color: var(--brand-dark);
       font-size: 16px;
       font-weight: 800;
+      line-height: 1.6;
     }
 
     .price-line {
@@ -633,7 +637,7 @@
       align-items: center;
       justify-content: center;
       vertical-align: middle;
-      margin-inline: 4px 0;
+      margin-inline-start: 4px;
     }
 
     .omr-symbol-img {
@@ -641,6 +645,13 @@
       height: 16px;
       object-fit: contain;
       display: block;
+    }
+
+    .omr-text-fallback {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--brand-dark);
+      line-height: 1;
     }
 
     .calendar-card {
@@ -979,6 +990,27 @@
       }
     }
 
+    @media (max-width: 700px) {
+      .prices-layout {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .prices-divider {
+        width: 100%;
+        height: 1px;
+        min-height: 1px;
+      }
+
+      .prices-column.weekdays,
+      .prices-column.holidays,
+      html[dir="ltr"] .prices-column.weekdays,
+      html[dir="ltr"] .prices-column.holidays {
+        order: initial;
+        text-align: start;
+      }
+    }
+
     @media (max-width: 560px) {
       .container { width: min(100%, calc(100% - 12px)); }
       .topbar-inner { padding: 10px 12px; }
@@ -1208,9 +1240,9 @@
         <h2 class="section-title" data-i18n="pricesTitle">أسعار الشاليه</h2>
         <div class="price-box">
           <div class="prices-layout">
-            <div class="prices-column price-col-weekdays" id="priceWeekdays"></div>
+            <div class="prices-column weekdays" id="priceWeekdays"></div>
             <div class="prices-divider" aria-hidden="true"></div>
-            <div class="prices-column price-col-holidays" id="priceHolidays"></div>
+            <div class="prices-column holidays" id="priceHolidays"></div>
           </div>
         </div>
       </section>
@@ -1662,7 +1694,13 @@
       return `
         ${value}
         <span class="omr-inline">
-          <img class="omr-symbol-img" src="images/omr-symbol.svg" alt="OMR">
+          <img
+            class="omr-symbol-img"
+            src="images/omr-symbol.svg"
+            alt="OMR"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';"
+          >
+          <span class="omr-text-fallback" style="display:none;">OMR</span>
         </span>
       `;
     }
