@@ -183,10 +183,11 @@
       cursor: pointer;
       font-size: 14px;
       border-radius: 999px;
+      border: 0;
+      outline: none;
     }
 
     .lang-btn {
-      border: 0;
       padding: 0 18px;
       background: linear-gradient(135deg, var(--brand), var(--brand-dark));
       color: #fff;
@@ -198,7 +199,6 @@
       min-width: 48px;
       height: 48px;
       padding: 0;
-      border: 1px solid rgba(95,70,48,0.12);
       background: linear-gradient(180deg, #fff, #f6f0e8);
       color: var(--text);
       display: inline-flex;
@@ -206,6 +206,7 @@
       justify-content: center;
       flex-direction: column;
       gap: 4px;
+      box-shadow: 0 14px 28px rgba(95, 70, 48, 0.10);
     }
 
     .menu-btn span {
@@ -1167,7 +1168,6 @@
 
       <div class="topbar-actions">
         <button class="lang-btn" id="langToggle" type="button">EN</button>
-
         <button class="menu-btn" id="menuToggle" type="button" aria-label="Open menu">
           <span></span>
           <span></span>
@@ -1186,18 +1186,18 @@
     </div>
 
     <nav class="side-menu-links">
-      <a href="index.html" class="menu-link" data-i18n="menuHome">الرئيسية</a>
+      <a href="index.html" class="menu-link nav-link" data-i18n="menuHome">الرئيسية</a>
 
       <div class="menu-group">
         <span class="menu-group-title" data-i18n="menuOurChalets">شاليهاتنا</span>
         <div class="menu-sub-links">
-          <a href="chalet-a.html" class="menu-sub-link" data-i18n="menuChaletA">شاليه رافانا A</a>
-          <a href="chalet-b.html" class="menu-sub-link" data-i18n="menuChaletB">شاليه رافانا B</a>
-          <a href="chalet-c.html" class="menu-sub-link" data-i18n="menuChaletC">شاليه رافانا C</a>
+          <a href="chalet-a.html" class="menu-sub-link nav-link" data-i18n="menuChaletA">شاليه رافانا A</a>
+          <a href="chalet-b.html" class="menu-sub-link nav-link" data-i18n="menuChaletB">شاليه رافانا B</a>
+          <a href="chalet-c.html" class="menu-sub-link nav-link" data-i18n="menuChaletC">شاليه رافانا C</a>
         </div>
       </div>
 
-      <a href="rules.html" class="menu-link" data-i18n="menuRules">الشروط والضوابط</a>
+      <a href="rules.html" class="menu-link nav-link" data-i18n="menuRules">الشروط والضوابط</a>
       <a href="#" class="menu-link" data-scroll-target="contactSection" data-i18n="menuContact">تواصل معنا</a>
     </nav>
   </aside>
@@ -1338,6 +1338,7 @@
     const CONTACT_WHATSAPP_URL = 'https://wa.me/96800000000';
     const CONTACT_INSTAGRAM_URL = 'https://instagram.com/youraccount';
     const CONTACT_CALL_URL = 'tel:+96800000000';
+    const LANGUAGE_STORAGE_KEY = 'ravana_lang';
 
     const CHALET_DATA = {
       A: {
@@ -1553,6 +1554,21 @@
       return I18N[currentLang][key] || key;
     }
 
+    function saveLanguagePreference() {
+      try {
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, currentLang);
+      } catch (e) {}
+    }
+
+    function loadLanguagePreference() {
+      try {
+        const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+        if (saved && I18N[saved]) {
+          currentLang = saved;
+        }
+      } catch (e) {}
+    }
+
     function normalizeDate(value) {
       if (!value) return '';
       if (typeof value === 'string') return value.trim().slice(0, 10);
@@ -1585,6 +1601,7 @@
     }
 
     function goToBooking(params = {}) {
+      saveLanguagePreference();
       const query = new URLSearchParams();
       if (params.date) query.set('date', params.date);
       if (params.resort) query.set('resort', params.resort);
@@ -1830,6 +1847,7 @@
       langToggle.textContent = t('langButton');
       menuToggle.setAttribute('aria-label', currentLang === 'ar' ? 'فتح القائمة' : 'Open menu');
 
+      saveLanguagePreference();
       updateGalleryArrowDirection();
       renderDescription();
       renderAmenities();
@@ -1855,6 +1873,7 @@
 
     langToggle.addEventListener('click', () => {
       currentLang = currentLang === 'ar' ? 'en' : 'ar';
+      saveLanguagePreference();
       applyLanguage();
     });
 
@@ -1873,8 +1892,15 @@
           }
           closeMenu();
         } else {
+          saveLanguagePreference();
           closeMenu();
         }
+      });
+    });
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        saveLanguagePreference();
       });
     });
 
@@ -1883,6 +1909,7 @@
     contactInstagram.setAttribute('href', CONTACT_INSTAGRAM_URL);
     contactCall.setAttribute('href', CONTACT_CALL_URL);
 
+    loadLanguagePreference();
     applyLanguage();
     loadBookings();
   </script>
