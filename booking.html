@@ -9,6 +9,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/locales-all.global.min.js"></script>
+
   <style>
     :root {
       --surface: rgba(255,255,255,0.82);
@@ -95,7 +99,10 @@
       text-decoration: none;
     }
 
-    button, input, select, textarea {
+    button,
+    input,
+    select,
+    textarea {
       font-family: inherit;
     }
 
@@ -339,22 +346,15 @@
     }
 
     .page-head {
-      padding: 10px 2px 20px;
+      padding: 10px 2px 14px;
     }
 
-    .page-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 36px;
-      padding: 0 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.74);
-      border: 1px solid rgba(95,70,48,0.08);
-      color: var(--brand-dark);
-      font-size: 13px;
+    .selected-resort-name {
+      margin: 0 0 10px;
+      font-size: clamp(24px, 4vw, 36px);
       font-weight: 800;
-      margin-bottom: 12px;
+      letter-spacing: -0.03em;
+      color: var(--brand-dark);
     }
 
     .page-title {
@@ -370,6 +370,249 @@
       font-size: 15px;
       line-height: 1.95;
       max-width: 760px;
+    }
+
+    .calendar-card {
+      background: rgba(255,255,255,0.62);
+      border: 1px solid rgba(95,70,48,0.08);
+      border-radius: 32px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: var(--shadow-xl);
+      overflow: hidden;
+      margin-top: 16px;
+    }
+
+    .calendar-top {
+      padding: 22px 20px 14px;
+    }
+
+    .calendar-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .calendar-title {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: -0.03em;
+    }
+
+    .calendar-head span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 0;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.72));
+      border: 1px solid rgba(95,70,48,0.10);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .legend-dot.success { background: var(--success); }
+    .legend-dot.danger { background: var(--danger); }
+
+    .calendar-wrapper {
+      position: relative;
+      min-height: 360px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,0.52), rgba(255,255,255,0.24));
+      border-top: 1px solid rgba(95,70,48,0.08);
+    }
+
+    #calendar {
+      position: relative;
+      z-index: 1;
+      min-height: 330px;
+      padding: 0;
+    }
+
+    .loading-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(248,244,238,0.90));
+      transition: opacity .35s ease, visibility .35s ease;
+    }
+
+    .loading-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .loading-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .loading-logo {
+      width: 82px;
+      height: 82px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(246,240,232,0.85));
+      border: 1px solid rgba(95,70,48,0.10);
+      box-shadow: var(--shadow-md);
+    }
+
+    .loading-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 3px solid rgba(139,106,72,0.14);
+      border-top-color: var(--brand);
+      animation: spin .9s linear infinite;
+    }
+
+    .loading-text {
+      color: var(--text);
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .loading-subtext {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .fallback {
+      display: none;
+      margin: 12px 20px 20px;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(212,84,84,0.10);
+      color: #992f2f;
+      border: 1px solid rgba(212,84,84,0.16);
+      font-size: 14px;
+    }
+
+    .fc {
+      --fc-border-color: rgba(95,70,48,0.10);
+      --fc-page-bg-color: transparent;
+      --fc-neutral-bg-color: rgba(255,255,255,0.26);
+      --fc-list-event-hover-bg-color: rgba(139,106,72,0.08);
+      --fc-today-bg-color: rgba(236,228,216,0.74);
+      color: var(--text);
+    }
+
+    .fc-theme-standard td,
+    .fc-theme-standard th {
+      border-color: rgba(95,70,48,0.08);
+    }
+
+    .fc .fc-toolbar {
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+      padding: 12px 12px 0;
+    }
+
+    .fc .fc-toolbar-title {
+      font-size: clamp(1.05rem, 3vw, 1.4rem);
+      color: var(--text);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .fc .fc-button {
+      min-height: 40px;
+      border-radius: 13px;
+      border: 1px solid rgba(95,70,48,0.10);
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(246,240,232,0.88));
+      color: var(--text);
+      font-weight: 700;
+      box-shadow: 0 8px 18px rgba(66,43,19,0.05);
+    }
+
+    .fc .fc-button-primary:not(:disabled).fc-button-active,
+    .fc .fc-button-primary:not(:disabled):active,
+    .fc .fc-button:hover {
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(236,228,216,0.92));
+      color: var(--text);
+      border-color: rgba(95,70,48,0.16);
+    }
+
+    .fc .fc-scrollgrid {
+      border-left: 0;
+      border-right: 0;
+      border-bottom: 0;
+      border-radius: 0;
+    }
+
+    .fc .fc-daygrid-day-frame {
+      min-height: 92px;
+      padding: 2px;
+    }
+
+    .fc-daygrid-day-top {
+      padding: 2px 4px;
+    }
+
+    .fc-daygrid-event {
+      border: 0;
+      border-radius: 12px;
+      padding: 4px 6px;
+      margin-top: 4px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: center;
+      box-shadow: 0 10px 18px rgba(66,43,19,0.10);
+    }
+
+    .fc-daygrid-day-number,
+    .fc-col-header-cell-cushion {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .fc .fc-day-today {
+      background: rgba(236,228,216,0.74) !important;
     }
 
     .booking-shell {
@@ -413,6 +656,18 @@
     .summary-chip strong {
       color: var(--brand-dark);
       font-weight: 800;
+    }
+
+    .status-note {
+      margin: 0;
+      padding: 18px 20px 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.9;
+    }
+
+    .status-note strong {
+      color: var(--warning);
     }
 
     .booking-form {
@@ -459,6 +714,11 @@
       box-shadow: inset 0 0 0 1px rgba(95,70,48,0.08);
     }
 
+    .input[readonly] {
+      background: rgba(244,238,230,0.86);
+      cursor: default;
+    }
+
     .textarea {
       min-height: 120px;
       resize: vertical;
@@ -487,18 +747,6 @@
       line-height: 1.7;
     }
 
-    .status-note {
-      margin: 0;
-      padding: 18px 20px 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.9;
-    }
-
-    .status-note strong {
-      color: var(--warning);
-    }
-
     .submit-row {
       display: flex;
       align-items: center;
@@ -516,6 +764,7 @@
       font-size: 14px;
       font-weight: 700;
       line-height: 1.8;
+      margin-bottom: 12px;
     }
 
     .message.show {
@@ -573,10 +822,6 @@
         grid-template-columns: 1fr;
       }
 
-      .phone-wrap {
-        grid-template-columns: 1fr;
-      }
-
       .booking-summary {
         padding: 16px 14px;
       }
@@ -625,7 +870,8 @@
         font-size: 14px;
       }
 
-      .booking-surface {
+      .booking-surface,
+      .calendar-card {
         border-radius: 26px;
       }
 
@@ -643,6 +889,40 @@
 
       .textarea {
         min-height: 110px;
+      }
+
+      .phone-wrap {
+        grid-template-columns: 104px minmax(0, 1fr);
+        gap: 8px;
+      }
+
+      .calendar-top {
+        padding: 18px 14px 12px;
+      }
+
+      .fc .fc-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 10px 8px 0;
+      }
+
+      .fc .fc-toolbar-chunk {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .fc .fc-daygrid-day-frame { min-height: 78px; }
+      .fc-daygrid-event { font-size: 10px; padding: 3px 5px; }
+
+      .side-menu {
+        width: min(90vw, 300px);
+      }
+
+      .menu-link,
+      .menu-sub-link {
+        font-size: 16px;
       }
     }
   </style>
@@ -696,14 +976,47 @@
   <main class="page-wrap">
     <div class="container">
       <header class="page-head">
-        <div class="page-kicker" data-i18n="bookingKicker">طلب حجز جديد</div>
+        <div class="selected-resort-name" id="selectedResortHeading">شاليه رافانا A</div>
         <h1 class="page-title" data-i18n="bookingTitle">احجز إقامتك</h1>
         <p class="page-copy" data-i18n="bookingCopy">
-          أكمل البيانات التالية لإرسال طلب الحجز، وسيتم تسجيله بحالة بانتظار التأكيد حتى تتم مراجعته من الإدارة.
+          أكمل البيانات التالية لإرسال طلب الحجز، ثم اختر التاريخ المناسب من التقويم أدناه لإكمال بقية البيانات.
         </p>
       </header>
 
-      <section class="booking-shell">
+      <section class="calendar-card">
+        <div class="calendar-top">
+          <div class="calendar-head">
+            <h2 class="calendar-title" data-i18n="calendarTitle">اختر التاريخ من التقويم</h2>
+            <span data-i18n="calendarSub">يعرض هذا التقويم توفر الشاليه المختار فقط</span>
+          </div>
+
+          <div class="legend">
+            <span class="legend-item"><i class="legend-dot success"></i><span data-i18n="legendAvailable">متاح</span></span>
+            <span class="legend-item"><i class="legend-dot danger"></i><span data-i18n="legendBooked">غير متاح</span></span>
+          </div>
+        </div>
+
+        <div class="calendar-wrapper">
+          <div class="loading-overlay" id="calendarLoading">
+            <div class="loading-box">
+              <div class="loading-logo">
+                <img src="logo.png" alt="Ravana Chalets" onerror="this.style.display='none'; this.parentNode.innerHTML='🏡'">
+              </div>
+              <div class="loading-spinner"></div>
+              <div class="loading-text" data-i18n="loadingTitle">جاري تحميل التقويم</div>
+              <div class="loading-subtext" data-i18n="loadingSub">يرجى الانتظار قليلاً</div>
+            </div>
+          </div>
+
+          <div id="calendar"></div>
+        </div>
+
+        <div class="fallback" id="calendarError" data-i18n="calendarError">
+          تعذر تحميل التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.
+        </div>
+      </section>
+
+      <section class="booking-shell" id="bookingFormSection">
         <div class="booking-surface">
           <div class="booking-summary">
             <div class="summary-chip">
@@ -729,17 +1042,14 @@
 
             <div class="form-grid">
               <div class="field">
-                <label class="label" for="bookingDate" data-i18n="fieldDate">تاريخ الحجز</label>
-                <input class="input" id="bookingDate" name="date" type="date" required>
+                <label class="label" for="bookingDateDisplay" data-i18n="fieldDate">تاريخ الحجز</label>
+                <input class="input" id="bookingDateDisplay" type="text" readonly>
+                <input id="bookingDateValue" type="hidden" name="date">
               </div>
 
               <div class="field">
-                <label class="label" for="resortSelect" data-i18n="fieldResort">الشاليه</label>
-                <select class="select" id="resortSelect" name="resort" required>
-                  <option value="شاليه رافانا A">شاليه رافانا A</option>
-                  <option value="شاليه رافانا B">شاليه رافانا B</option>
-                  <option value="شاليه رافانا C">شاليه رافانا C</option>
-                </select>
+                <label class="label" for="selectedResortInput" data-i18n="fieldResort">الشاليه</label>
+                <input class="input" id="selectedResortInput" type="text" readonly>
               </div>
 
               <div class="field">
@@ -784,7 +1094,7 @@
 
               <div class="field full">
                 <label class="label" for="notesInput" data-i18n="fieldNotes">ملاحظات إضافية</label>
-                <textarea class="textarea" id="notesInput" name="notes" placeholder=""></textarea>
+                <textarea class="textarea" id="notesInput" name="notes"></textarea>
               </div>
             </div>
 
@@ -802,6 +1112,12 @@
     const API_URL = 'https://script.google.com/macros/s/AKfycbyOVAeXgIxLQycwo4uT66kQpgU6R9GzeDA9DIGGy1eel5uGbUJI4GZv3FH__TQvs7b8BA/exec';
     const LANGUAGE_STORAGE_KEY = 'ravana_lang';
 
+    const RESORTS = [
+      { key: 'A', ar: 'شاليه رافانا A', en: 'Ravana Chalet A' },
+      { key: 'B', ar: 'شاليه رافانا B', en: 'Ravana Chalet B' },
+      { key: 'C', ar: 'شاليه رافانا C', en: 'Ravana Chalet C' }
+    ];
+
     const I18N = {
       ar: {
         dir: 'rtl',
@@ -815,9 +1131,15 @@
         menuChaletC: 'شاليه رافانا C',
         menuRules: 'الشروط والضوابط',
         menuContact: 'تواصل معنا',
-        bookingKicker: 'طلب حجز جديد',
         bookingTitle: 'احجز إقامتك',
-        bookingCopy: 'أكمل البيانات التالية لإرسال طلب الحجز، وسيتم تسجيله بحالة بانتظار التأكيد حتى تتم مراجعته من الإدارة.',
+        bookingCopy: 'أكمل البيانات التالية لإرسال طلب الحجز، ثم اختر التاريخ المناسب من التقويم أدناه لإكمال بقية البيانات.',
+        calendarTitle: 'اختر التاريخ من التقويم',
+        calendarSub: 'يعرض هذا التقويم توفر الشاليه المختار فقط',
+        legendAvailable: 'متاح',
+        legendBooked: 'غير متاح',
+        loadingTitle: 'جاري تحميل التقويم',
+        loadingSub: 'يرجى الانتظار قليلاً',
+        calendarError: 'تعذر تحميل التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.',
         summaryDate: 'التاريخ:',
         summaryResort: 'الشاليه:',
         summaryStatus: 'الحالة:',
@@ -835,11 +1157,15 @@
         backHome: 'العودة للرئيسية',
         submitBooking: 'إرسال طلب الحجز',
         notesPlaceholder: 'اكتب أي ملاحظات تود إضافتها',
+        selectDateFirst: 'يرجى اختيار تاريخ الحجز من التقويم أولاً.',
+        unavailableDate: 'هذا التاريخ غير متاح للحجز.',
         invalidPastDate: 'لا يمكن الحجز في تاريخ سابق.',
         requiredFields: 'يرجى تعبئة جميع الحقول المطلوبة.',
         submitSuccess: 'تم إرسال طلب الحجز بنجاح، وسيتم التواصل معكم بعد المراجعة.',
         submitError: 'تعذر إرسال الطلب حاليًا. يرجى المحاولة مرة أخرى.',
-        loadingSubmit: 'جاري الإرسال...'
+        loadingSubmit: 'جاري الإرسال...',
+        availableEvent: 'متاح',
+        bookedEvent: 'غير متاح'
       },
       en: {
         dir: 'ltr',
@@ -853,9 +1179,15 @@
         menuChaletC: 'Ravana Chalet C',
         menuRules: 'Terms & Rules',
         menuContact: 'Contact Us',
-        bookingKicker: 'New Booking Request',
         bookingTitle: 'Book Your Stay',
-        bookingCopy: 'Complete the form below to send your booking request. It will be saved as pending confirmation until it is reviewed by management.',
+        bookingCopy: 'Complete the form below, then choose your preferred date from the calendar to continue the booking.',
+        calendarTitle: 'Choose the Date from the Calendar',
+        calendarSub: 'This calendar shows availability for the selected chalet only',
+        legendAvailable: 'Available',
+        legendBooked: 'Unavailable',
+        loadingTitle: 'Loading Calendar',
+        loadingSub: 'Please wait a moment',
+        calendarError: 'Unable to load the calendar. Please check the service URL and your sheet data, then refresh the page.',
         summaryDate: 'Date:',
         summaryResort: 'Chalet:',
         summaryStatus: 'Status:',
@@ -869,15 +1201,19 @@
         fieldNotes: 'Additional Notes',
         bookingTypeDay: 'Without Overnight',
         bookingTypeNight: 'With Overnight',
-        phoneHint: 'Please enter the phone number using English digits only so the WhatsApp link works correctly.',
+        phoneHint: 'Please use English digits only so the WhatsApp link works correctly.',
         backHome: 'Back to Home',
         submitBooking: 'Send Booking Request',
         notesPlaceholder: 'Add any notes you would like to include',
+        selectDateFirst: 'Please choose the booking date from the calendar first.',
+        unavailableDate: 'This date is not available for booking.',
         invalidPastDate: 'Booking cannot be made for a past date.',
         requiredFields: 'Please complete all required fields.',
         submitSuccess: 'Your booking request was sent successfully. You will be contacted after review.',
         submitError: 'Unable to send the request right now. Please try again.',
-        loadingSubmit: 'Sending...'
+        loadingSubmit: 'Sending...',
+        availableEvent: 'Available',
+        bookedEvent: 'Unavailable'
       }
     };
 
@@ -886,9 +1222,15 @@
     const sideMenuOverlay = document.getElementById('sideMenuOverlay');
     const closeMenuBtn = document.getElementById('closeMenuBtn');
 
+    const selectedResortHeading = document.getElementById('selectedResortHeading');
+    const selectedResortInput = document.getElementById('selectedResortInput');
+    const summaryDateValue = document.getElementById('summaryDateValue');
+    const summaryResortValue = document.getElementById('summaryResortValue');
+
+    const bookingFormSection = document.getElementById('bookingFormSection');
     const bookingForm = document.getElementById('bookingForm');
-    const bookingDate = document.getElementById('bookingDate');
-    const resortSelect = document.getElementById('resortSelect');
+    const bookingDateDisplay = document.getElementById('bookingDateDisplay');
+    const bookingDateValue = document.getElementById('bookingDateValue');
     const bookingType = document.getElementById('bookingType');
     const nameInput = document.getElementById('nameInput');
     const countryCode = document.getElementById('countryCode');
@@ -897,10 +1239,14 @@
     const formMessage = document.getElementById('formMessage');
     const submitBtn = document.getElementById('submitBtn');
 
-    const summaryDateValue = document.getElementById('summaryDateValue');
-    const summaryResortValue = document.getElementById('summaryResortValue');
+    const calendarLoading = document.getElementById('calendarLoading');
+    const calendarError = document.getElementById('calendarError');
 
     let currentLang = 'ar';
+    let currentResort = RESORTS[0];
+    let bookingData = [];
+    let calendar = null;
+    let selectedDate = '';
 
     function t(key) {
       return I18N[currentLang][key] || key;
@@ -915,9 +1261,7 @@
     function loadLanguagePreference() {
       try {
         const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
-        if (saved && I18N[saved]) {
-          currentLang = saved;
-        }
+        if (saved && I18N[saved]) currentLang = saved;
       } catch (e) {}
     }
 
@@ -937,6 +1281,17 @@
       return year + '-' + month + '-' + day;
     }
 
+    function normalizeDate(value) {
+      if (!value) return '';
+      if (typeof value === 'string') return value.trim().slice(0, 10);
+      const date = new Date(value);
+      if (isNaN(date.getTime())) return '';
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return year + '-' + month + '-' + day;
+    }
+
     function normalizeDigits(value) {
       return String(value || '')
         .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))
@@ -944,9 +1299,30 @@
         .replace(/[^\d]/g, '');
     }
 
-    function updateSummary() {
-      summaryDateValue.textContent = bookingDate.value || '-';
-      summaryResortValue.textContent = resortSelect.value || '-';
+    function findResort(value) {
+      const clean = String(value || '').trim();
+      return RESORTS.find(item =>
+        item.ar === clean ||
+        item.en === clean ||
+        item.key === clean
+      ) || RESORTS[0];
+    }
+
+    function getResortDisplayName(resort) {
+      return currentLang === 'ar' ? resort.ar : resort.en;
+    }
+
+    function updateSelectedResortUI() {
+      const name = getResortDisplayName(currentResort);
+      selectedResortHeading.textContent = name;
+      selectedResortInput.value = name;
+      summaryResortValue.textContent = name;
+    }
+
+    function updateSelectedDateUI() {
+      bookingDateDisplay.value = selectedDate || '';
+      bookingDateValue.value = selectedDate || '';
+      summaryDateValue.textContent = selectedDate || '-';
     }
 
     function showMessage(type, text) {
@@ -957,6 +1333,29 @@
     function clearMessage() {
       formMessage.className = 'message';
       formMessage.textContent = '';
+    }
+
+    function getDateStatus(dateStr) {
+      const record = bookingData.find(item => {
+        return String(item['الاستراحة'] || '').trim() === currentResort.ar &&
+               normalizeDate(item['التاريخ']) === dateStr;
+      });
+
+      if (!record) return 'متاح';
+      return String(record['الحالة'] || '').trim() || 'متاح';
+    }
+
+    function isSelectableDate(dateStr) {
+      if (!dateStr || dateStr < todayString()) return false;
+      return getDateStatus(dateStr) === 'متاح';
+    }
+
+    function chooseDate(dateStr) {
+      if (!dateStr) return;
+      selectedDate = dateStr;
+      updateSelectedDateUI();
+      clearMessage();
+      bookingFormSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function applyLanguage() {
@@ -977,26 +1376,26 @@
       notesInput.placeholder = t('notesPlaceholder');
 
       saveLanguagePreference();
-      updateSummary();
+      updateSelectedResortUI();
+      updateSelectedDateUI();
+      renderCalendar();
     }
 
     function presetFromQuery() {
       const params = new URLSearchParams(window.location.search);
-      const date = params.get('date');
-      const resort = params.get('resort');
+      const resortParam = params.get('resort');
+      const dateParam = params.get('date');
 
-      bookingDate.min = todayString();
+      currentResort = findResort(resortParam);
 
-      if (date) bookingDate.value = date;
-      if (resort && [...resortSelect.options].some(opt => opt.value === resort)) {
-        resortSelect.value = resort;
+      if (dateParam && dateParam >= todayString()) {
+        selectedDate = dateParam;
+      } else {
+        selectedDate = '';
       }
 
-      if (!bookingDate.value) {
-        bookingDate.value = todayString();
-      }
-
-      updateSummary();
+      updateSelectedResortUI();
+      updateSelectedDateUI();
     }
 
     function buildPhone() {
@@ -1005,19 +1404,125 @@
       return countryCode.value + number;
     }
 
+    function buildCalendarEvents() {
+      return bookingData
+        .filter(item => String(item['الاستراحة'] || '').trim() === currentResort.ar)
+        .filter(item => ! (normalizeDate(item['التاريخ']) < todayString()))
+        .map(item => {
+          const status = String(item['الحالة'] || '').trim() || 'متاح';
+          const date = normalizeDate(item['التاريخ']);
+          const available = status === 'متاح';
+
+          return {
+            title: available ? t('availableEvent') : t('bookedEvent'),
+            start: date,
+            allDay: true,
+            backgroundColor: available ? '#24a46d' : '#d45454',
+            borderColor: available ? '#24a46d' : '#d45454',
+            textColor: '#ffffff',
+            extendedProps: {
+              status: status,
+              date: date,
+              available: available
+            }
+          };
+        });
+    }
+
+    function renderCalendar() {
+      const calendarEl = document.getElementById('calendar');
+      const events = buildCalendarEvents();
+
+      if (calendar) calendar.destroy();
+
+      calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: currentLang === 'ar' ? 'ar' : 'en',
+        direction: currentLang === 'ar' ? 'rtl' : 'ltr',
+        initialView: 'dayGridMonth',
+        height: 'auto',
+        headerToolbar: {
+          right: currentLang === 'ar' ? 'prev,next today' : 'today prev,next',
+          center: 'title',
+          left: ''
+        },
+        buttonText: currentLang === 'ar' ? { today: 'اليوم' } : { today: 'Today' },
+        editable: false,
+        selectable: false,
+        events: events,
+        dateClick(info) {
+          const clickedDate = normalizeDate(info.dateStr);
+
+          if (clickedDate < todayString()) return;
+
+          if (!isSelectableDate(clickedDate)) {
+            showMessage('error', t('unavailableDate'));
+            return;
+          }
+
+          chooseDate(clickedDate);
+        },
+        eventClick(info) {
+          info.jsEvent.preventDefault();
+          const props = info.event.extendedProps || {};
+          const date = normalizeDate(props.date);
+
+          if (!props.available) {
+            showMessage('error', t('unavailableDate'));
+            return;
+          }
+
+          chooseDate(date);
+        }
+      });
+
+      calendar.render();
+    }
+
+    async function loadBookings() {
+      try {
+        calendarError.style.display = 'none';
+        calendarLoading.classList.remove('hidden');
+
+        const res = await fetch(API_URL, { method: 'GET', cache: 'no-store' });
+        const rawText = await res.text();
+
+        let json;
+        try {
+          json = JSON.parse(rawText);
+        } catch (e) {
+          throw new Error('Invalid JSON');
+        }
+
+        if (!json.success) throw new Error(json.message || 'Load error');
+
+        bookingData = Array.isArray(json.data) ? json.data : [];
+
+        if (selectedDate && !isSelectableDate(selectedDate)) {
+          selectedDate = '';
+          updateSelectedDateUI();
+        }
+
+        renderCalendar();
+      } catch (error) {
+        console.error(error);
+        calendarError.style.display = 'block';
+      } finally {
+        calendarLoading.classList.add('hidden');
+      }
+    }
+
     async function submitBooking(e) {
       e.preventDefault();
       clearMessage();
 
-      const date = bookingDate.value;
-      const resort = resortSelect.value;
+      const date = bookingDateValue.value;
       const name = nameInput.value.trim();
       const fullPhone = buildPhone();
       const bookingTypeValue = bookingType.value;
       const notes = notesInput.value.trim();
 
-      if (!date || !resort || !name || !fullPhone || !bookingTypeValue) {
-        showMessage('error', t('requiredFields'));
+      if (!date) {
+        showMessage('error', t('selectDateFirst'));
         return;
       }
 
@@ -1026,12 +1531,22 @@
         return;
       }
 
+      if (!isSelectableDate(date)) {
+        showMessage('error', t('unavailableDate'));
+        return;
+      }
+
+      if (!name || !fullPhone || !bookingTypeValue) {
+        showMessage('error', t('requiredFields'));
+        return;
+      }
+
       submitBtn.disabled = true;
       submitBtn.textContent = t('loadingSubmit');
 
       const payload = {
         date: date,
-        resort: resort,
+        resort: currentResort.ar,
         bookingType: bookingTypeValue,
         name: name,
         phone: fullPhone,
@@ -1061,10 +1576,11 @@
 
         bookingForm.reset();
         countryCode.value = '+968';
-        bookingType.value = currentLang === 'ar' ? 'بدون مبيت' : bookingType.options[0].value;
-        bookingDate.min = todayString();
-        presetFromQuery();
+        bookingType.value = 'بدون مبيت';
+        selectedDate = '';
+        updateSelectedDateUI();
         showMessage('success', t('submitSuccess'));
+        loadBookings();
       } catch (error) {
         console.error(error);
         showMessage('error', t('submitError'));
@@ -1077,9 +1593,6 @@
     phoneInput.addEventListener('input', () => {
       phoneInput.value = normalizeDigits(phoneInput.value);
     });
-
-    bookingDate.addEventListener('change', updateSummary);
-    resortSelect.addEventListener('change', updateSummary);
 
     langToggle.addEventListener('click', () => {
       currentLang = currentLang === 'ar' ? 'en' : 'ar';
@@ -1100,8 +1613,9 @@
     bookingForm.addEventListener('submit', submitBooking);
 
     loadLanguagePreference();
-    applyLanguage();
     presetFromQuery();
+    applyLanguage();
+    loadBookings();
   </script>
 </body>
 </html>
