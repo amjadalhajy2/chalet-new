@@ -1121,11 +1121,7 @@
       });
 
       if (!record) return 'متاح';
-      return String(itemOrRecordStatus(record)).trim() || 'متاح';
-    }
-
-    function itemOrRecordStatus(record) {
-      return record['الحالة'] || '';
+      return String(record['الحالة'] || '').trim() || 'متاح';
     }
 
     function isSelectableDate(dateStr) {
@@ -1354,7 +1350,13 @@
         }
 
         saveLanguagePreference();
-        window.location.href = 'index.html';
+
+        const successParams = new URLSearchParams({
+          resort: currentResort.ar,
+          date: date
+        });
+
+        window.location.href = 'booking-success.html?' + successParams.toString();
         return;
       } catch (error) {
         console.error(error);
