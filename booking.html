@@ -207,6 +207,7 @@
       justify-content: center;
       flex-direction: column;
       gap: 4px;
+      box-shadow: 0 14px 28px rgba(95, 70, 48, 0.10);
     }
 
     .menu-btn span {
@@ -646,6 +647,46 @@
       align-items: stretch;
     }
 
+    .price-summary-card {
+      background: rgba(255,255,255,0.78);
+      border-radius: 20px;
+      padding: 10px 14px;
+      box-shadow: inset 0 0 0 1px rgba(95,70,48,0.08);
+    }
+
+    .price-summary-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 46px;
+      border-bottom: 1px solid rgba(95,70,48,0.08);
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .price-summary-row:last-child {
+      border-bottom: 0;
+    }
+
+    .price-summary-row.total {
+      font-weight: 800;
+      color: var(--brand-dark);
+    }
+
+    .file-input {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .file-name {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
     .submit-row {
       display: flex;
       align-items: center;
@@ -869,16 +910,48 @@
               </div>
 
               <div class="field">
-                <label class="label" for="nameInput" data-i18n="fieldName">الاسم</label>
-                <input class="input" id="nameInput" name="name" type="text" required>
-              </div>
-
-              <div class="field">
                 <label class="label" for="bookingType" data-i18n="fieldBookingType">نوع الحجز</label>
                 <select class="select" id="bookingType" name="bookingType" required>
                   <option value="بدون مبيت" selected data-i18n="bookingTypeDay">بدون مبيت</option>
                   <option value="مع مبيت" data-i18n="bookingTypeNight">مع مبيت</option>
                 </select>
+              </div>
+
+              <div class="field">
+                <label class="label" for="pricingType" data-i18n="fieldPricingType">نوع التسعير</label>
+                <select class="select" id="pricingType" name="pricingType" required>
+                  <option value="weekday" selected data-i18n="pricingWeekday">أيام الأسبوع</option>
+                  <option value="holiday" data-i18n="pricingHoliday">الإجازات الرسمية</option>
+                </select>
+              </div>
+
+              <div class="field full">
+                <label class="label" data-i18n="fieldPriceDetails">تفاصيل سعر الحجز</label>
+                <div class="price-summary-card">
+                  <div class="price-summary-row">
+                    <span data-i18n="bookingPriceLabel">سعر الحجز</span>
+                    <strong id="bookingPriceValue">-</strong>
+                  </div>
+                  <div class="price-summary-row">
+                    <span data-i18n="depositLabel">الضمان المسترجع</span>
+                    <strong id="depositValue">-</strong>
+                  </div>
+                  <div class="price-summary-row total">
+                    <span data-i18n="totalLabel">إجمالي المبلغ</span>
+                    <strong id="totalValue">-</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field full">
+                <label class="label" for="paymentReceipt" data-i18n="fieldReceipt">صورة إيصال الدفع</label>
+                <input class="input file-input" id="paymentReceipt" type="file" accept="image/*" required>
+                <div class="file-name" id="paymentReceiptName" data-i18n="receiptPlaceholder">لم يتم اختيار ملف</div>
+              </div>
+
+              <div class="field">
+                <label class="label" for="nameInput" data-i18n="fieldName">الاسم</label>
+                <input class="input" id="nameInput" name="name" type="text" required>
               </div>
 
               <div class="field full">
@@ -921,7 +994,7 @@
   </main>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyOVAeXgIxLQycwo4uT66kQpgU6R9GzeDA9DIGGy1eel5uGbUJI4GZv3FH__TQvs7b8BA/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwMvBlpiKfweqXjXZiWSzx2u2HzfXiXRwua7SvsCDUMO8_PJKGkD3r7hEFZnHDEoRtSyg/exec';
     const LANGUAGE_STORAGE_KEY = 'ravana_lang';
 
     const RESORTS = [
@@ -929,6 +1002,30 @@
       { key: 'B', ar: 'شاليه رافانا B', en: 'Ravana Chalet B' },
       { key: 'C', ar: 'شاليه رافانا C', en: 'Ravana Chalet C' }
     ];
+
+    const PRICE_TABLE = {
+      'شاليه رافانا A': {
+        weekdayDay: 35,
+        weekdayNight: 55,
+        holidayDay: 45,
+        holidayNight: 70,
+        deposit: 0
+      },
+      'شاليه رافانا B': {
+        weekdayDay: 38,
+        weekdayNight: 58,
+        holidayDay: 48,
+        holidayNight: 74,
+        deposit: 0
+      },
+      'شاليه رافانا C': {
+        weekdayDay: 36,
+        weekdayNight: 56,
+        holidayDay: 46,
+        holidayNight: 72,
+        deposit: 0
+      }
+    };
 
     const I18N = {
       ar: {
@@ -952,8 +1049,17 @@
         fieldResort: 'الشاليه',
         fieldName: 'الاسم',
         fieldBookingType: 'نوع الحجز',
+        fieldPricingType: 'نوع التسعير',
+        pricingWeekday: 'أيام الأسبوع',
+        pricingHoliday: 'الإجازات الرسمية',
         fieldPhone: 'رقم الهاتف',
         fieldNotes: 'ملاحظات إضافية',
+        fieldPriceDetails: 'تفاصيل سعر الحجز',
+        bookingPriceLabel: 'سعر الحجز',
+        depositLabel: 'الضمان المسترجع',
+        totalLabel: 'إجمالي المبلغ',
+        fieldReceipt: 'صورة إيصال الدفع',
+        receiptPlaceholder: 'لم يتم اختيار ملف',
         bookingTypeDay: 'بدون مبيت',
         bookingTypeNight: 'مع مبيت',
         submitBooking: 'إرسال طلب الحجز',
@@ -964,6 +1070,9 @@
         requiredFields: 'يرجى تعبئة جميع الحقول المطلوبة.',
         submitError: 'تعذر إرسال الطلب حاليًا. يرجى المحاولة مرة أخرى.',
         loadingSubmit: 'جاري الإرسال...',
+        receiptRequired: 'يرجى إرفاق صورة إيصال الدفع.',
+        fileTooLarge: 'حجم صورة الإيصال كبير جدًا. الحد الأقصى 5MB.',
+        invalidReceiptType: 'يرجى إرفاق صورة فقط.',
         availableEvent: 'متاح',
         bookedEvent: 'غير متاح'
       },
@@ -988,8 +1097,17 @@
         fieldResort: 'Chalet',
         fieldName: 'Name',
         fieldBookingType: 'Booking Type',
+        fieldPricingType: 'Pricing Type',
+        pricingWeekday: 'Weekdays',
+        pricingHoliday: 'Official Holidays',
         fieldPhone: 'Phone Number',
         fieldNotes: 'Additional Notes',
+        fieldPriceDetails: 'Booking Price Details',
+        bookingPriceLabel: 'Booking Price',
+        depositLabel: 'Refundable Deposit',
+        totalLabel: 'Total Amount',
+        fieldReceipt: 'Payment Receipt Image',
+        receiptPlaceholder: 'No file selected',
         bookingTypeDay: 'Without Overnight',
         bookingTypeNight: 'With Overnight',
         submitBooking: 'Send Booking Request',
@@ -1000,6 +1118,9 @@
         requiredFields: 'Please complete all required fields.',
         submitError: 'Unable to send the request right now. Please try again.',
         loadingSubmit: 'Sending...',
+        receiptRequired: 'Please attach the payment receipt image.',
+        fileTooLarge: 'The receipt image is too large. Maximum size is 5MB.',
+        invalidReceiptType: 'Please attach an image file only.',
         availableEvent: 'Available',
         bookedEvent: 'Unavailable'
       }
@@ -1017,7 +1138,17 @@
     const bookingForm = document.getElementById('bookingForm');
     const bookingDateDisplay = document.getElementById('bookingDateDisplay');
     const bookingDateValue = document.getElementById('bookingDateValue');
+
     const bookingType = document.getElementById('bookingType');
+    const pricingType = document.getElementById('pricingType');
+
+    const bookingPriceValue = document.getElementById('bookingPriceValue');
+    const depositValue = document.getElementById('depositValue');
+    const totalValue = document.getElementById('totalValue');
+
+    const paymentReceipt = document.getElementById('paymentReceipt');
+    const paymentReceiptName = document.getElementById('paymentReceiptName');
+
     const nameInput = document.getElementById('nameInput');
     const countryCode = document.getElementById('countryCode');
     const phoneInput = document.getElementById('phoneInput');
@@ -1097,10 +1228,59 @@
       return currentLang === 'ar' ? resort.ar : resort.en;
     }
 
+    function formatMoney(value) {
+      const num = Number(value || 0);
+      return num + ' ﷼';
+    }
+
+    function getCurrentPriceData() {
+      const resortPricing = PRICE_TABLE[currentResort.ar] || {
+        weekdayDay: 0,
+        weekdayNight: 0,
+        holidayDay: 0,
+        holidayNight: 0,
+        deposit: 0
+      };
+
+      const isHoliday = pricingType.value === 'holiday';
+      const isOvernight = bookingType.value === 'مع مبيت';
+
+      const bookingPrice = isHoliday
+        ? (isOvernight ? resortPricing.holidayNight : resortPricing.holidayDay)
+        : (isOvernight ? resortPricing.weekdayNight : resortPricing.weekdayDay);
+
+      const deposit = Number(resortPricing.deposit || 0);
+      const total = Number(bookingPrice) + deposit;
+
+      return {
+        bookingPrice: Number(bookingPrice),
+        deposit: deposit,
+        total: total,
+        pricingType: pricingType.value
+      };
+    }
+
+    function updatePriceSummary() {
+      const priceData = getCurrentPriceData();
+      bookingPriceValue.textContent = formatMoney(priceData.bookingPrice);
+      depositValue.textContent = formatMoney(priceData.deposit);
+      totalValue.textContent = formatMoney(priceData.total);
+    }
+
+    function readFileAsDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error('Failed to read file'));
+        reader.readAsDataURL(file);
+      });
+    }
+
     function updateSelectedResortUI() {
       const name = getResortDisplayName(currentResort);
       selectedResortHeading.textContent = name;
       selectedResortInput.value = name;
+      updatePriceSummary();
     }
 
     function updateSelectedDateUI() {
@@ -1150,9 +1330,14 @@
       menuToggle.setAttribute('aria-label', currentLang === 'ar' ? 'فتح القائمة' : 'Open menu');
       notesInput.placeholder = t('notesPlaceholder');
 
+      paymentReceiptName.textContent = (paymentReceipt.files && paymentReceipt.files[0])
+        ? paymentReceipt.files[0].name
+        : t('receiptPlaceholder');
+
       saveLanguagePreference();
       updateSelectedResortUI();
       updateSelectedDateUI();
+      updatePriceSummary();
       renderCalendar();
     }
 
@@ -1316,20 +1501,45 @@
         return;
       }
 
+      const receiptFile = paymentReceipt.files && paymentReceipt.files[0];
+      if (!receiptFile) {
+        showError(t('receiptRequired'));
+        return;
+      }
+
+      if (!receiptFile.type || !receiptFile.type.startsWith('image/')) {
+        showError(t('invalidReceiptType'));
+        return;
+      }
+
+      if (receiptFile.size > 5 * 1024 * 1024) {
+        showError(t('fileTooLarge'));
+        return;
+      }
+
       submitBtn.disabled = true;
       submitBtn.textContent = t('loadingSubmit');
 
-      const payload = {
-        date: date,
-        resort: currentResort.ar,
-        bookingType: bookingTypeValue,
-        name: name,
-        phone: fullPhone,
-        notes: notes,
-        status: 'بانتظار التأكيد'
-      };
-
       try {
+        const priceData = getCurrentPriceData();
+        const receiptDataUrl = await readFileAsDataUrl(receiptFile);
+
+        const payload = {
+          date: date,
+          resort: currentResort.ar,
+          bookingType: bookingTypeValue,
+          pricingType: priceData.pricingType,
+          bookingPrice: String(priceData.bookingPrice),
+          refundableDeposit: String(priceData.deposit),
+          totalAmount: String(priceData.total),
+          name: name,
+          phone: fullPhone,
+          notes: notes,
+          paymentReceiptFileName: receiptFile.name,
+          paymentReceiptDataUrl: receiptDataUrl,
+          status: 'بانتظار التأكيد'
+        };
+
         const response = await fetch(API_URL, {
           method: 'POST',
           headers: {
@@ -1360,7 +1570,7 @@
         return;
       } catch (error) {
         console.error(error);
-        showError(t('submitError'));
+        showError(error.message || t('submitError'));
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = t('submitBooking');
@@ -1369,6 +1579,14 @@
 
     phoneInput.addEventListener('input', () => {
       phoneInput.value = normalizeDigits(phoneInput.value);
+    });
+
+    bookingType.addEventListener('change', updatePriceSummary);
+    pricingType.addEventListener('change', updatePriceSummary);
+
+    paymentReceipt.addEventListener('change', () => {
+      const file = paymentReceipt.files && paymentReceipt.files[0];
+      paymentReceiptName.textContent = file ? file.name : t('receiptPlaceholder');
     });
 
     langToggle.addEventListener('click', () => {
