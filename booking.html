@@ -25,7 +25,6 @@
       --danger: #d45454;
       --shadow-xl: 0 24px 60px rgba(66, 43, 19, 0.10);
       --shadow-md: 0 10px 22px rgba(66, 43, 19, 0.08);
-      --radius-2xl: 34px;
       --header-h: 78px;
     }
 
@@ -606,7 +605,6 @@
     }
 
     .input,
-    .select,
     .textarea {
       width: 100%;
       min-width: 0;
@@ -633,7 +631,6 @@
     }
 
     .input:focus,
-    .select:focus,
     .textarea:focus {
       box-shadow:
         inset 0 0 0 1px rgba(139,106,72,0.24),
@@ -674,13 +671,6 @@
       color: var(--brand-dark);
     }
 
-    .price-badge {
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.7;
-    }
-
     .file-input {
       padding-top: 12px;
       padding-bottom: 12px;
@@ -702,26 +692,32 @@
 
     .agreement-label {
       display: inline-flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 10px;
       color: var(--muted);
       font-size: 14px;
       line-height: 1.9;
       cursor: pointer;
+      flex-wrap: wrap;
     }
 
     .agreement-label input {
-      margin-top: 4px;
       accent-color: var(--brand);
       width: 18px;
       height: 18px;
       flex-shrink: 0;
+      margin: 0;
+    }
+
+    .agreement-text {
+      display: inline;
     }
 
     .agreement-link {
       color: var(--brand-dark);
       font-weight: 800;
       text-decoration: underline;
+      display: inline;
     }
 
     .submit-row {
@@ -778,50 +774,42 @@
       text-align: center;
     }
 
-    .submit-progress-circle {
+    .submit-progress-ring {
       --progress: 0;
-      width: 116px;
-      height: 116px;
-      margin: 0 auto 14px;
+      width: 124px;
+      height: 124px;
+      margin: 0 auto 16px;
       border-radius: 50%;
-      background:
-        conic-gradient(var(--brand) calc(var(--progress) * 1%), rgba(139,106,72,0.12) 0);
-      display: grid;
-      place-items: center;
+      background: conic-gradient(var(--brand) calc(var(--progress) * 1%), rgba(139,106,72,0.12) 0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .submit-progress-circle::before {
-      content: "";
-      width: 88px;
-      height: 88px;
+    .submit-progress-ring-inner {
+      width: 92px;
+      height: 92px;
       border-radius: 50%;
       background: #fff;
       box-shadow: inset 0 0 0 1px rgba(95,70,48,0.08);
-      display: block;
-      position: absolute;
-    }
-
-    .submit-progress-inner {
-      position: relative;
-      z-index: 1;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      line-height: 1.2;
+      flex-direction: column;
     }
 
     .submit-progress-percent {
       font-size: 24px;
       font-weight: 800;
       color: var(--brand-dark);
+      line-height: 1;
     }
 
     .submit-progress-text {
       font-size: 14px;
       color: var(--muted);
-      margin-top: 6px;
       line-height: 1.8;
+      min-height: 28px;
     }
 
     @media (max-width: 720px) {
@@ -885,7 +873,6 @@
       }
 
       .input,
-      .select,
       .textarea {
         min-height: 50px;
         font-size: 14px;
@@ -1021,7 +1008,7 @@
 
               <div class="field">
                 <label class="label" for="bookingType" data-i18n="fieldBookingType">نوع الحجز</label>
-                <select class="select" id="bookingType" name="bookingType" required>
+                <select class="input" id="bookingType" name="bookingType" required>
                   <option value="بدون مبيت" selected data-i18n="bookingTypeDay">بدون مبيت</option>
                   <option value="مع مبيت" data-i18n="bookingTypeNight">مع مبيت</option>
                 </select>
@@ -1035,7 +1022,7 @@
               <div class="field full">
                 <label class="label" for="phoneInput" data-i18n="fieldPhone">رقم الهاتف (واتساب)</label>
                 <div class="phone-wrap">
-                  <select class="select" id="countryCode" name="countryCode">
+                  <select class="input" id="countryCode" name="countryCode">
                     <option value="+968" selected>+968 Oman</option>
                     <option value="+971">+971 UAE</option>
                     <option value="+966">+966 Saudi Arabia</option>
@@ -1077,7 +1064,6 @@
                     <strong id="totalValue">-</strong>
                   </div>
                 </div>
-                <div class="price-badge" id="pricingBadge"></div>
               </div>
 
               <div class="field full">
@@ -1090,8 +1076,9 @@
             <div class="agreement-row">
               <label class="agreement-label" for="termsAgree">
                 <input type="checkbox" id="termsAgree">
-                <span data-i18n="agreePrefix">عند الضغط على زر إرسال طلب الحجز فإنك توافق على</span>
-                <a class="agreement-link" href="rules.html" target="_blank" rel="noopener noreferrer" data-i18n="rulesLink">الشروط والأحكام</a>
+                <span class="agreement-text">
+                  <span data-i18n="agreePrefix">عند الضغط على زر إرسال طلب الحجز فإنك توافق على </span><a class="agreement-link" href="rules.html" target="_blank" rel="noopener noreferrer" data-i18n="rulesLink">الشروط والأحكام</a>
+                </span>
               </label>
             </div>
 
@@ -1106,8 +1093,8 @@
 
   <div class="submit-progress-overlay" id="submitProgressOverlay">
     <div class="submit-progress-card">
-      <div class="submit-progress-circle" id="submitProgressCircle">
-        <div class="submit-progress-inner">
+      <div class="submit-progress-ring" id="submitProgressRing">
+        <div class="submit-progress-ring-inner">
           <div class="submit-progress-percent" id="submitProgressPercent">0%</div>
         </div>
       </div>
@@ -1126,27 +1113,9 @@
     ];
 
     const PRICE_TABLE = {
-      'شاليه رافانا A': {
-        weekdayDay: 35,
-        weekdayNight: 55,
-        holidayDay: 45,
-        holidayNight: 70,
-        deposit: 0
-      },
-      'شاليه رافانا B': {
-        weekdayDay: 38,
-        weekdayNight: 58,
-        holidayDay: 48,
-        holidayNight: 74,
-        deposit: 0
-      },
-      'شاليه رافانا C': {
-        weekdayDay: 36,
-        weekdayNight: 56,
-        holidayDay: 46,
-        holidayNight: 72,
-        deposit: 0
-      }
+      'شاليه رافانا A': { weekdayDay: 35, weekdayNight: 55, holidayDay: 45, holidayNight: 70, deposit: 20 },
+      'شاليه رافانا B': { weekdayDay: 38, weekdayNight: 58, holidayDay: 48, holidayNight: 74, deposit: 20 },
+      'شاليه رافانا C': { weekdayDay: 36, weekdayNight: 56, holidayDay: 46, holidayNight: 72, deposit: 20 }
     };
 
     const I18N = {
@@ -1188,7 +1157,6 @@
         invalidPastDate: 'لا يمكن الحجز في تاريخ سابق.',
         requiredFields: 'يرجى تعبئة جميع الحقول المطلوبة.',
         submitError: 'تعذر إرسال الطلب حاليًا. يرجى المحاولة مرة أخرى.',
-        loadingSubmit: 'جاري الإرسال...',
         readingReceipt: 'جاري تجهيز إيصال الدفع...',
         uploadingRequest: 'جاري رفع وإرسال الطلب...',
         finishingRequest: 'جاري إنهاء العملية...',
@@ -1196,10 +1164,8 @@
         fileTooLarge: 'حجم صورة الإيصال كبير جدًا. الحد الأقصى 5MB.',
         invalidReceiptType: 'يرجى إرفاق صورة فقط.',
         termsRequired: 'يجب الموافقة على الشروط والأحكام قبل إرسال الطلب.',
-        agreePrefix: 'عند الضغط على زر إرسال طلب الحجز فإنك توافق على',
+        agreePrefix: 'عند الضغط على زر إرسال طلب الحجز فإنك توافق على ',
         rulesLink: 'الشروط والأحكام',
-        priceWeekdayBadge: 'تم احتساب السعر تلقائيًا بحسب يوم التاريخ: أيام الأسبوع',
-        priceHolidayBadge: 'تم احتساب السعر تلقائيًا بحسب يوم التاريخ: الإجازات',
         availableEvent: 'متاح',
         bookedEvent: 'غير متاح'
       },
@@ -1241,7 +1207,6 @@
         invalidPastDate: 'Booking cannot be made for a past date.',
         requiredFields: 'Please complete all required fields.',
         submitError: 'Unable to send the request right now. Please try again.',
-        loadingSubmit: 'Sending...',
         readingReceipt: 'Preparing the payment receipt...',
         uploadingRequest: 'Uploading and sending the request...',
         finishingRequest: 'Finishing the process...',
@@ -1249,10 +1214,8 @@
         fileTooLarge: 'The receipt image is too large. Maximum size is 5MB.',
         invalidReceiptType: 'Please attach an image file only.',
         termsRequired: 'You must agree to the terms and conditions before sending the request.',
-        agreePrefix: 'By clicking Send Booking Request, you agree to the',
+        agreePrefix: 'By clicking Send Booking Request, you agree to the ',
         rulesLink: 'Terms & Conditions',
-        priceWeekdayBadge: 'The price has been calculated automatically based on the selected weekday date.',
-        priceHolidayBadge: 'The price has been calculated automatically based on the selected weekend date.',
         availableEvent: 'Available',
         bookedEvent: 'Unavailable'
       }
@@ -1275,7 +1238,6 @@
     const bookingPriceValue = document.getElementById('bookingPriceValue');
     const depositValue = document.getElementById('depositValue');
     const totalValue = document.getElementById('totalValue');
-    const pricingBadge = document.getElementById('pricingBadge');
 
     const paymentReceipt = document.getElementById('paymentReceipt');
     const paymentReceiptName = document.getElementById('paymentReceiptName');
@@ -1289,7 +1251,7 @@
     const submitBtn = document.getElementById('submitBtn');
 
     const submitProgressOverlay = document.getElementById('submitProgressOverlay');
-    const submitProgressCircle = document.getElementById('submitProgressCircle');
+    const submitProgressRing = document.getElementById('submitProgressRing');
     const submitProgressPercent = document.getElementById('submitProgressPercent');
     const submitProgressText = document.getElementById('submitProgressText');
 
@@ -1301,7 +1263,6 @@
     let bookingData = [];
     let calendar = null;
     let selectedDate = '';
-    let uploadProgressTimer = null;
 
     function t(key) {
       return I18N[currentLang][key] || key;
@@ -1385,7 +1346,7 @@
         weekdayNight: 0,
         holidayDay: 0,
         holidayNight: 0,
-        deposit: 0
+        deposit: 20
       };
 
       const bucket = getPricingBucketFromDate(selectedDate || bookingDateValue.value);
@@ -1395,14 +1356,13 @@
         ? (isOvernight ? resortPricing.holidayNight : resortPricing.holidayDay)
         : (isOvernight ? resortPricing.weekdayNight : resortPricing.weekdayDay);
 
-      const deposit = Number(resortPricing.deposit || 0);
+      const deposit = Number(resortPricing.deposit || 20);
       const total = Number(bookingPrice) + deposit;
 
       return {
         bookingPrice: Number(bookingPrice),
         deposit: deposit,
-        total: total,
-        bucket: bucket
+        total: total
       };
     }
 
@@ -1411,48 +1371,78 @@
       bookingPriceValue.textContent = formatMoney(priceData.bookingPrice);
       depositValue.textContent = formatMoney(priceData.deposit);
       totalValue.textContent = formatMoney(priceData.total);
-      pricingBadge.textContent = priceData.bucket === 'holiday' ? t('priceHolidayBadge') : t('priceWeekdayBadge');
     }
 
-    function readFileAsDataUrl(file) {
+    function readFileAsDataUrlWithProgress(file, onProgress) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
+
+        reader.onprogress = (event) => {
+          if (event.lengthComputable && typeof onProgress === 'function') {
+            const ratio = event.loaded / event.total;
+            const percent = Math.min(18, Math.max(3, Math.round(3 + ratio * 15)));
+            onProgress(percent, t('readingReceipt'));
+          }
+        };
+
         reader.onload = () => resolve(reader.result);
         reader.onerror = () => reject(new Error('Failed to read file'));
         reader.readAsDataURL(file);
       });
     }
 
+    function sendBookingRequest(payload, onProgress) {
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', API_URL, true);
+        xhr.setRequestHeader('Content-Type', 'text/plain;charset=utf-8');
+
+        xhr.upload.onprogress = (event) => {
+          if (event.lengthComputable && typeof onProgress === 'function') {
+            const ratio = event.loaded / event.total;
+            const percent = Math.min(94, Math.max(20, Math.round(20 + ratio * 74)));
+            onProgress(percent, t('uploadingRequest'));
+          }
+        };
+
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === 3 && typeof onProgress === 'function') {
+            onProgress(96, t('finishingRequest'));
+          }
+
+          if (xhr.readyState === 4) {
+            const text = xhr.responseText || '';
+            let json = null;
+
+            try {
+              json = JSON.parse(text);
+            } catch (e) {}
+
+            if (xhr.status >= 200 && xhr.status < 300 && (!json || json.success !== false)) {
+              resolve({ status: xhr.status, text, json });
+            } else {
+              reject(new Error((json && json.message) || text || 'Request failed'));
+            }
+          }
+        };
+
+        xhr.onerror = () => reject(new Error('Network error'));
+        xhr.send(JSON.stringify(payload));
+      });
+    }
+
     function showSubmitProgress(percent, text) {
       submitProgressOverlay.classList.add('show');
-      submitProgressCircle.style.setProperty('--progress', percent);
+      submitProgressRing.style.setProperty('--progress', percent);
       submitProgressPercent.textContent = percent + '%';
       submitProgressText.textContent = text;
     }
 
     function hideSubmitProgress() {
       submitProgressOverlay.classList.remove('show');
-      submitProgressCircle.style.setProperty('--progress', 0);
+      submitProgressRing.style.setProperty('--progress', 0);
       submitProgressPercent.textContent = '0%';
       submitProgressText.textContent = '';
-      if (uploadProgressTimer) {
-        clearInterval(uploadProgressTimer);
-        uploadProgressTimer = null;
-      }
-    }
-
-    function startUploadProgressSimulation() {
-      let value = 55;
-      showSubmitProgress(value, t('uploadingRequest'));
-
-      if (uploadProgressTimer) clearInterval(uploadProgressTimer);
-
-      uploadProgressTimer = setInterval(() => {
-        if (value < 92) {
-          value += 3;
-          showSubmitProgress(value, t('uploadingRequest'));
-        }
-      }, 280);
     }
 
     function updateSelectedResortUI() {
@@ -1703,16 +1693,16 @@
       }
 
       submitBtn.disabled = true;
-      submitBtn.textContent = t('loadingSubmit');
+      submitBtn.textContent = t('readingReceipt');
 
       try {
         const priceData = getCurrentPriceData();
 
-        showSubmitProgress(12, t('readingReceipt'));
-        const receiptDataUrl = await readFileAsDataUrl(receiptFile);
+        showSubmitProgress(3, t('readingReceipt'));
+        const receiptDataUrl = await readFileAsDataUrlWithProgress(receiptFile, showSubmitProgress);
 
-        showSubmitProgress(42, t('readingReceipt'));
-        startUploadProgressSimulation();
+        showSubmitProgress(20, t('uploadingRequest'));
+        submitBtn.textContent = t('uploadingRequest');
 
         const payload = {
           date: date,
@@ -1728,27 +1718,9 @@
           status: 'بانتظار التأكيد'
         };
 
-        const response = await fetch(API_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'text/plain;charset=utf-8'
-          },
-          body: JSON.stringify(payload)
-        });
-
-        const text = await response.text();
-        let json = null;
-
-        try {
-          json = JSON.parse(text);
-        } catch (e) {}
-
-        if (!response.ok || (json && json.success === false)) {
-          throw new Error((json && json.message) || 'Request failed');
-        }
+        await sendBookingRequest(payload, showSubmitProgress);
 
         showSubmitProgress(100, t('finishingRequest'));
-
         saveLanguagePreference();
 
         const successParams = new URLSearchParams({
@@ -1760,16 +1732,12 @@
           window.location.href = 'booking-success.html?' + successParams.toString();
         }, 450);
 
-        return;
       } catch (error) {
         console.error(error);
         hideSubmitProgress();
+        submitBtn.disabled = false;
+        submitBtn.textContent = t('submitBooking');
         showError(error.message || t('submitError'));
-      } finally {
-        if (!submitProgressOverlay.classList.contains('show')) {
-          submitBtn.disabled = false;
-          submitBtn.textContent = t('submitBooking');
-        }
       }
     }
 
