@@ -1424,55 +1424,61 @@
       });
     }
 
-    function sendBookingRequest(payload, onProgress) {
-      return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', API_URL, true);
-        xhr.setRequestHeader('Content-Type', 'text/plain;charset=utf-8');
+    function sendBookingRequest(payload) {
+      return fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8'
+        },
+        body: JSON.stringify(payload)
+      }).then(async (response) => {
+        const text = await response.text();
+        let json = null;
 
-        xhr.upload.onprogress = (event) => {
-          if (event.lengthComputable && typeof onProgress === 'function') {
-            const ratio = event.loaded / event.total;
-            const percent = Math.min(94, Math.max(24, Math.round(24 + ratio * 70)));
-            onProgress(percent, t('uploadingRequest'));
-          }
-        };
+        try {
+          json = JSON.parse(text);
+        } catch (e) {}
 
-        xhr.onreadystatechange = () => {
-          if (xhr.readyState === 2 && typeof onProgress === 'function') {
-            onProgress(96, t('finishingRequest'));
-          }
+        if (!response.ok || (json && json.success === false)) {
+          throw new Error(
+            (json && json.message) ||
+            text ||
+            ('HTTP ' + response.status + ' failed')
+          );
+        }
 
-          if (xhr.readyState === 4) {
-            const text = xhr.responseText || '';
-            let json = null;
-
-            try {
-              json = JSON.parse(text);
-            } catch (e) {}
-
-            if (xhr.status >= 200 && xhr.status < 300 && (!json || json.success !== false)) {
-              resolve({ status: xhr.status, text, json });
-            } else {
-              reject(new Error(
-                (json && json.message) ||
-                text ||
-                ('HTTP ' + xhr.status + ' failed')
-              ));
-            }
-          }
-        };
-
-        xhr.onerror = () => reject(new Error('Network error'));
-        xhr.send(JSON.stringify(payload));
+        return { response, text, json };
       });
+    }
+
+    function animateSubmitProgress(targetPercent, text, duration = 350) {
+      const current = Number(
+        String(submitProgressPercent.textContent || '0').replace('%', '')
+      ) || 0;
+
+      const start = current;
+      const end = targetPercent;
+      const startTime = performance.now();
+
+      submitProgressText.textContent = text;
+
+      function step(now) {
+        const progress = Math.min(1, (now - startTime) / duration);
+        const value = Math.round(start + (end - start) * progress);
+        submitProgressRing.style.setProperty('--progress', value);
+        submitProgressPercent.textContent = value + '%';
+
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        }
+      }
+
+      requestAnimationFrame(step);
     }
 
     function showSubmitProgress(percent, text) {
       submitProgressOverlay.classList.add('show');
-      submitProgressRing.style.setProperty('--progress', percent);
-      submitProgressPercent.textContent = percent + '%';
-      submitProgressText.textContent = text;
+      animateSubmitProgress(percent, text, 260);
     }
 
     function hideSubmitProgress() {
@@ -1735,10 +1741,12 @@
       try {
         const priceData = getCurrentPriceData();
 
-        showSubmitProgress(4, t('readingReceipt'));
-        const receiptDataUrl = await readFileAsDataUrlWithProgress(receiptFile, showSubmitProgress);
+        showSubmitProgress(8, t('readingReceipt'));
+        const receiptDataUrl = await readFileAsDataUrlWithProgress(receiptFile, (percent) => {
+          showSubmitProgress(percent, t('readingReceipt'));
+        });
 
-        showSubmitProgress(24, t('uploadingRequest'));
+        showSubmitProgress(35, t('uploadingRequest'));
         submitBtn.textContent = t('uploadingRequest');
 
         const payload = {
@@ -1755,7 +1763,11 @@
           status: 'بانتظار التأكيد'
         };
 
-        await sendBookingRequest(payload, showSubmitProgress);
+        showSubmitProgress(65, t('uploadingRequest'));
+        await sendBookingRequest(payload);
+
+        showSubmitProgress(92, t('finishingRequest'));
+        await new Promise(resolve => setTimeout(resolve, 250));
 
         showSubmitProgress(100, t('finishingRequest'));
         saveLanguagePreference();
