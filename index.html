@@ -1215,13 +1215,16 @@
   </main>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwPYMjWcgOj5bvZjPkSI3VpMuk_w0Hx1APA2DLIyfwRjS_9pMwdBAXe2aBVCvo0D4HB8A/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwNYWRMWOITz3oyip7ty8Ep5lk8daj4wffuc-UekGMeMITq71DNH6L8ut-GPitSNOEzOg/exec';
     const GOOGLE_MAPS_URL = 'https://maps.google.com/?q=Nizwa,Oman';
     const CONTACT_WHATSAPP_URL = 'https://wa.me/96800000000';
     const CONTACT_INSTAGRAM_URL = 'https://instagram.com/youraccount';
     const CONTACT_CALL_URL = 'tel:+96800000000';
     const LANGUAGE_STORAGE_KEY = 'ravana_lang';
-    const CALENDAR_REQUEST_TIMEOUT_MS = 20000;
+
+    const CALENDAR_REQUEST_TIMEOUT_MS = 22000;
+    const CALENDAR_MAX_ATTEMPTS = 4;
+    const CALENDAR_RETRY_DELAY_MS = 1200;
 
     const CHALET_DATA = [
       {
@@ -1363,8 +1366,11 @@
     let currentLang = 'ar';
     let heroIndex = 0;
     let heroTimer = null;
-    let bookingsRequestController = null;
+    let calendarIsFetching = false;
+
     const sliders = new Map();
+    const loadedRanges = [];
+    const pendingRanges = new Set();
 
     function saveLanguagePreference() {
       try {
@@ -1384,20 +1390,30 @@
     function normalizeDate(value) {
       if (!value) return '';
       if (typeof value === 'string') return value.trim().slice(0, 10);
+
       const date = new Date(value);
       if (isNaN(date.getTime())) return '';
+
+      return formatDateForApi(date);
+    }
+
+    function formatDateForApi(date) {
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
       return year + '-' + month + '-' + day;
     }
 
+    function firstDayOfMonth(date) {
+      return new Date(date.getFullYear(), date.getMonth(), 1);
+    }
+
+    function addMonths(date, months) {
+      return new Date(date.getFullYear(), date.getMonth() + months, 1);
+    }
+
     function todayString() {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-      return year + '-' + month + '-' + day;
+      return formatDateForApi(new Date());
     }
 
     function isPastDate(dateStr) {
@@ -1407,6 +1423,10 @@
 
     function t(key) {
       return I18N[currentLang][key] || key;
+    }
+
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     function goToBooking(params = {}) {
@@ -1439,7 +1459,10 @@
 
       saveLanguagePreference();
       renderChaletCards();
-      renderCalendar();
+
+      if (calendar) {
+        renderCalendar(calendar.getDate());
+      }
     }
 
     function openMenu() {
@@ -1644,10 +1667,11 @@
         });
     }
 
-    function renderCalendar() {
+    function renderCalendar(initialDate) {
       const calendarEl = document.getElementById('calendar');
       if (!calendarEl || typeof FullCalendar === 'undefined') return;
 
+      const currentDate = initialDate || new Date();
       const events = buildCalendarEvents(bookingData);
 
       if (calendar) calendar.destroy();
@@ -1656,6 +1680,7 @@
         locale: currentLang === 'ar' ? 'ar' : 'en',
         direction: currentLang === 'ar' ? 'rtl' : 'ltr',
         initialView: 'dayGridMonth',
+        initialDate: currentDate,
         height: 'auto',
         headerToolbar: {
           right: currentLang === 'ar' ? 'prev,next today' : 'today prev,next',
@@ -1666,6 +1691,9 @@
         editable: false,
         selectable: false,
         events: events,
+        datesSet(info) {
+          handleCalendarDatesSet(info);
+        },
         dateClick(info) {
           const clickedDate = normalizeDate(info.dateStr);
           if (isPastDate(clickedDate)) return;
@@ -1705,51 +1733,86 @@
       calendarError.style.display = 'none';
     }
 
-    async function fetchWithTimeout(url, options = {}, timeoutMs = 20000) {
-      if (bookingsRequestController) {
-        bookingsRequestController.abort();
-      }
+    function dateToTime(dateStr) {
+      return new Date(dateStr + 'T00:00:00').getTime();
+    }
 
-      bookingsRequestController = new AbortController();
+    function isRangeLoaded(start, end) {
+      const startMs = dateToTime(start);
+      const endMs = dateToTime(end);
 
-      const timeoutId = setTimeout(() => {
-        bookingsRequestController.abort();
-      }, timeoutMs);
+      return loadedRanges.some(range => {
+        return range.startMs <= startMs && range.endMs >= endMs;
+      });
+    }
 
-      try {
-        const response = await fetch(url, {
-          ...options,
-          signal: bookingsRequestController.signal
-        });
+    function addLoadedRange(start, end) {
+      const newRange = {
+        start,
+        end,
+        startMs: dateToTime(start),
+        endMs: dateToTime(end)
+      };
 
-        clearTimeout(timeoutId);
-        return response;
-      } catch (error) {
-        clearTimeout(timeoutId);
-        throw error;
+      loadedRanges.push(newRange);
+      loadedRanges.sort((a, b) => a.startMs - b.startMs);
+
+      for (let i = 0; i < loadedRanges.length - 1; i++) {
+        const current = loadedRanges[i];
+        const next = loadedRanges[i + 1];
+
+        if (current.endMs >= next.startMs) {
+          current.endMs = Math.max(current.endMs, next.endMs);
+          current.end = current.endMs >= next.endMs ? current.end : next.end;
+          loadedRanges.splice(i + 1, 1);
+          i--;
+        }
       }
     }
 
-    async function loadBookings() {
+    function mergeBookingData(newRows, start, end) {
+      const startMs = dateToTime(start);
+      const endMs = dateToTime(end);
+
+      bookingData = bookingData.filter(item => {
+        const date = normalizeDate(item['التاريخ']);
+        if (!date) return false;
+        const ms = dateToTime(date);
+        return ms < startMs || ms >= endMs;
+      });
+
+      bookingData = bookingData.concat(Array.isArray(newRows) ? newRows : []);
+    }
+
+    function buildCalendarApiUrl(start, end) {
+      const query = new URLSearchParams();
+      query.set('start', start);
+      query.set('end', end);
+      query.set('_', String(Date.now()));
+      return API_URL + '?' + query.toString();
+    }
+
+    async function fetchJsonWithTimeout(url, timeoutMs) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
       try {
-        hideCalendarError();
-        setCalendarLoading(true);
-
-        const res = await fetchWithTimeout(API_URL, {
+        const response = await fetch(url, {
           method: 'GET',
-          cache: 'no-store'
-        }, CALENDAR_REQUEST_TIMEOUT_MS);
+          cache: 'no-store',
+          signal: controller.signal
+        });
 
-        if (!res.ok) {
-          throw new Error('HTTP ' + res.status);
+        const rawText = await response.text();
+
+        if (!response.ok) {
+          throw new Error('HTTP ' + response.status + ': ' + rawText.slice(0, 120));
         }
-
-        const rawText = await res.text();
 
         let json;
         try {
           json = JSON.parse(rawText);
-        } catch (e) {
+        } catch (error) {
           throw new Error('تعذر قراءة رد الخدمة.');
         }
 
@@ -1757,21 +1820,92 @@
           throw new Error(json.message || 'Load error');
         }
 
-        bookingData = Array.isArray(json.data) ? json.data : [];
-        renderCalendar();
+        return json;
 
-      } catch (error) {
-        if (error && error.name === 'AbortError') {
-          console.error('Calendar request timeout');
-        } else {
-          console.error(error);
+      } finally {
+        clearTimeout(timeoutId);
+      }
+    }
+
+    async function fetchCalendarRangeWithRetry(start, end) {
+      const url = buildCalendarApiUrl(start, end);
+      let lastError = null;
+
+      for (let attempt = 1; attempt <= CALENDAR_MAX_ATTEMPTS; attempt++) {
+        try {
+          return await fetchJsonWithTimeout(url, CALENDAR_REQUEST_TIMEOUT_MS);
+        } catch (error) {
+          lastError = error;
+          console.warn('Calendar load attempt failed:', attempt, error);
+
+          if (attempt < CALENDAR_MAX_ATTEMPTS) {
+            await delay(CALENDAR_RETRY_DELAY_MS * attempt);
+          }
+        }
+      }
+
+      throw lastError || new Error('تعذر تحميل التقويم');
+    }
+
+    async function loadCalendarRange(start, end, options = {}) {
+      const rangeKey = start + '_' + end;
+
+      if (isRangeLoaded(start, end)) {
+        return;
+      }
+
+      if (pendingRanges.has(rangeKey)) {
+        return;
+      }
+
+      pendingRanges.add(rangeKey);
+
+      const showLoading = options.showLoading === true || bookingData.length === 0;
+
+      try {
+        hideCalendarError();
+
+        if (showLoading) {
+          setCalendarLoading(true);
         }
 
+        calendarIsFetching = true;
+
+        const json = await fetchCalendarRangeWithRetry(start, end);
+        const rows = Array.isArray(json.data) ? json.data : [];
+
+        mergeBookingData(rows, start, end);
+        addLoadedRange(start, end);
+
+        if (calendar) {
+          calendar.removeAllEvents();
+          calendar.addEventSource(buildCalendarEvents(bookingData));
+        }
+
+      } catch (error) {
+        console.error(error);
         showCalendarError();
 
       } finally {
-        setCalendarLoading(false);
+        pendingRanges.delete(rangeKey);
+        calendarIsFetching = false;
+
+        if (showLoading) {
+          setCalendarLoading(false);
+        }
       }
+    }
+
+    function handleCalendarDatesSet(info) {
+      if (!info || !info.view || !info.view.currentStart) return;
+
+      const monthStart = firstDayOfMonth(info.view.currentStart);
+      const rangeStart = formatDateForApi(monthStart);
+      const rangeEnd = formatDateForApi(addMonths(monthStart, 2));
+
+      loadCalendarRange(rangeStart, rangeEnd, {
+        showLoading: bookingData.length === 0
+      });
     }
 
     document.getElementById('mapLink').setAttribute('href', GOOGLE_MAPS_URL);
@@ -1817,8 +1951,15 @@
     });
 
     window.addEventListener('pageshow', event => {
-      if (event.persisted) {
-        loadBookings();
+      if (event.persisted && calendar) {
+        const currentDate = calendar.getDate();
+        const monthStart = firstDayOfMonth(currentDate);
+        const rangeStart = formatDateForApi(monthStart);
+        const rangeEnd = formatDateForApi(addMonths(monthStart, 2));
+
+        loadCalendarRange(rangeStart, rangeEnd, {
+          showLoading: false
+        });
       }
     });
 
@@ -1832,7 +1973,7 @@
 
     loadLanguagePreference();
     applyLanguage();
-    loadBookings();
+    renderCalendar(new Date());
   </script>
 </body>
 </html>
