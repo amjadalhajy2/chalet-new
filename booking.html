@@ -1454,7 +1454,11 @@
             if (xhr.status >= 200 && xhr.status < 300 && (!json || json.success !== false)) {
               resolve({ status: xhr.status, text, json });
             } else {
-              reject(new Error((json && json.message) || text || 'Request failed'));
+              reject(new Error(
+                (json && json.message) ||
+                text ||
+                ('HTTP ' + xhr.status + ' failed')
+              ));
             }
           }
         };
