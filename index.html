@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="shortcut icon" href="logo.png">
-<link rel="apple-touch-icon" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
   <title>شاليهات رافانا</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1215,12 +1215,13 @@
   </main>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyOVAeXgIxLQycwo4uT66kQpgU6R9GzeDA9DIGGy1eel5uGbUJI4GZv3FH__TQvs7b8BA/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwPYMjWcgOj5bvZjPkSI3VpMuk_w0Hx1APA2DLIyfwRjS_9pMwdBAXe2aBVCvo0D4HB8A/exec';
     const GOOGLE_MAPS_URL = 'https://maps.google.com/?q=Nizwa,Oman';
     const CONTACT_WHATSAPP_URL = 'https://wa.me/96800000000';
     const CONTACT_INSTAGRAM_URL = 'https://instagram.com/youraccount';
     const CONTACT_CALL_URL = 'tel:+96800000000';
     const LANGUAGE_STORAGE_KEY = 'ravana_lang';
+    const CALENDAR_REQUEST_TIMEOUT_MS = 20000;
 
     const CHALET_DATA = [
       {
@@ -1362,6 +1363,7 @@
     let currentLang = 'ar';
     let heroIndex = 0;
     let heroTimer = null;
+    let bookingsRequestController = null;
     const sliders = new Map();
 
     function saveLanguagePreference() {
@@ -1399,6 +1401,7 @@
     }
 
     function isPastDate(dateStr) {
+      if (!dateStr) return true;
       return dateStr < todayString();
     }
 
@@ -1620,7 +1623,10 @@
 
     function buildCalendarEvents(data) {
       return data
-        .filter(item => !isPastDate(normalizeDate(item['التاريخ'])))
+        .filter(item => {
+          const date = normalizeDate(item['التاريخ']);
+          return date && !isPastDate(date);
+        })
         .map(item => {
           const status = String(item['الحالة'] || '').trim();
           const resort = String(item['الاستراحة'] || '').trim();
@@ -1640,6 +1646,8 @@
 
     function renderCalendar() {
       const calendarEl = document.getElementById('calendar');
+      if (!calendarEl || typeof FullCalendar === 'undefined') return;
+
       const events = buildCalendarEvents(bookingData);
 
       if (calendar) calendar.destroy();
@@ -1676,12 +1684,66 @@
       calendar.render();
     }
 
+    function setCalendarLoading(isLoading) {
+      if (!calendarLoading) return;
+
+      if (isLoading) {
+        calendarLoading.classList.remove('hidden');
+      } else {
+        calendarLoading.classList.add('hidden');
+      }
+    }
+
+    function showCalendarError() {
+      if (!calendarError) return;
+      calendarError.textContent = t('calendarError');
+      calendarError.style.display = 'block';
+    }
+
+    function hideCalendarError() {
+      if (!calendarError) return;
+      calendarError.style.display = 'none';
+    }
+
+    async function fetchWithTimeout(url, options = {}, timeoutMs = 20000) {
+      if (bookingsRequestController) {
+        bookingsRequestController.abort();
+      }
+
+      bookingsRequestController = new AbortController();
+
+      const timeoutId = setTimeout(() => {
+        bookingsRequestController.abort();
+      }, timeoutMs);
+
+      try {
+        const response = await fetch(url, {
+          ...options,
+          signal: bookingsRequestController.signal
+        });
+
+        clearTimeout(timeoutId);
+        return response;
+      } catch (error) {
+        clearTimeout(timeoutId);
+        throw error;
+      }
+    }
+
     async function loadBookings() {
       try {
-        calendarError.style.display = 'none';
-        calendarLoading.classList.remove('hidden');
+        hideCalendarError();
+        setCalendarLoading(true);
 
-        const res = await fetch(API_URL, { method: 'GET', cache: 'no-store' });
+        const res = await fetchWithTimeout(API_URL, {
+          method: 'GET',
+          cache: 'no-store'
+        }, CALENDAR_REQUEST_TIMEOUT_MS);
+
+        if (!res.ok) {
+          throw new Error('HTTP ' + res.status);
+        }
+
         const rawText = await res.text();
 
         let json;
@@ -1691,15 +1753,24 @@
           throw new Error('تعذر قراءة رد الخدمة.');
         }
 
-        if (!json.success) throw new Error(json.message || 'Load error');
+        if (!json.success) {
+          throw new Error(json.message || 'Load error');
+        }
 
         bookingData = Array.isArray(json.data) ? json.data : [];
         renderCalendar();
+
       } catch (error) {
-        console.error(error);
-        calendarError.style.display = 'block';
+        if (error && error.name === 'AbortError') {
+          console.error('Calendar request timeout');
+        } else {
+          console.error(error);
+        }
+
+        showCalendarError();
+
       } finally {
-        calendarLoading.classList.add('hidden');
+        setCalendarLoading(false);
       }
     }
 
@@ -1745,6 +1816,12 @@
       });
     });
 
+    window.addEventListener('pageshow', event => {
+      if (event.persisted) {
+        loadBookings();
+      }
+    });
+
     renderHeroSlides();
     startHeroAutoplay();
 
@@ -1754,7 +1831,6 @@
     heroSlideshow.addEventListener('touchend', startHeroAutoplay, { passive: true });
 
     loadLanguagePreference();
-    renderChaletCards();
     applyLanguage();
     loadBookings();
   </script>
