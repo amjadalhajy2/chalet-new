@@ -671,6 +671,28 @@
       color: var(--brand-dark);
     }
 
+    .omr-inline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+      margin-inline-start: 4px;
+    }
+
+    .omr-symbol-img {
+      width: 16px;
+      height: 16px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .omr-text-fallback {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--brand-dark);
+      line-height: 1;
+    }
+
     .file-input {
       padding-top: 12px;
       padding-bottom: 12px;
@@ -1330,7 +1352,18 @@
 
     function formatMoney(value) {
       const num = Number(value || 0);
-      return num + ' ﷼';
+      return `
+        ${num}
+        <span class="omr-inline">
+          <img
+            class="omr-symbol-img"
+            src="images/omr-symbol.svg"
+            alt="OMR"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';"
+          >
+          <span class="omr-text-fallback" style="display:none;">OMR</span>
+        </span>
+      `;
     }
 
     function getPricingBucketFromDate(dateStr) {
@@ -1368,9 +1401,9 @@
 
     function updatePriceSummary() {
       const priceData = getCurrentPriceData();
-      bookingPriceValue.textContent = formatMoney(priceData.bookingPrice);
-      depositValue.textContent = formatMoney(priceData.deposit);
-      totalValue.textContent = formatMoney(priceData.total);
+      bookingPriceValue.innerHTML = formatMoney(priceData.bookingPrice);
+      depositValue.innerHTML = formatMoney(priceData.deposit);
+      totalValue.innerHTML = formatMoney(priceData.total);
     }
 
     function readFileAsDataUrlWithProgress(file, onProgress) {
@@ -1380,7 +1413,7 @@
         reader.onprogress = (event) => {
           if (event.lengthComputable && typeof onProgress === 'function') {
             const ratio = event.loaded / event.total;
-            const percent = Math.min(18, Math.max(3, Math.round(3 + ratio * 15)));
+            const percent = Math.min(22, Math.max(4, Math.round(4 + ratio * 18)));
             onProgress(percent, t('readingReceipt'));
           }
         };
@@ -1400,13 +1433,13 @@
         xhr.upload.onprogress = (event) => {
           if (event.lengthComputable && typeof onProgress === 'function') {
             const ratio = event.loaded / event.total;
-            const percent = Math.min(94, Math.max(20, Math.round(20 + ratio * 74)));
+            const percent = Math.min(94, Math.max(24, Math.round(24 + ratio * 70)));
             onProgress(percent, t('uploadingRequest'));
           }
         };
 
         xhr.onreadystatechange = () => {
-          if (xhr.readyState === 3 && typeof onProgress === 'function') {
+          if (xhr.readyState === 2 && typeof onProgress === 'function') {
             onProgress(96, t('finishingRequest'));
           }
 
@@ -1698,10 +1731,10 @@
       try {
         const priceData = getCurrentPriceData();
 
-        showSubmitProgress(3, t('readingReceipt'));
+        showSubmitProgress(4, t('readingReceipt'));
         const receiptDataUrl = await readFileAsDataUrlWithProgress(receiptFile, showSubmitProgress);
 
-        showSubmitProgress(20, t('uploadingRequest'));
+        showSubmitProgress(24, t('uploadingRequest'));
         submitBtn.textContent = t('uploadingRequest');
 
         const payload = {
