@@ -1422,10 +1422,6 @@
       return chalet ? chalet.code : '';
     }
 
-    function getResortByValue(resortName) {
-      return CHALET_DATA.find(item => item.resortValue === String(resortName || '').trim()) || null;
-    }
-
     function mergeBookingData(newItems) {
       const map = new Map();
 
@@ -1535,7 +1531,9 @@
       });
 
       chaletsSection.querySelectorAll('.chalet-details-btn').forEach(btn => {
-        window.location.href = 'chalet-' + String(btn.dataset.code || '').toLowerCase() + '.html';
+        btn.addEventListener('click', () => {
+          window.location.href = 'chalet-' + String(btn.dataset.code || '').toLowerCase() + '.html';
+        });
       });
     }
 
