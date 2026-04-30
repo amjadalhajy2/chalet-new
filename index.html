@@ -1172,7 +1172,7 @@
       <div class="location-media">
         <a class="map-link" id="mapLink" href="https://maps.google.com/?q=Nizwa,Oman" target="_blank" rel="noopener noreferrer">
           <div class="map-thumb">
-            <img src="images/location-satellite.jpg" alt="Nizwa, Oman" onerror="this.src='https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1600&q=80'">
+            <img src="images/location-satellite.jpg" alt="Nizwa, Oman" loading="lazy" decoding="async" onerror="this.src='https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1600&q=80'">
           </div>
         </a>
       </div>
@@ -1213,7 +1213,7 @@
   </main>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbywL5kIl3A2WZo1ZidbBrH9QSzlZ_DhWCTV5-nLuoqSUxao7l_TDGeCewG9-8CcEcIpjg/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyuc1jBj_c-QQC3UQXxvZ5cCgYACQ-56BS5KpYe0dHhEeOpuDtek05IknfYyOSxlxu0nA/exec';
     const GOOGLE_MAPS_URL = 'https://maps.google.com/?q=Nizwa,Oman';
     const CONTACT_WHATSAPP_URL = 'https://wa.me/96800000000';
     const CONTACT_INSTAGRAM_URL = 'https://instagram.com/youraccount';
@@ -1357,6 +1357,8 @@
 
     let calendar = null;
     let bookingData = [];
+    let loadedCalendarRanges = [];
+    const calendarRequestCache = new Map();
     let currentLang = 'ar';
     let heroIndex = 0;
     let heroTimer = null;
@@ -1380,11 +1382,15 @@
     function normalizeDate(value) {
       if (!value) return '';
       if (typeof value === 'string') return value.trim().slice(0, 10);
+
       const date = new Date(value);
+
       if (isNaN(date.getTime())) return '';
+
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
+
       return year + '-' + month + '-' + day;
     }
 
@@ -1393,6 +1399,7 @@
       const year = now.getFullYear();
       const month = String(now.getMonth() + 1).padStart(2, '0');
       const day = String(now.getDate()).padStart(2, '0');
+
       return year + '-' + month + '-' + day;
     }
 
@@ -1406,15 +1413,20 @@
 
     function goToBooking(params = {}) {
       saveLanguagePreference();
+
       const query = new URLSearchParams();
+
       if (params.date) query.set('date', params.date);
       if (params.resort) query.set('resort', params.resort);
+
       const qs = query.toString();
+
       window.location.href = 'booking.html' + (qs ? '?' + qs : '');
     }
 
     function goToChaletDetails(code) {
       saveLanguagePreference();
+
       if (code === 'A') window.location.href = 'chalet-a.html';
       if (code === 'B') window.location.href = 'chalet-b.html';
       if (code === 'C') window.location.href = 'chalet-c.html';
@@ -1449,6 +1461,8 @@
       heroSlideshow.innerHTML = HERO_IMAGES.map((src, index) => `
         <div class="hero-slide ${index === 0 ? 'active' : ''}" data-hero-index="${index}">
           <img src="${src}" alt="Ravana Chalet"
+               loading="${index === 0 ? 'eager' : 'lazy'}"
+               decoding="async"
                onerror="this.src='https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80'">
         </div>
       `).join('');
@@ -1469,6 +1483,7 @@
     function showHeroSlide(index) {
       const slides = heroSlideshow.querySelectorAll('.hero-slide');
       const dots = heroDots.querySelectorAll('.hero-dot');
+
       if (!slides.length) return;
 
       heroIndex = (index + slides.length) % slides.length;
@@ -1507,7 +1522,7 @@
       const desc = currentLang === 'ar' ? chalet.descAr : chalet.descEn;
 
       const slides = chalet.images.map(src => (
-        '<div class="slide"><img src="' + src + '" alt="' + title + '" onerror="this.src=\'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80\'"></div>'
+        '<div class="slide"><img src="' + src + '" alt="' + title + '" loading="lazy" decoding="async" onerror="this.src=\'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80\'"></div>'
       )).join('');
 
       const dots = chalet.images.map((_, index) => (
@@ -1543,7 +1558,9 @@
       document.querySelectorAll('[data-book-chalet]').forEach(btn => {
         btn.addEventListener('click', () => {
           const chalet = CHALET_DATA.find(item => item.code === btn.getAttribute('data-book-chalet'));
+
           if (!chalet) return;
+
           goToBooking({ resort: chalet.resortValue });
         });
       });
@@ -1557,9 +1574,12 @@
 
     function setSliderIndex(code, index) {
       const slider = sliders.get(code);
+
       if (!slider) return;
+
       slider.index = (index + slider.count) % slider.count;
       slider.track.style.transform = 'translateX(' + (-slider.index * 100) + '%)';
+
       slider.dots.forEach((dot, dotIndex) => {
         dot.classList.toggle('active', dotIndex === slider.index);
       });
@@ -1567,6 +1587,7 @@
 
     function initSlider(code) {
       const root = document.querySelector('[data-slider="' + code + '"]');
+
       if (!root) return;
 
       const track = root.querySelector('.slides');
@@ -1575,7 +1596,16 @@
       const prev = root.querySelector('[data-nav="prev"]');
       const next = root.querySelector('[data-nav="next"]');
 
-      const state = { root, track, dots, count: slides.length, index: 0, startX: 0, deltaX: 0 };
+      const state = {
+        root,
+        track,
+        dots,
+        count: slides.length,
+        index: 0,
+        startX: 0,
+        deltaX: 0
+      };
+
       sliders.set(code, state);
 
       prev.addEventListener('click', () => setSliderIndex(code, state.index - 1));
@@ -1609,11 +1639,151 @@
 
     function getResortShortName(resort) {
       const chalet = CHALET_DATA.find(item => item.resortValue === resort);
+
       return chalet ? chalet.code : resort;
     }
 
     function getEventColor(status) {
       return status === 'متاح' ? '#24a46d' : '#d45454';
+    }
+
+    function addDays(date, days) {
+      const next = new Date(date);
+      next.setDate(next.getDate() + days);
+
+      return next;
+    }
+
+    function addMonths(date, months) {
+      const next = new Date(date);
+      next.setMonth(next.getMonth() + months);
+
+      return next;
+    }
+
+    function startOfMonth(date) {
+      return new Date(date.getFullYear(), date.getMonth(), 1);
+    }
+
+    function endOfMonth(date) {
+      return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    }
+
+    function dateToLocalString(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+
+      return year + '-' + month + '-' + day;
+    }
+
+    function getCalendarRequestRange(fetchInfo) {
+      const anchorDate = calendar && calendar.view && calendar.view.currentStart
+        ? calendar.view.currentStart
+        : (fetchInfo && fetchInfo.start ? fetchInfo.start : new Date());
+
+      const from = dateToLocalString(startOfMonth(anchorDate));
+      const to = dateToLocalString(endOfMonth(addMonths(anchorDate, 1)));
+
+      return { from, to };
+    }
+
+    function isCalendarRangeLoaded(from, to) {
+      return loadedCalendarRanges.some(range => range.from <= from && range.to >= to);
+    }
+
+    function rememberCalendarRange(from, to) {
+      loadedCalendarRanges.push({ from, to });
+    }
+
+    function buildCalendarApiUrl(from, to) {
+      const query = new URLSearchParams();
+
+      query.set('fields', 'calendar');
+
+      if (from) query.set('from', from);
+      if (to) query.set('to', to);
+
+      return API_URL + '?' + query.toString();
+    }
+
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function fetchJsonWithRetry(url, attempts = 3) {
+      let lastError = null;
+
+      for (let attempt = 1; attempt <= attempts; attempt++) {
+        try {
+          const res = await fetch(url, { method: 'GET', cache: 'no-store' });
+          const rawText = await res.text();
+
+          let json;
+
+          try {
+            json = JSON.parse(rawText);
+          } catch (e) {
+            throw new Error('تعذر قراءة رد الخدمة.');
+          }
+
+          if (!res.ok || !json.success) {
+            throw new Error((json && json.message) || ('HTTP ' + res.status + ' failed'));
+          }
+
+          return json;
+        } catch (error) {
+          lastError = error;
+
+          if (attempt < attempts) {
+            await delay(450 * attempt);
+          }
+        }
+      }
+
+      throw lastError || new Error('Load error');
+    }
+
+    function mergeBookingRows(rows) {
+      const map = new Map();
+
+      bookingData.forEach(item => {
+        const key = normalizeDate(item['التاريخ']) + '|' + String(item['الاستراحة'] || '').trim();
+
+        if (key !== '|') map.set(key, item);
+      });
+
+      rows.forEach(item => {
+        const key = normalizeDate(item['التاريخ']) + '|' + String(item['الاستراحة'] || '').trim();
+
+        if (key !== '|') map.set(key, item);
+      });
+
+      bookingData = Array.from(map.values());
+    }
+
+    async function loadBookingsRange(from, to) {
+      if (isCalendarRangeLoaded(from, to)) return;
+
+      const requestKey = from + '|' + to;
+
+      if (calendarRequestCache.has(requestKey)) {
+        return calendarRequestCache.get(requestKey);
+      }
+
+      const request = fetchJsonWithRetry(buildCalendarApiUrl(from, to), 3)
+        .then(json => {
+          const rows = Array.isArray(json.data) ? json.data : [];
+          mergeBookingRows(rows);
+          rememberCalendarRange(from, to);
+        })
+        .finally(() => {
+          calendarRequestCache.delete(requestKey);
+        });
+
+      calendarRequestCache.set(requestKey, request);
+
+      return request;
     }
 
     function buildCalendarEvents(data) {
@@ -1636,9 +1806,14 @@
         });
     }
 
+    function getCalendarEventsInRange(from, to) {
+      return buildCalendarEvents(bookingData).filter(event => {
+        return event.start >= from && event.start <= to;
+      });
+    }
+
     function renderCalendar() {
       const calendarEl = document.getElementById('calendar');
-      const events = buildCalendarEvents(bookingData);
 
       if (calendar) calendar.destroy();
 
@@ -1655,18 +1830,46 @@
         buttonText: currentLang === 'ar' ? { today: 'اليوم' } : { today: 'Today' },
         editable: false,
         selectable: false,
-        events: events,
+        loading(isLoading) {
+          if (isLoading) {
+            calendarError.style.display = 'none';
+            calendarLoading.classList.remove('hidden');
+          } else {
+            calendarLoading.classList.add('hidden');
+          }
+        },
+        events(fetchInfo, successCallback, failureCallback) {
+          const requestRange = getCalendarRequestRange(fetchInfo);
+          const visibleFrom = normalizeDate(fetchInfo.startStr);
+          const visibleTo = dateToLocalString(addDays(fetchInfo.end, -1));
+
+          loadBookingsRange(requestRange.from, requestRange.to)
+            .then(() => {
+              calendarError.style.display = 'none';
+              successCallback(getCalendarEventsInRange(visibleFrom, visibleTo));
+            })
+            .catch(error => {
+              console.error(error);
+              calendarError.style.display = 'block';
+              failureCallback(error);
+            });
+        },
         dateClick(info) {
           const clickedDate = normalizeDate(info.dateStr);
+
           if (isPastDate(clickedDate)) return;
+
           goToBooking({ date: clickedDate });
         },
         eventClick(info) {
           info.jsEvent.preventDefault();
+
           const props = info.event.extendedProps || {};
           const date = normalizeDate(props.date);
           const resort = props.resort;
+
           if (isPastDate(date)) return;
+
           goToBooking({ date, resort });
         }
       });
@@ -1674,30 +1877,9 @@
       calendar.render();
     }
 
-    async function loadBookings() {
-      try {
-        calendarError.style.display = 'none';
-        calendarLoading.classList.remove('hidden');
-
-        const res = await fetch(API_URL, { method: 'GET', cache: 'no-store' });
-        const rawText = await res.text();
-
-        let json;
-        try {
-          json = JSON.parse(rawText);
-        } catch (e) {
-          throw new Error('تعذر قراءة رد الخدمة.');
-        }
-
-        if (!json.success) throw new Error(json.message || 'Load error');
-
-        bookingData = Array.isArray(json.data) ? json.data : [];
-        renderCalendar();
-      } catch (error) {
-        console.error(error);
-        calendarError.style.display = 'block';
-      } finally {
-        calendarLoading.classList.add('hidden');
+    function loadBookings() {
+      if (calendar) {
+        calendar.refetchEvents();
       }
     }
 
@@ -1723,12 +1905,16 @@
     document.querySelectorAll('.menu-link').forEach(link => {
       link.addEventListener('click', e => {
         const targetId = link.getAttribute('data-scroll-target');
+
         if (targetId) {
           e.preventDefault();
+
           const target = document.getElementById(targetId);
+
           if (target) {
             target.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
+
           closeMenu();
         } else {
           saveLanguagePreference();
@@ -1754,7 +1940,6 @@
     loadLanguagePreference();
     renderChaletCards();
     applyLanguage();
-    loadBookings();
   </script>
 </body>
 </html>
