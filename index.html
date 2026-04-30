@@ -1357,8 +1357,8 @@
 
     let calendar = null;
     let bookingData = [];
-    let loadedCalendarRanges = [];
-    const calendarRequestCache = new Map();
+    let calendarDataLoaded = false;
+    let calendarDataRequest = null;
     let currentLang = 'ar';
     let heroIndex = 0;
     let heroTimer = null;
@@ -1647,63 +1647,9 @@
       return status === 'متاح' ? '#24a46d' : '#d45454';
     }
 
-    function addDays(date, days) {
-      const next = new Date(date);
-      next.setDate(next.getDate() + days);
-
-      return next;
-    }
-
-    function addMonths(date, months) {
-      const next = new Date(date);
-      next.setMonth(next.getMonth() + months);
-
-      return next;
-    }
-
-    function startOfMonth(date) {
-      return new Date(date.getFullYear(), date.getMonth(), 1);
-    }
-
-    function endOfMonth(date) {
-      return new Date(date.getFullYear(), date.getMonth() + 1, 0);
-    }
-
-    function dateToLocalString(date) {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-
-      return year + '-' + month + '-' + day;
-    }
-
-    function getCalendarRequestRange(fetchInfo) {
-      const anchorDate = calendar && calendar.view && calendar.view.currentStart
-        ? calendar.view.currentStart
-        : (fetchInfo && fetchInfo.start ? fetchInfo.start : new Date());
-
-      const from = dateToLocalString(startOfMonth(anchorDate));
-      const to = dateToLocalString(endOfMonth(addMonths(anchorDate, 1)));
-
-      return { from, to };
-    }
-
-    function isCalendarRangeLoaded(from, to) {
-      return loadedCalendarRanges.some(range => range.from <= from && range.to >= to);
-    }
-
-    function rememberCalendarRange(from, to) {
-      loadedCalendarRanges.push({ from, to });
-    }
-
-    function buildCalendarApiUrl(from, to) {
+    function buildCalendarApiUrl() {
       const query = new URLSearchParams();
-
       query.set('fields', 'calendar');
-
-      if (from) query.set('from', from);
-      if (to) query.set('to', to);
-
       return API_URL + '?' + query.toString();
     }
 
@@ -1750,40 +1696,42 @@
       bookingData.forEach(item => {
         const key = normalizeDate(item['التاريخ']) + '|' + String(item['الاستراحة'] || '').trim();
 
-        if (key !== '|') map.set(key, item);
+        if (key !== '|') {
+          map.set(key, item);
+        }
       });
 
       rows.forEach(item => {
         const key = normalizeDate(item['التاريخ']) + '|' + String(item['الاستراحة'] || '').trim();
 
-        if (key !== '|') map.set(key, item);
+        if (key !== '|') {
+          map.set(key, item);
+        }
       });
 
       bookingData = Array.from(map.values());
     }
 
-    async function loadBookingsRange(from, to) {
-      if (isCalendarRangeLoaded(from, to)) return;
-
-      const requestKey = from + '|' + to;
-
-      if (calendarRequestCache.has(requestKey)) {
-        return calendarRequestCache.get(requestKey);
+    async function loadAllBookings() {
+      if (calendarDataLoaded) {
+        return;
       }
 
-      const request = fetchJsonWithRetry(buildCalendarApiUrl(from, to), 3)
+      if (calendarDataRequest) {
+        return calendarDataRequest;
+      }
+
+      calendarDataRequest = fetchJsonWithRetry(buildCalendarApiUrl(), 3)
         .then(json => {
           const rows = Array.isArray(json.data) ? json.data : [];
           mergeBookingRows(rows);
-          rememberCalendarRange(from, to);
+          calendarDataLoaded = true;
         })
         .finally(() => {
-          calendarRequestCache.delete(requestKey);
+          calendarDataRequest = null;
         });
 
-      calendarRequestCache.set(requestKey, request);
-
-      return request;
+      return calendarDataRequest;
     }
 
     function buildCalendarEvents(data) {
@@ -1806,12 +1754,6 @@
         });
     }
 
-    function getCalendarEventsInRange(from, to) {
-      return buildCalendarEvents(bookingData).filter(event => {
-        return event.start >= from && event.start <= to;
-      });
-    }
-
     function renderCalendar() {
       const calendarEl = document.getElementById('calendar');
 
@@ -1830,6 +1772,7 @@
         buttonText: currentLang === 'ar' ? { today: 'اليوم' } : { today: 'Today' },
         editable: false,
         selectable: false,
+
         loading(isLoading) {
           if (isLoading) {
             calendarError.style.display = 'none';
@@ -1838,15 +1781,12 @@
             calendarLoading.classList.add('hidden');
           }
         },
-        events(fetchInfo, successCallback, failureCallback) {
-          const requestRange = getCalendarRequestRange(fetchInfo);
-          const visibleFrom = normalizeDate(fetchInfo.startStr);
-          const visibleTo = dateToLocalString(addDays(fetchInfo.end, -1));
 
-          loadBookingsRange(requestRange.from, requestRange.to)
+        events(fetchInfo, successCallback, failureCallback) {
+          loadAllBookings()
             .then(() => {
               calendarError.style.display = 'none';
-              successCallback(getCalendarEventsInRange(visibleFrom, visibleTo));
+              successCallback(buildCalendarEvents(bookingData));
             })
             .catch(error => {
               console.error(error);
@@ -1854,6 +1794,7 @@
               failureCallback(error);
             });
         },
+
         dateClick(info) {
           const clickedDate = normalizeDate(info.dateStr);
 
@@ -1861,6 +1802,7 @@
 
           goToBooking({ date: clickedDate });
         },
+
         eventClick(info) {
           info.jsEvent.preventDefault();
 
@@ -1878,6 +1820,9 @@
     }
 
     function loadBookings() {
+      calendarDataLoaded = false;
+      bookingData = [];
+
       if (calendar) {
         calendar.refetchEvents();
       }
