@@ -60,18 +60,14 @@
       font-family: "Tajawal", "Segoe UI", Tahoma, Arial, sans-serif;
     }
 
-    body::before {
-      display: none;
-    }
+    body::before { display: none; }
 
     body > * {
       position: relative;
       z-index: 1;
     }
 
-    body.menu-open {
-      overflow: hidden;
-    }
+    body.menu-open { overflow: hidden; }
 
     a { color: inherit; text-decoration: none; }
     button { font-family: inherit; }
@@ -236,9 +232,7 @@
       transform: translateX(100%);
     }
 
-    body.menu-open .side-menu {
-      transform: translateX(0);
-    }
+    body.menu-open .side-menu { transform: translateX(0); }
 
     body.menu-open .side-menu-overlay {
       opacity: 1;
@@ -293,9 +287,7 @@
       padding-inline-start: 6px;
     }
 
-    .menu-group {
-      padding: 8px 0 4px;
-    }
+    .menu-group { padding: 8px 0 4px; }
 
     .menu-group-title {
       display: block;
@@ -451,9 +443,7 @@
       border: 1px solid rgba(95,70,48,0.12);
     }
 
-    .section {
-      padding: 18px 0 0;
-    }
+    .section { padding: 18px 0 0; }
 
     .intro-band {
       width: 100vw;
@@ -468,9 +458,7 @@
       border-radius: var(--radius-2xl);
     }
 
-    .intro-card {
-      padding: 22px;
-    }
+    .intro-card { padding: 22px; }
 
     .intro-full {
       border-radius: 0;
@@ -592,9 +580,7 @@
       background: #fff;
     }
 
-    .chalet-body {
-      padding: 16px;
-    }
+    .chalet-body { padding: 16px; }
 
     .chalet-title {
       margin: 0 0 6px;
@@ -615,9 +601,7 @@
       gap: 10px;
     }
 
-    .calendar-top {
-      padding: 22px 22px 14px;
-    }
+    .calendar-top { padding: 22px 22px 14px; }
 
     .calendar-head {
       display: flex;
@@ -849,9 +833,7 @@
       text-align: start;
     }
 
-    .location-section {
-      padding: 24px 2px 8px;
-    }
+    .location-section { padding: 24px 2px 8px; }
 
     .location-media {
       display: flex;
@@ -879,9 +861,7 @@
       display: block;
     }
 
-    .contact-section {
-      padding: 26px 2px 34px;
-    }
+    .contact-section { padding: 26px 2px 34px; }
 
     .contact-actions {
       display: flex;
@@ -944,27 +924,21 @@
     @media (max-width: 720px) {
       :root { --header-h: 72px; }
 
-      body {
-        background: #f7f3ed;
-      }
+      body { background: #f7f3ed; }
 
       .hero-media {
         aspect-ratio: 6 / 9.8;
         min-height: 500px;
       }
 
-      .hero-dots {
-        bottom: 96px;
-      }
+      .hero-dots { bottom: 96px; }
 
       .hero-card {
         bottom: 14px;
         width: calc(100% - 24px);
       }
 
-      .hero-card h1 {
-        font-size: 24px;
-      }
+      .hero-card h1 { font-size: 24px; }
     }
 
     @media (max-width: 560px) {
@@ -993,13 +967,9 @@
       .section-copy { font-size: 14px; }
       .chalet-title { font-size: 22px; }
 
-      .intro-full {
-        padding: 22px 0;
-      }
+      .intro-full { padding: 22px 0; }
 
-      .calendar-top {
-        padding: 18px 14px 12px;
-      }
+      .calendar-top { padding: 18px 14px 12px; }
 
       .fc .fc-toolbar {
         flex-direction: column;
@@ -1017,22 +987,14 @@
       .fc .fc-daygrid-day-frame { min-height: 78px; }
       .fc-daygrid-event { font-size: 10px; padding: 3px 5px; }
 
-      .side-menu {
-        width: min(90vw, 300px);
-      }
+      .side-menu { width: min(90vw, 300px); }
 
       .menu-link,
-      .menu-sub-link {
-        font-size: 16px;
-      }
+      .menu-sub-link { font-size: 16px; }
 
-      .map-thumb {
-        width: 50%;
-      }
+      .map-thumb { width: 50%; }
 
-      .contact-actions {
-        gap: 24px;
-      }
+      .contact-actions { gap: 24px; }
 
       .contact-icon,
       .contact-icon svg {
@@ -1040,9 +1002,7 @@
         height: 30px;
       }
 
-      .contact-label {
-        font-size: 13px;
-      }
+      .contact-label { font-size: 13px; }
     }
   </style>
 </head>
@@ -1202,10 +1162,10 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.19/locales/ar.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/locales/ar.global.min.js"></script>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxlbA6tk9Ir12IgjYohBA8FkGNV3_CqwMd2eZmgol_eum09h1Tr1CKqpnmYoJBn08K8/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzrAxWVF8X95t0uwDiPLRj-tGWEfKC1gNtFy7cp3nCNUIj9JDQ38UzhC_F85QT7nUlddg/exec';
     const GOOGLE_MAPS_URL = 'https://maps.google.com/?q=Nizwa,Oman';
     const CONTACT_WHATSAPP_URL = 'https://wa.me/96800000000';
     const CONTACT_INSTAGRAM_URL = 'https://instagram.com/youraccount';
@@ -1420,7 +1380,7 @@
       if (code === 'C') window.location.href = 'chalet-c.html';
     }
 
-    function applyLanguage() {
+    function applyLanguageWithoutCalendar() {
       document.documentElement.lang = currentLang;
       document.documentElement.dir = I18N[currentLang].dir;
       document.body.dir = I18N[currentLang].dir;
@@ -1434,6 +1394,10 @@
 
       saveLanguagePreference();
       renderChaletCards();
+    }
+
+    function applyLanguage() {
+      applyLanguageWithoutCalendar();
       renderCalendar();
     }
 
@@ -1860,8 +1824,11 @@
     heroSlideshow.addEventListener('touchend', startHeroAutoplay, { passive: true });
 
     loadLanguagePreference();
-    renderChaletCards();
-    applyLanguage();
+    applyLanguageWithoutCalendar();
+
+    setTimeout(() => {
+      renderCalendar();
+    }, 700);
   </script>
 </body>
 </html>
