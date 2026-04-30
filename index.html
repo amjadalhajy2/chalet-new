@@ -12,11 +12,10 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/locales-all.global.min.js"></script>
 
   <style>
     :root {
@@ -932,6 +931,16 @@
     .instagram-link .contact-icon { color: #9b6a7f; }
     .call-link .contact-icon { color: #8b6a48; }
 
+    @supports (-webkit-touch-callout: none) {
+      .glass-card,
+      .topbar-inner,
+      .side-menu,
+      .hero-card {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+    }
+
     @media (max-width: 720px) {
       :root { --header-h: 72px; }
 
@@ -1049,7 +1058,6 @@
 
       <div class="topbar-actions">
         <button class="lang-btn" id="langToggle" type="button">EN</button>
-
         <button class="menu-btn" id="menuToggle" type="button" aria-label="Open menu">
           <span></span>
           <span></span>
@@ -1192,6 +1200,9 @@
       </div>
     </section>
   </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.19/locales/ar.global.min.js"></script>
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbxlbA6tk9Ir12IgjYohBA8FkGNV3_CqwMd2eZmgol_eum09h1Tr1CKqpnmYoJBn08K8/exec';
@@ -1354,9 +1365,7 @@
     function loadLanguagePreference() {
       try {
         const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
-        if (saved && I18N[saved]) {
-          currentLang = saved;
-        }
+        if (saved && I18N[saved]) currentLang = saved;
       } catch (e) {}
     }
 
@@ -1365,7 +1374,6 @@
       if (typeof value === 'string') return value.trim().slice(0, 10);
 
       const date = new Date(value);
-
       if (isNaN(date.getTime())) return '';
 
       const year = date.getFullYear();
@@ -1401,7 +1409,6 @@
       if (params.resort) query.set('resort', params.resort);
 
       const qs = query.toString();
-
       window.location.href = 'booking.html' + (qs ? '?' + qs : '');
     }
 
@@ -1539,9 +1546,7 @@
       document.querySelectorAll('[data-book-chalet]').forEach(btn => {
         btn.addEventListener('click', () => {
           const chalet = CHALET_DATA.find(item => item.code === btn.getAttribute('data-book-chalet'));
-
           if (!chalet) return;
-
           goToBooking({ resort: chalet.resortValue });
         });
       });
@@ -1555,7 +1560,6 @@
 
     function setSliderIndex(code, index) {
       const slider = sliders.get(code);
-
       if (!slider) return;
 
       slider.index = (index + slider.count) % slider.count;
@@ -1568,7 +1572,6 @@
 
     function initSlider(code) {
       const root = document.querySelector('[data-slider="' + code + '"]');
-
       if (!root) return;
 
       const track = root.querySelector('.slides');
@@ -1620,7 +1623,6 @@
 
     function getResortShortName(resort) {
       const chalet = CHALET_DATA.find(item => item.resortValue === resort);
-
       return chalet ? chalet.code : resort;
     }
 
@@ -1661,7 +1663,6 @@
           return json;
         } catch (error) {
           lastError = error;
-
           if (attempt < attempts) {
             await delay(450 * attempt);
           }
@@ -1676,27 +1677,19 @@
 
       bookingData.forEach(item => {
         const key = normalizeDate(item['التاريخ']) + '|' + String(item['الاستراحة'] || '').trim();
-
-        if (key !== '|') {
-          map.set(key, item);
-        }
+        if (key !== '|') map.set(key, item);
       });
 
       rows.forEach(item => {
         const key = normalizeDate(item['التاريخ']) + '|' + String(item['الاستراحة'] || '').trim();
-
-        if (key !== '|') {
-          map.set(key, item);
-        }
+        if (key !== '|') map.set(key, item);
       });
 
       bookingData = Array.from(map.values());
     }
 
     async function loadAllBookings() {
-      if (calendarDataLoaded) {
-        return;
-      }
+      if (calendarDataLoaded) return;
 
       if (calendarDataRequest) {
         return calendarDataRequest;
@@ -1738,6 +1731,12 @@
     function renderCalendar() {
       const calendarEl = document.getElementById('calendar');
 
+      if (!window.FullCalendar) {
+        calendarError.style.display = 'block';
+        calendarLoading.classList.add('hidden');
+        return;
+      }
+
       if (calendar) calendar.destroy();
 
       calendar = new FullCalendar.Calendar(calendarEl, {
@@ -1778,9 +1777,7 @@
 
         dateClick(info) {
           const clickedDate = normalizeDate(info.dateStr);
-
           if (isPastDate(clickedDate)) return;
-
           goToBooking({ date: clickedDate });
         },
 
@@ -1834,7 +1831,6 @@
 
         if (targetId) {
           e.preventDefault();
-
           const target = document.getElementById(targetId);
 
           if (target) {
