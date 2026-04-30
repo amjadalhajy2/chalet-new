@@ -1643,7 +1643,7 @@
 
       for (let attempt = 1; attempt <= attempts; attempt++) {
         try {
-          const res = await fetch(url, { method: 'GET', cache: 'no-store' });
+          const res = await fetch(url, { method: 'GET' });
           const rawText = await res.text();
 
           let json;
