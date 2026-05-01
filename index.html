@@ -12,9 +12,6 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <link rel="preconnect" href="https://unpkg.com" crossorigin>
   <link rel="preconnect" href="https://script.google.com" crossorigin>
 
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
@@ -38,9 +35,12 @@
       --header-h: 78px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-    html, body {
+    html,
+    body {
       margin: 0;
       padding: 0;
       overflow-x: hidden;
@@ -65,24 +65,32 @@
       font-family: "Tajawal", "Segoe UI", Tahoma, Arial, sans-serif;
     }
 
-    body::before { display: none; }
+    body::before {
+      display: none;
+    }
 
     body > * {
       position: relative;
       z-index: 1;
     }
 
-    body.menu-open { overflow: hidden; }
+    body.menu-open {
+      overflow: hidden;
+    }
 
     a {
       color: inherit;
       text-decoration: none;
     }
 
-    button { font-family: inherit; }
+    button {
+      font-family: inherit;
+    }
 
     @keyframes spin {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     .container {
@@ -241,7 +249,9 @@
       transform: translateX(100%);
     }
 
-    body.menu-open .side-menu { transform: translateX(0); }
+    body.menu-open .side-menu {
+      transform: translateX(0);
+    }
 
     body.menu-open .side-menu-overlay {
       opacity: 1;
@@ -296,7 +306,9 @@
       padding-inline-start: 6px;
     }
 
-    .menu-group { padding: 8px 0 4px; }
+    .menu-group {
+      padding: 8px 0 4px;
+    }
 
     .menu-group-title {
       display: block;
@@ -451,7 +463,9 @@
       border: 1px solid rgba(95,70,48,0.12);
     }
 
-    .section { padding: 18px 0 0; }
+    .section {
+      padding: 18px 0 0;
+    }
 
     .intro-band {
       width: 100vw;
@@ -466,7 +480,9 @@
       border-radius: var(--radius-2xl);
     }
 
-    .intro-card { padding: 22px; }
+    .intro-card {
+      padding: 22px;
+    }
 
     .intro-full {
       border-radius: 0;
@@ -587,7 +603,9 @@
       background: #fff;
     }
 
-    .chalet-body { padding: 16px; }
+    .chalet-body {
+      padding: 16px;
+    }
 
     .chalet-title {
       margin: 0 0 6px;
@@ -608,7 +626,9 @@
       gap: 10px;
     }
 
-    .calendar-top { padding: 22px 22px 14px; }
+    .calendar-top {
+      padding: 22px 22px 14px;
+    }
 
     .calendar-head {
       display: flex;
@@ -651,8 +671,13 @@
       display: inline-block;
     }
 
-    .legend-dot.success { background: var(--success); }
-    .legend-dot.danger { background: var(--danger); }
+    .legend-dot.success {
+      background: var(--success);
+    }
+
+    .legend-dot.danger {
+      background: var(--danger);
+    }
 
     .calendar-wrapper {
       position: relative;
@@ -810,7 +835,9 @@
       padding: 2px;
     }
 
-    .fc-daygrid-day-top { padding: 2px 4px; }
+    .fc-daygrid-day-top {
+      padding: 2px 4px;
+    }
 
     .fc-daygrid-event {
       border: 0;
@@ -841,7 +868,9 @@
       text-align: start;
     }
 
-    .location-section { padding: 24px 2px 8px; }
+    .location-section {
+      padding: 24px 2px 8px;
+    }
 
     .location-media {
       display: flex;
@@ -869,7 +898,9 @@
       display: block;
     }
 
-    .contact-section { padding: 26px 2px 34px; }
+    .contact-section {
+      padding: 26px 2px 34px;
+    }
 
     .contact-actions {
       display: flex;
@@ -915,9 +946,17 @@
       color: var(--muted);
     }
 
-    .whatsapp-link .contact-icon { color: #3f8a63; }
-    .instagram-link .contact-icon { color: #9b6a7f; }
-    .call-link .contact-icon { color: #8b6a48; }
+    .whatsapp-link .contact-icon {
+      color: #3f8a63;
+    }
+
+    .instagram-link .contact-icon {
+      color: #9b6a7f;
+    }
+
+    .call-link .contact-icon {
+      color: #8b6a48;
+    }
 
     @supports (-webkit-touch-callout: none) {
       .glass-card,
@@ -930,31 +969,55 @@
     }
 
     @media (max-width: 720px) {
-      :root { --header-h: 72px; }
+      :root {
+        --header-h: 72px;
+      }
 
-      body { background: #f7f3ed; }
+      body {
+        background: #f7f3ed;
+      }
 
       .hero-media {
         aspect-ratio: 6 / 9.8;
         min-height: 500px;
       }
 
-      .hero-dots { bottom: 96px; }
+      .hero-dots {
+        bottom: 96px;
+      }
 
       .hero-card {
         bottom: 14px;
         width: calc(100% - 24px);
       }
 
-      .hero-card h1 { font-size: 24px; }
+      .hero-card h1 {
+        font-size: 24px;
+      }
     }
 
     @media (max-width: 560px) {
-      .container { width: min(100%, calc(100% - 12px)); }
-      .topbar-inner { padding: 10px 12px; }
-      .brand-title { font-size: 18px; }
-      .logo-box { width: 50px; height: 50px; border-radius: 16px; }
-      .topbar-actions { gap: 8px; }
+      .container {
+        width: min(100%, calc(100% - 12px));
+      }
+
+      .topbar-inner {
+        padding: 10px 12px;
+      }
+
+      .brand-title {
+        font-size: 18px;
+      }
+
+      .logo-box {
+        width: 50px;
+        height: 50px;
+        border-radius: 16px;
+      }
+
+      .topbar-actions {
+        gap: 8px;
+      }
 
       .menu-btn {
         width: 44px;
@@ -970,14 +1033,25 @@
 
       .section-title,
       .location-title,
-      .contact-title { font-size: 24px; }
+      .contact-title {
+        font-size: 24px;
+      }
 
-      .section-copy { font-size: 14px; }
-      .chalet-title { font-size: 22px; }
+      .section-copy {
+        font-size: 14px;
+      }
 
-      .intro-full { padding: 22px 0; }
+      .chalet-title {
+        font-size: 22px;
+      }
 
-      .calendar-top { padding: 18px 14px 12px; }
+      .intro-full {
+        padding: 22px 0;
+      }
+
+      .calendar-top {
+        padding: 18px 14px 12px;
+      }
 
       .fc .fc-toolbar {
         flex-direction: column;
@@ -992,17 +1066,31 @@
         gap: 8px;
       }
 
-      .fc .fc-daygrid-day-frame { min-height: 78px; }
-      .fc-daygrid-event { font-size: 10px; padding: 3px 5px; }
+      .fc .fc-daygrid-day-frame {
+        min-height: 78px;
+      }
 
-      .side-menu { width: min(90vw, 300px); }
+      .fc-daygrid-event {
+        font-size: 10px;
+        padding: 3px 5px;
+      }
+
+      .side-menu {
+        width: min(90vw, 300px);
+      }
 
       .menu-link,
-      .menu-sub-link { font-size: 16px; }
+      .menu-sub-link {
+        font-size: 16px;
+      }
 
-      .map-thumb { width: 50%; }
+      .map-thumb {
+        width: 50%;
+      }
 
-      .contact-actions { gap: 24px; }
+      .contact-actions {
+        gap: 24px;
+      }
 
       .contact-icon,
       .contact-icon svg {
@@ -1010,10 +1098,13 @@
         height: 30px;
       }
 
-      .contact-label { font-size: 13px; }
+      .contact-label {
+        font-size: 13px;
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="topbar">
     <div class="topbar-inner">
@@ -1096,8 +1187,15 @@
           </div>
 
           <div class="legend">
-            <span class="legend-item"><i class="legend-dot success"></i><span data-i18n="legendAvailable">متاح</span></span>
-            <span class="legend-item"><i class="legend-dot danger"></i><span data-i18n="legendBooked">محجوز</span></span>
+            <span class="legend-item">
+              <i class="legend-dot success"></i>
+              <span data-i18n="legendAvailable">متاح</span>
+            </span>
+
+            <span class="legend-item">
+              <i class="legend-dot danger"></i>
+              <span data-i18n="legendBooked">محجوز</span>
+            </span>
           </div>
         </div>
 
@@ -1171,7 +1269,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbyamFBUqze5MVUYIVn813k8fEIAkI70JoTQNnomb9RSMp8MjT_zmMaGjOakA7cwdWgtFw/exec';
-    const API_VERSION = '2026-05-02-no-fullcalendar-css-v2';
+    const API_VERSION = '2026-05-02-local-fullcalendar-v1';
 
     const GOOGLE_MAPS_URL = 'https://maps.google.com/?q=Nizwa,Oman';
     const CONTACT_WHATSAPP_URL = 'https://wa.me/96800000000';
@@ -1180,15 +1278,11 @@
     const LANGUAGE_STORAGE_KEY = 'ravana_lang';
 
     const FULLCALENDAR_JS_URLS = [
-      'https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.19/index.global.min.js',
-      'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js',
-      'https://unpkg.com/fullcalendar@6.1.19/index.global.min.js'
+      './libs/fullcalendar/index.global.min.js'
     ];
 
     const FULLCALENDAR_LOCALE_URLS = [
-      'https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.19/locales-all.global.min.js',
-      'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/locales-all.global.min.js',
-      'https://unpkg.com/fullcalendar@6.1.19/locales-all.global.min.js'
+      './libs/fullcalendar/locales-all.global.min.js'
     ];
 
     const CHALET_DATA = [
@@ -1270,9 +1364,8 @@
         legendBooked: 'محجوز',
         loadingTitle: 'جاري تحميل التقويم',
         loadingSub: 'يرجى الانتظار قليلاً',
-        calendarLibraryError: 'تعذر تحميل مكتبة التقويم. تحقق من اتصال الإنترنت ثم أعد تحديث الصفحة.',
+        calendarLibraryError: 'تعذر تحميل مكتبة التقويم. تأكد من رفع ملفات FullCalendar داخل مجلد libs/fullcalendar.',
         calendarDataError: 'تعذر تحميل بيانات التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.',
-        calendarEmpty: 'لا توجد بيانات متاحة للتقويم حاليًا.',
         locationTitle: 'موقعنا',
         locationPlace: 'نزوى، عمان',
         contactTitle: 'تواصل معنا',
@@ -1304,9 +1397,8 @@
         legendBooked: 'Booked',
         loadingTitle: 'Loading Calendar',
         loadingSub: 'Please wait a moment',
-        calendarLibraryError: 'Unable to load the calendar library. Please check your internet connection and refresh.',
+        calendarLibraryError: 'Unable to load the calendar library. Make sure FullCalendar files are uploaded inside libs/fullcalendar.',
         calendarDataError: 'Unable to load calendar data. Please check the service URL and sheet data, then refresh.',
-        calendarEmpty: 'No calendar data is currently available.',
         locationTitle: 'Our Location',
         locationPlace: 'Nizwa, Oman',
         contactTitle: 'Contact Us',
@@ -1337,7 +1429,6 @@
     let currentLang = 'ar';
     let heroIndex = 0;
     let heroTimer = null;
-
     let fullCalendarAssetsLoaded = false;
     let fullCalendarAssetsLoading = null;
 
@@ -1420,6 +1511,7 @@
       if (params.resort) query.set('resort', params.resort);
 
       const qs = query.toString();
+
       window.location.href = 'booking.html' + (qs ? '?' + qs : '');
     }
 
@@ -1443,6 +1535,7 @@
         script.async = false;
         script.onload = resolve;
         script.onerror = reject;
+
         document.body.appendChild(script);
       });
     }
@@ -1619,12 +1712,14 @@
 
     function renderChaletCards() {
       chaletsSection.innerHTML = CHALET_DATA.map(createSliderHtml).join('');
+
       initAllSliders();
 
       document.querySelectorAll('[data-book-chalet]').forEach(btn => {
         btn.addEventListener('click', () => {
           const chalet = CHALET_DATA.find(item => item.code === btn.getAttribute('data-book-chalet'));
           if (!chalet) return;
+
           goToBooking({ resort: chalet.resortValue });
         });
       });
@@ -1674,7 +1769,9 @@
       next.addEventListener('click', () => setSliderIndex(code, state.index + 1));
 
       dots.forEach(dot => {
-        dot.addEventListener('click', () => setSliderIndex(code, Number(dot.getAttribute('data-dot-index'))));
+        dot.addEventListener('click', () => {
+          setSliderIndex(code, Number(dot.getAttribute('data-dot-index')));
+        });
       });
 
       root.addEventListener('touchstart', e => {
@@ -1710,8 +1807,10 @@
 
     function buildCalendarApiUrl() {
       const query = new URLSearchParams();
+
       query.set('fields', 'calendar');
       query.set('v', API_VERSION);
+
       return API_URL + '?' + query.toString();
     }
 
@@ -1743,6 +1842,7 @@
           return json;
         } catch (error) {
           lastError = error;
+
           if (attempt < attempts) {
             await delay(600 * attempt);
           }
@@ -1760,7 +1860,9 @@
         const resort = String(getField(item, ['الاستراحة', 'الشاليه', 'اسم الشاليه']) || '').trim();
         const key = date + '|' + resort;
 
-        if (key !== '|') map.set(key, item);
+        if (key !== '|') {
+          map.set(key, item);
+        }
       });
 
       rows.forEach(item => {
@@ -1768,7 +1870,9 @@
         const resort = String(getField(item, ['الاستراحة', 'الشاليه', 'اسم الشاليه']) || '').trim();
         const key = date + '|' + resort;
 
-        if (key !== '|') map.set(key, item);
+        if (key !== '|') {
+          map.set(key, item);
+        }
       });
 
       bookingData = Array.from(map.values());
@@ -1784,7 +1888,9 @@
       calendarDataRequest = fetchJsonWithRetry(buildCalendarApiUrl(), 3)
         .then(json => {
           const rows = Array.isArray(json.data) ? json.data : [];
+
           mergeBookingRows(rows);
+
           calendarDataLoaded = true;
 
           if (!rows.length) {
@@ -1815,7 +1921,11 @@
             backgroundColor: getEventColor(status),
             borderColor: getEventColor(status),
             textColor: '#ffffff',
-            extendedProps: { status, resort, date }
+            extendedProps: {
+              status,
+              resort,
+              date
+            }
           };
         })
         .filter(Boolean);
@@ -1839,7 +1949,9 @@
         return;
       }
 
-      if (calendar) calendar.destroy();
+      if (calendar) {
+        calendar.destroy();
+      }
 
       calendar = new FullCalendar.Calendar(calendarEl, {
         locale: currentLang === 'ar' ? 'ar' : 'en',
@@ -1868,7 +1980,9 @@
           loadAllBookings()
             .then(() => {
               const events = buildCalendarEvents(bookingData);
+
               clearCalendarError();
+
               successCallback(events);
             })
             .catch(error => {
@@ -1877,13 +1991,16 @@
               const details = error && error.message ? ' (' + error.message + ')' : '';
 
               setCalendarError(t('calendarDataError') + details);
+
               failureCallback(error);
             });
         },
 
         dateClick(info) {
           const clickedDate = normalizeDate(info.dateStr);
+
           if (isPastDate(clickedDate)) return;
+
           goToBooking({ date: clickedDate });
         },
 
@@ -1918,7 +2035,10 @@
     contactCall.setAttribute('href', CONTACT_CALL_URL);
 
     heroBookBtn.addEventListener('click', () => {
-      document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById('bookingSection').scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
     });
 
     langToggle.addEventListener('click', () => {
@@ -1937,10 +2057,14 @@
 
         if (targetId) {
           e.preventDefault();
+
           const target = document.getElementById(targetId);
 
           if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
           }
 
           closeMenu();
