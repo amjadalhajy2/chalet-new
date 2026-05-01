@@ -13,9 +13,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://script.google.com" crossorigin>
 
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.css" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  </noscript>
 
   <style>
     :root {
@@ -69,7 +72,11 @@
 
     body.menu-open { overflow: hidden; }
 
-    a { color: inherit; text-decoration: none; }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
     button { font-family: inherit; }
 
     @keyframes spin {
@@ -345,7 +352,6 @@
       opacity: 0;
       transform: scale(1.02);
       transition: opacity 1.6s ease, transform 6s ease;
-      will-change: opacity, transform;
     }
 
     .hero-slide.active {
@@ -513,7 +519,6 @@
       direction: ltr;
       height: 100%;
       transition: transform .35s ease;
-      will-change: transform;
     }
 
     .slide {
@@ -1161,9 +1166,6 @@
     </section>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/locales/ar.global.min.js"></script>
-
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrAxWVF8X95t0uwDiPLRj-tGWEfKC1gNtFy7cp3nCNUIj9JDQ38UzhC_F85QT7nUlddg/exec';
     const GOOGLE_MAPS_URL = 'https://maps.google.com/?q=Nizwa,Oman';
@@ -1171,6 +1173,11 @@
     const CONTACT_INSTAGRAM_URL = 'https://instagram.com/youraccount';
     const CONTACT_CALL_URL = 'tel:+96800000000';
     const LANGUAGE_STORAGE_KEY = 'ravana_lang';
+
+    const FULLCALENDAR_CSS_URL = 'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.css';
+    const FULLCALENDAR_JS_URL = 'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js';
+    const FULLCALENDAR_AR_LOCALE_URL = 'https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.19/locales/ar.global.min.js';
+    const FULLCALENDAR_AR_LOCALE_FALLBACK_URL = 'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/locales/ar.global.min.js';
 
     const CHALET_DATA = [
       {
@@ -1314,6 +1321,10 @@
     let currentLang = 'ar';
     let heroIndex = 0;
     let heroTimer = null;
+
+    let fullCalendarAssetsLoaded = false;
+    let fullCalendarAssetsLoading = null;
+
     const sliders = new Map();
 
     function saveLanguagePreference() {
@@ -1380,6 +1391,67 @@
       if (code === 'C') window.location.href = 'chalet-c.html';
     }
 
+    function loadExternalCss(href) {
+      return new Promise((resolve, reject) => {
+        if (document.querySelector('link[href="' + href + '"]')) {
+          resolve();
+          return;
+        }
+
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = href;
+        link.onload = resolve;
+        link.onerror = reject;
+        document.head.appendChild(link);
+      });
+    }
+
+    function loadExternalScript(src) {
+      return new Promise((resolve, reject) => {
+        if (document.querySelector('script[src="' + src + '"]')) {
+          resolve();
+          return;
+        }
+
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = false;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.body.appendChild(script);
+      });
+    }
+
+    async function loadFullCalendarAssets() {
+      if (fullCalendarAssetsLoaded) return;
+
+      if (fullCalendarAssetsLoading) {
+        return fullCalendarAssetsLoading;
+      }
+
+      fullCalendarAssetsLoading = Promise.all([
+        loadExternalCss(FULLCALENDAR_CSS_URL),
+        loadExternalScript(FULLCALENDAR_JS_URL)
+      ])
+      .then(async () => {
+        try {
+          await loadExternalScript(FULLCALENDAR_AR_LOCALE_URL);
+        } catch (e) {
+          try {
+            await loadExternalScript(FULLCALENDAR_AR_LOCALE_FALLBACK_URL);
+          } catch (fallbackError) {
+            console.warn('Arabic locale failed to load. Calendar will continue.', fallbackError);
+          }
+        }
+      })
+      .then(() => {
+        fullCalendarAssetsLoaded = true;
+      });
+
+      return fullCalendarAssetsLoading;
+    }
+
     function applyLanguageWithoutCalendar() {
       document.documentElement.lang = currentLang;
       document.documentElement.dir = I18N[currentLang].dir;
@@ -1398,7 +1470,10 @@
 
     function applyLanguage() {
       applyLanguageWithoutCalendar();
-      renderCalendar();
+
+      if (calendar || fullCalendarAssetsLoaded) {
+        renderCalendar();
+      }
     }
 
     function openMenu() {
@@ -1692,8 +1767,17 @@
         });
     }
 
-    function renderCalendar() {
+    async function renderCalendar() {
       const calendarEl = document.getElementById('calendar');
+
+      try {
+        await loadFullCalendarAssets();
+      } catch (e) {
+        console.error(e);
+        calendarError.style.display = 'block';
+        calendarLoading.classList.add('hidden');
+        return;
+      }
 
       if (!window.FullCalendar) {
         calendarError.style.display = 'block';
@@ -1826,9 +1910,11 @@
     loadLanguagePreference();
     applyLanguageWithoutCalendar();
 
-    setTimeout(() => {
-      renderCalendar();
-    }, 700);
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        renderCalendar();
+      }, 1500);
+    });
   </script>
 </body>
 </html>
