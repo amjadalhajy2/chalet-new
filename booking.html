@@ -4,19 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="icon" type="image/png" href="logo.png">
-  <link rel="shortcut icon" href="logo.png">
-  <link rel="apple-touch-icon" href="logo.png">
+  <link rel="icon" type="image/webp" href="logo.webp">
+  <link rel="shortcut icon" href="logo.webp">
+  <link rel="apple-touch-icon" href="logo.webp">
 
   <title>حجز الإقامة - شاليهات رافانا</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://script.google.com" crossorigin>
 
-  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/locales-all.global.min.js"></script>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  </noscript>
 
   <style>
     :root {
@@ -44,9 +45,7 @@
     body {
       font-family: "Segoe UI", Tahoma, Arial, sans-serif;
       color: var(--text);
-      background:
-        linear-gradient(rgba(250,248,244,0.78), rgba(245,242,236,0.82)),
-        url('images/background-main.jpg') center center / cover no-repeat fixed;
+      background: #f7f3ed;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
       padding-top: var(--header-h);
@@ -63,27 +62,7 @@
     }
 
     body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.16;
-      background:
-        repeating-linear-gradient(
-          45deg,
-          rgba(139,106,72,0.035) 0px,
-          rgba(139,106,72,0.035) 1px,
-          transparent 1px,
-          transparent 28px
-        ),
-        repeating-linear-gradient(
-          -45deg,
-          rgba(95,70,48,0.025) 0px,
-          rgba(95,70,48,0.025) 1px,
-          transparent 1px,
-          transparent 28px
-        );
+      display: none;
     }
 
     body > * {
@@ -133,8 +112,8 @@
       gap: 12px;
       padding: 12px 18px;
       background: rgba(255,255,255,0.84);
-      backdrop-filter: blur(18px) saturate(1.2);
-      -webkit-backdrop-filter: blur(18px) saturate(1.2);
+      backdrop-filter: blur(8px) saturate(1.2);
+      -webkit-backdrop-filter: blur(8px) saturate(1.2);
       border-bottom: 1px solid rgba(255,255,255,0.7);
       box-shadow: var(--shadow-md);
     }
@@ -240,8 +219,8 @@
       height: 100vh;
       padding: 26px 20px;
       background: rgba(255,255,255,0.96);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       transition: .25s ease;
       overflow-y: auto;
     }
@@ -378,14 +357,18 @@
       max-width: 760px;
     }
 
-    .calendar-card {
+    .calendar-card,
+    .booking-surface {
       background: rgba(255,255,255,0.62);
       border: 1px solid rgba(95,70,48,0.08);
       border-radius: 32px;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       box-shadow: var(--shadow-xl);
       overflow: hidden;
+    }
+
+    .calendar-card {
       margin-top: 16px;
     }
 
@@ -478,6 +461,7 @@
       color: #992f2f;
       border: 1px solid rgba(212,84,84,0.16);
       font-size: 14px;
+      line-height: 1.8;
     }
 
     .fc {
@@ -571,16 +555,6 @@
       padding: 18px 0 0;
     }
 
-    .booking-surface {
-      background: rgba(255,255,255,0.62);
-      border: 1px solid rgba(95,70,48,0.08);
-      border-radius: 32px;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      box-shadow: var(--shadow-xl);
-      overflow: hidden;
-    }
-
     .booking-form {
       padding: 0 20px 20px;
     }
@@ -649,14 +623,21 @@
       align-items: stretch;
     }
 
-    .price-summary-card {
+    .price-summary-card,
+    .bank-transfer-box {
       background: rgba(255,255,255,0.78);
       border-radius: 20px;
       padding: 10px 14px;
       box-shadow: inset 0 0 0 1px rgba(95,70,48,0.08);
     }
 
-    .price-summary-row {
+    .bank-transfer-box {
+      margin-top: 14px;
+      padding: 14px 16px;
+    }
+
+    .price-summary-row,
+    .bank-transfer-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -667,13 +648,33 @@
       font-size: 14px;
     }
 
-    .price-summary-row:last-child {
+    .price-summary-row:last-child,
+    .bank-transfer-row:last-child {
       border-bottom: 0;
     }
 
     .price-summary-row.total {
       font-weight: 800;
       color: var(--brand-dark);
+    }
+
+    .bank-transfer-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--brand-dark);
+      line-height: 1.9;
+      margin-bottom: 10px;
+    }
+
+    .bank-transfer-label {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .bank-transfer-value {
+      color: var(--text);
+      font-weight: 800;
+      text-align: end;
     }
 
     .omr-inline {
@@ -696,47 +697,6 @@
       font-weight: 800;
       color: var(--brand-dark);
       line-height: 1;
-    }
-
-    .bank-transfer-box {
-      margin-top: 14px;
-      background: rgba(255,255,255,0.78);
-      border-radius: 20px;
-      padding: 14px 16px;
-      box-shadow: inset 0 0 0 1px rgba(95,70,48,0.08);
-    }
-
-    .bank-transfer-title {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--brand-dark);
-      line-height: 1.9;
-      margin-bottom: 10px;
-    }
-
-    .bank-transfer-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      min-height: 42px;
-      border-bottom: 1px solid rgba(95,70,48,0.08);
-      font-size: 14px;
-    }
-
-    .bank-transfer-row:last-child {
-      border-bottom: 0;
-    }
-
-    .bank-transfer-label {
-      color: var(--muted);
-      font-weight: 700;
-    }
-
-    .bank-transfer-value {
-      color: var(--text);
-      font-weight: 800;
-      text-align: end;
     }
 
     .file-input {
@@ -775,10 +735,6 @@
       height: 18px;
       flex-shrink: 0;
       margin: 0;
-    }
-
-    .agreement-text {
-      display: inline;
     }
 
     .agreement-link {
@@ -880,14 +836,19 @@
       min-height: 28px;
     }
 
+    @supports (-webkit-touch-callout: none) {
+      .topbar-inner,
+      .side-menu,
+      .calendar-card,
+      .booking-surface,
+      .submit-progress-overlay {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+    }
+
     @media (max-width: 720px) {
       :root { --header-h: 72px; }
-
-      body {
-        background:
-          linear-gradient(rgba(250,248,244,0.78), rgba(245,242,236,0.82)),
-          url('images/background-main.jpg') center center / cover no-repeat;
-      }
     }
 
     @media (max-width: 640px) {
@@ -982,12 +943,13 @@
     }
   </style>
 </head>
+
 <body>
   <div class="topbar">
     <div class="topbar-inner">
       <div class="brand-wrap">
         <div class="logo-box">
-          <img src="logo.png" alt="Ravana Chalets" onerror="this.style.display='none'; this.parentNode.innerHTML='🏡'">
+          <img src="logo.webp" alt="Ravana Chalets" onerror="this.style.display='none'; this.parentNode.innerHTML='🏡'">
         </div>
         <div class="brand-title" data-i18n="topbarBrand">شاليهات رافانا</div>
       </div>
@@ -1043,7 +1005,7 @@
           <div class="loading-overlay" id="calendarLoading">
             <div class="loading-box">
               <div class="loading-logo">
-                <img src="logo.png" alt="Ravana Chalets" onerror="this.style.display='none'; this.parentNode.innerHTML='🏡'">
+                <img src="logo.webp" alt="Ravana Chalets" onerror="this.style.display='none'; this.parentNode.innerHTML='🏡'">
               </div>
               <div class="loading-spinner"></div>
               <div class="loading-text" data-i18n="loadingTitle">جاري تحميل التقويم</div>
@@ -1054,7 +1016,7 @@
           <div id="calendar"></div>
         </div>
 
-        <div class="fallback" id="calendarError" data-i18n="calendarError">
+        <div class="fallback" id="calendarError">
           تعذر تحميل التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.
         </div>
       </section>
@@ -1090,276 +1052,30 @@
               <div class="field full">
                 <label class="label" for="phoneInput" data-i18n="fieldPhone">رقم الهاتف (واتساب)</label>
                 <div class="phone-wrap">
-                  <select class="input" id="countryCode" name="countryCode">
-                    <option value="+968" selected>+968 Oman</option>
-                    <option value="+93">+93 Afghanistan</option>
-                    <option value="+355">+355 Albania</option>
-                    <option value="+213">+213 Algeria</option>
-                    <option value="+1">+1 American Samoa</option>
-                    <option value="+376">+376 Andorra</option>
-                    <option value="+244">+244 Angola</option>
-                    <option value="+1">+1 Anguilla</option>
-                    <option value="+1">+1 Antigua and Barbuda</option>
-                    <option value="+54">+54 Argentina</option>
-                    <option value="+374">+374 Armenia</option>
-                    <option value="+297">+297 Aruba</option>
-                    <option value="+61">+61 Australia</option>
-                    <option value="+43">+43 Austria</option>
-                    <option value="+994">+994 Azerbaijan</option>
-                    <option value="+1">+1 Bahamas</option>
-                    <option value="+973">+973 Bahrain</option>
-                    <option value="+880">+880 Bangladesh</option>
-                    <option value="+1">+1 Barbados</option>
-                    <option value="+375">+375 Belarus</option>
-                    <option value="+32">+32 Belgium</option>
-                    <option value="+501">+501 Belize</option>
-                    <option value="+229">+229 Benin</option>
-                    <option value="+1">+1 Bermuda</option>
-                    <option value="+975">+975 Bhutan</option>
-                    <option value="+591">+591 Bolivia</option>
-                    <option value="+387">+387 Bosnia and Herzegovina</option>
-                    <option value="+267">+267 Botswana</option>
-                    <option value="+55">+55 Brazil</option>
-                    <option value="+246">+246 British Indian Ocean Territory</option>
-                    <option value="+1">+1 British Virgin Islands</option>
-                    <option value="+673">+673 Brunei</option>
-                    <option value="+359">+359 Bulgaria</option>
-                    <option value="+226">+226 Burkina Faso</option>
-                    <option value="+257">+257 Burundi</option>
-                    <option value="+855">+855 Cambodia</option>
-                    <option value="+237">+237 Cameroon</option>
-                    <option value="+1">+1 Canada</option>
-                    <option value="+238">+238 Cabo Verde</option>
-                    <option value="+1">+1 Cayman Islands</option>
-                    <option value="+236">+236 Central African Republic</option>
-                    <option value="+235">+235 Chad</option>
-                    <option value="+56">+56 Chile</option>
-                    <option value="+86">+86 China</option>
-                    <option value="+61">+61 Christmas Island</option>
-                    <option value="+61">+61 Cocos (Keeling) Islands</option>
-                    <option value="+57">+57 Colombia</option>
-                    <option value="+269">+269 Comoros</option>
-                    <option value="+242">+242 Congo</option>
-                    <option value="+243">+243 Congo (DRC)</option>
-                    <option value="+682">+682 Cook Islands</option>
-                    <option value="+506">+506 Costa Rica</option>
-                    <option value="+225">+225 Côte d’Ivoire</option>
-                    <option value="+385">+385 Croatia</option>
-                    <option value="+53">+53 Cuba</option>
-                    <option value="+599">+599 Curaçao</option>
-                    <option value="+357">+357 Cyprus</option>
-                    <option value="+420">+420 Czech Republic</option>
-                    <option value="+45">+45 Denmark</option>
-                    <option value="+253">+253 Djibouti</option>
-                    <option value="+1">+1 Dominica</option>
-                    <option value="+1">+1 Dominican Republic</option>
-                    <option value="+670">+670 Timor-Leste</option>
-                    <option value="+593">+593 Ecuador</option>
-                    <option value="+20">+20 Egypt</option>
-                    <option value="+503">+503 El Salvador</option>
-                    <option value="+240">+240 Equatorial Guinea</option>
-                    <option value="+291">+291 Eritrea</option>
-                    <option value="+372">+372 Estonia</option>
-                    <option value="+268">+268 Eswatini</option>
-                    <option value="+251">+251 Ethiopia</option>
-                    <option value="+500">+500 Falkland Islands</option>
-                    <option value="+298">+298 Faroe Islands</option>
-                    <option value="+679">+679 Fiji</option>
-                    <option value="+358">+358 Finland</option>
-                    <option value="+33">+33 France</option>
-                    <option value="+594">+594 French Guiana</option>
-                    <option value="+689">+689 French Polynesia</option>
-                    <option value="+241">+241 Gabon</option>
-                    <option value="+220">+220 Gambia</option>
-                    <option value="+995">+995 Georgia</option>
-                    <option value="+49">+49 Germany</option>
-                    <option value="+233">+233 Ghana</option>
-                    <option value="+350">+350 Gibraltar</option>
-                    <option value="+30">+30 Greece</option>
-                    <option value="+299">+299 Greenland</option>
-                    <option value="+1">+1 Grenada</option>
-                    <option value="+590">+590 Guadeloupe</option>
-                    <option value="+1">+1 Guam</option>
-                    <option value="+502">+502 Guatemala</option>
-                    <option value="+44">+44 Guernsey</option>
-                    <option value="+224">+224 Guinea</option>
-                    <option value="+245">+245 Guinea-Bissau</option>
-                    <option value="+592">+592 Guyana</option>
-                    <option value="+509">+509 Haiti</option>
-                    <option value="+504">+504 Honduras</option>
-                    <option value="+852">+852 Hong Kong</option>
-                    <option value="+36">+36 Hungary</option>
-                    <option value="+354">+354 Iceland</option>
-                    <option value="+91">+91 India</option>
-                    <option value="+62">+62 Indonesia</option>
-                    <option value="+98">+98 Iran</option>
-                    <option value="+964">+964 Iraq</option>
-                    <option value="+353">+353 Ireland</option>
-                    <option value="+44">+44 Isle of Man</option>
-                    <option value="+972">+972 Israel</option>
-                    <option value="+39">+39 Italy</option>
-                    <option value="+1">+1 Jamaica</option>
-                    <option value="+81">+81 Japan</option>
-                    <option value="+44">+44 Jersey</option>
-                    <option value="+962">+962 Jordan</option>
-                    <option value="+7">+7 Kazakhstan</option>
-                    <option value="+254">+254 Kenya</option>
-                    <option value="+686">+686 Kiribati</option>
-                    <option value="+383">+383 Kosovo</option>
-                    <option value="+965">+965 Kuwait</option>
-                    <option value="+996">+996 Kyrgyzstan</option>
-                    <option value="+856">+856 Laos</option>
-                    <option value="+371">+371 Latvia</option>
-                    <option value="+961">+961 Lebanon</option>
-                    <option value="+266">+266 Lesotho</option>
-                    <option value="+231">+231 Liberia</option>
-                    <option value="+218">+218 Libya</option>
-                    <option value="+423">+423 Liechtenstein</option>
-                    <option value="+370">+370 Lithuania</option>
-                    <option value="+352">+352 Luxembourg</option>
-                    <option value="+853">+853 Macau</option>
-                    <option value="+261">+261 Madagascar</option>
-                    <option value="+265">+265 Malawi</option>
-                    <option value="+60">+60 Malaysia</option>
-                    <option value="+960">+960 Maldives</option>
-                    <option value="+223">+223 Mali</option>
-                    <option value="+356">+356 Malta</option>
-                    <option value="+692">+692 Marshall Islands</option>
-                    <option value="+596">+596 Martinique</option>
-                    <option value="+222">+222 Mauritania</option>
-                    <option value="+230">+230 Mauritius</option>
-                    <option value="+262">+262 Mayotte</option>
-                    <option value="+52">+52 Mexico</option>
-                    <option value="+691">+691 Micronesia</option>
-                    <option value="+373">+373 Moldova</option>
-                    <option value="+377">+377 Monaco</option>
-                    <option value="+976">+976 Mongolia</option>
-                    <option value="+382">+382 Montenegro</option>
-                    <option value="+1">+1 Montserrat</option>
-                    <option value="+212">+212 Morocco</option>
-                    <option value="+258">+258 Mozambique</option>
-                    <option value="+95">+95 Myanmar</option>
-                    <option value="+264">+264 Namibia</option>
-                    <option value="+674">+674 Nauru</option>
-                    <option value="+977">+977 Nepal</option>
-                    <option value="+31">+31 Netherlands</option>
-                    <option value="+687">+687 New Caledonia</option>
-                    <option value="+64">+64 New Zealand</option>
-                    <option value="+505">+505 Nicaragua</option>
-                    <option value="+227">+227 Niger</option>
-                    <option value="+234">+234 Nigeria</option>
-                    <option value="+683">+683 Niue</option>
-                    <option value="+672">+672 Norfolk Island</option>
-                    <option value="+850">+850 North Korea</option>
-                    <option value="+1">+1 Northern Mariana Islands</option>
-                    <option value="+47">+47 Norway</option>
-                    <option value="+92">+92 Pakistan</option>
-                    <option value="+680">+680 Palau</option>
-                    <option value="+970">+970 Palestine</option>
-                    <option value="+507">+507 Panama</option>
-                    <option value="+675">+675 Papua New Guinea</option>
-                    <option value="+595">+595 Paraguay</option>
-                    <option value="+51">+51 Peru</option>
-                    <option value="+63">+63 Philippines</option>
-                    <option value="+48">+48 Poland</option>
-                    <option value="+351">+351 Portugal</option>
-                    <option value="+1">+1 Puerto Rico</option>
-                    <option value="+974">+974 Qatar</option>
-                    <option value="+262">+262 Réunion</option>
-                    <option value="+40">+40 Romania</option>
-                    <option value="+7">+7 Russia</option>
-                    <option value="+250">+250 Rwanda</option>
-                    <option value="+590">+590 Saint Barthélemy</option>
-                    <option value="+290">+290 Saint Helena</option>
-                    <option value="+1">+1 Saint Kitts and Nevis</option>
-                    <option value="+1">+1 Saint Lucia</option>
-                    <option value="+590">+590 Saint Martin</option>
-                    <option value="+508">+508 Saint Pierre and Miquelon</option>
-                    <option value="+1">+1 Saint Vincent and the Grenadines</option>
-                    <option value="+685">+685 Samoa</option>
-                    <option value="+378">+378 San Marino</option>
-                    <option value="+239">+239 São Tomé and Príncipe</option>
-                    <option value="+966">+966 Saudi Arabia</option>
-                    <option value="+221">+221 Senegal</option>
-                    <option value="+381">+381 Serbia</option>
-                    <option value="+248">+248 Seychelles</option>
-                    <option value="+232">+232 Sierra Leone</option>
-                    <option value="+65">+65 Singapore</option>
-                    <option value="+1">+1 Sint Maarten</option>
-                    <option value="+421">+421 Slovakia</option>
-                    <option value="+386">+386 Slovenia</option>
-                    <option value="+677">+677 Solomon Islands</option>
-                    <option value="+252">+252 Somalia</option>
-                    <option value="+27">+27 South Africa</option>
-                    <option value="+82">+82 South Korea</option>
-                    <option value="+211">+211 South Sudan</option>
-                    <option value="+34">+34 Spain</option>
-                    <option value="+94">+94 Sri Lanka</option>
-                    <option value="+249">+249 Sudan</option>
-                    <option value="+597">+597 Suriname</option>
-                    <option value="+46">+46 Sweden</option>
-                    <option value="+41">+41 Switzerland</option>
-                    <option value="+963">+963 Syria</option>
-                    <option value="+886">+886 Taiwan</option>
-                    <option value="+992">+992 Tajikistan</option>
-                    <option value="+255">+255 Tanzania</option>
-                    <option value="+66">+66 Thailand</option>
-                    <option value="+228">+228 Togo</option>
-                    <option value="+690">+690 Tokelau</option>
-                    <option value="+676">+676 Tonga</option>
-                    <option value="+1">+1 Trinidad and Tobago</option>
-                    <option value="+216">+216 Tunisia</option>
-                    <option value="+90">+90 Turkey</option>
-                    <option value="+993">+993 Turkmenistan</option>
-                    <option value="+1">+1 Turks and Caicos Islands</option>
-                    <option value="+688">+688 Tuvalu</option>
-                    <option value="+1">+1 U.S. Virgin Islands</option>
-                    <option value="+256">+256 Uganda</option>
-                    <option value="+380">+380 Ukraine</option>
-                    <option value="+971">+971 United Arab Emirates</option>
-                    <option value="+44">+44 United Kingdom</option>
-                    <option value="+1">+1 United States</option>
-                    <option value="+598">+598 Uruguay</option>
-                    <option value="+998">+998 Uzbekistan</option>
-                    <option value="+678">+678 Vanuatu</option>
-                    <option value="+379">+379 Vatican City</option>
-                    <option value="+58">+58 Venezuela</option>
-                    <option value="+84">+84 Vietnam</option>
-                    <option value="+681">+681 Wallis and Futuna</option>
-                    <option value="+212">+212 Western Sahara</option>
-                    <option value="+967">+967 Yemen</option>
-                    <option value="+260">+260 Zambia</option>
-                    <option value="+263">+263 Zimbabwe</option>
-                  </select>
-                  <input
-                    class="input"
-                    id="phoneInput"
-                    name="phone"
-                    type="tel"
-                    inputmode="numeric"
-                    autocomplete="tel"
-                    required
-                    placeholder="90000000"
-                  >
+                  <select class="input" id="countryCode" name="countryCode"></select>
+                  <input class="input" id="phoneInput" name="phone" type="tel" inputmode="numeric" autocomplete="tel" required>
                 </div>
               </div>
 
               <div class="field full">
-                <label class="label" for="notesInput" data-i18n="fieldNotes">ملاحظات إضافية</label>
-                <textarea class="textarea" id="notesInput" name="notes"></textarea>
+                <label class="label" for="notesInput" data-i18n="fieldNotes">ملاحظات</label>
+                <textarea class="textarea" id="notesInput" name="notes" data-i18n-placeholder="notesPlaceholder"></textarea>
               </div>
 
               <div class="field full">
-                <label class="label" data-i18n="fieldPriceDetails">تفاصيل سعر الحجز</label>
+                <label class="label" data-i18n="priceSummaryTitle">تفاصيل السعر</label>
+
                 <div class="price-summary-card">
                   <div class="price-summary-row">
                     <span data-i18n="bookingPriceLabel">سعر الحجز</span>
                     <strong id="bookingPriceValue">-</strong>
                   </div>
+
                   <div class="price-summary-row">
                     <span data-i18n="depositLabel">الضمان المسترجع</span>
                     <strong id="depositValue">-</strong>
                   </div>
+
                   <div class="price-summary-row total">
                     <span data-i18n="totalLabel">إجمالي المبلغ</span>
                     <strong id="totalValue">-</strong>
@@ -1397,7 +1113,8 @@
               <label class="agreement-label" for="termsAgree">
                 <input type="checkbox" id="termsAgree">
                 <span class="agreement-text">
-                  <span data-i18n="agreePrefix">عند الضغط على زر إرسال طلب الحجز فإنك توافق على </span><a class="agreement-link" href="rules.html" target="_blank" rel="noopener noreferrer" data-i18n="rulesLink">الشروط والأحكام</a>
+                  <span data-i18n="agreePrefix">عند الضغط على زر إرسال طلب الحجز فإنك توافق على </span>
+                  <a class="agreement-link" href="rules.html" target="_blank" rel="noopener noreferrer" data-i18n="rulesLink">الشروط والأحكام</a>
                 </span>
               </label>
             </div>
@@ -1418,13 +1135,22 @@
           <div class="submit-progress-percent" id="submitProgressPercent">0%</div>
         </div>
       </div>
-      <div class="submit-progress-text" id="submitProgressText">جاري إرسال الطلب...</div>
+      <div class="submit-progress-text" id="submitProgressText">جاري إرسال الطلب.</div>
     </div>
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbznmDnrKJl6zoQUFAFYqpX1wAtmy74eeDtAVVAultgGTAl0UuEB9e8Bg5-SN26Sck5vRQ/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyamFBUqze5MVUYIVn813k8fEIAkI70JoTQNnomb9RSMp8MjT_zmMaGjOakA7cwdWgtFw/exec';
+    const API_VERSION = '2026-05-02-booking-local-fullcalendar-v1';
     const LANGUAGE_STORAGE_KEY = 'ravana_lang';
+
+    const FULLCALENDAR_JS_URLS = [
+      './libs/fullcalendar/index.global.min.js'
+    ];
+
+    const FULLCALENDAR_LOCALE_URLS = [
+      './libs/fullcalendar/locales-all.global.min.js'
+    ];
 
     const RESORTS = [
       { key: 'A', ar: 'شاليه رافانا A', en: 'Ravana Chalet A' },
@@ -1437,6 +1163,30 @@
       'شاليه رافانا B': { weekdayDay: 38, weekdayNight: 58, holidayDay: 48, holidayNight: 74, deposit: 20 },
       'شاليه رافانا C': { weekdayDay: 36, weekdayNight: 56, holidayDay: 46, holidayNight: 72, deposit: 20 }
     };
+
+    const COUNTRY_CODES = [
+      ['+968', 'Oman'], ['+971', 'United Arab Emirates'], ['+966', 'Saudi Arabia'], ['+973', 'Bahrain'], ['+974', 'Qatar'], ['+965', 'Kuwait'], ['+967', 'Yemen'],
+      ['+20', 'Egypt'], ['+962', 'Jordan'], ['+961', 'Lebanon'], ['+963', 'Syria'], ['+964', 'Iraq'], ['+970', 'Palestine'], ['+90', 'Turkey'], ['+98', 'Iran'],
+      ['+212', 'Morocco'], ['+213', 'Algeria'], ['+216', 'Tunisia'], ['+218', 'Libya'], ['+249', 'Sudan'], ['+252', 'Somalia'], ['+253', 'Djibouti'], ['+222', 'Mauritania'],
+      ['+1', 'United States / Canada'], ['+44', 'United Kingdom'], ['+33', 'France'], ['+49', 'Germany'], ['+39', 'Italy'], ['+34', 'Spain'], ['+31', 'Netherlands'], ['+32', 'Belgium'],
+      ['+41', 'Switzerland'], ['+43', 'Austria'], ['+46', 'Sweden'], ['+47', 'Norway'], ['+45', 'Denmark'], ['+358', 'Finland'], ['+353', 'Ireland'], ['+351', 'Portugal'],
+      ['+30', 'Greece'], ['+48', 'Poland'], ['+40', 'Romania'], ['+359', 'Bulgaria'], ['+36', 'Hungary'], ['+420', 'Czech Republic'], ['+421', 'Slovakia'], ['+386', 'Slovenia'],
+      ['+385', 'Croatia'], ['+381', 'Serbia'], ['+387', 'Bosnia and Herzegovina'], ['+382', 'Montenegro'], ['+389', 'North Macedonia'], ['+355', 'Albania'], ['+383', 'Kosovo'],
+      ['+7', 'Russia / Kazakhstan'], ['+380', 'Ukraine'], ['+375', 'Belarus'], ['+373', 'Moldova'], ['+372', 'Estonia'], ['+371', 'Latvia'], ['+370', 'Lithuania'],
+      ['+91', 'India'], ['+92', 'Pakistan'], ['+880', 'Bangladesh'], ['+94', 'Sri Lanka'], ['+977', 'Nepal'], ['+960', 'Maldives'], ['+93', 'Afghanistan'],
+      ['+86', 'China'], ['+852', 'Hong Kong'], ['+853', 'Macau'], ['+886', 'Taiwan'], ['+81', 'Japan'], ['+82', 'South Korea'], ['+850', 'North Korea'],
+      ['+60', 'Malaysia'], ['+65', 'Singapore'], ['+62', 'Indonesia'], ['+63', 'Philippines'], ['+66', 'Thailand'], ['+84', 'Vietnam'], ['+855', 'Cambodia'], ['+856', 'Laos'], ['+95', 'Myanmar'], ['+673', 'Brunei'],
+      ['+61', 'Australia'], ['+64', 'New Zealand'], ['+675', 'Papua New Guinea'], ['+679', 'Fiji'], ['+685', 'Samoa'], ['+676', 'Tonga'],
+      ['+27', 'South Africa'], ['+234', 'Nigeria'], ['+254', 'Kenya'], ['+255', 'Tanzania'], ['+256', 'Uganda'], ['+251', 'Ethiopia'], ['+233', 'Ghana'], ['+237', 'Cameroon'],
+      ['+221', 'Senegal'], ['+225', 'Côte d’Ivoire'], ['+212', 'Western Sahara'], ['+220', 'Gambia'], ['+224', 'Guinea'], ['+245', 'Guinea-Bissau'], ['+232', 'Sierra Leone'], ['+231', 'Liberia'],
+      ['+228', 'Togo'], ['+229', 'Benin'], ['+226', 'Burkina Faso'], ['+223', 'Mali'], ['+227', 'Niger'], ['+235', 'Chad'], ['+236', 'Central African Republic'], ['+242', 'Republic of the Congo'],
+      ['+243', 'DR Congo'], ['+244', 'Angola'], ['+260', 'Zambia'], ['+263', 'Zimbabwe'], ['+258', 'Mozambique'], ['+264', 'Namibia'], ['+267', 'Botswana'], ['+266', 'Lesotho'], ['+268', 'Eswatini'],
+      ['+261', 'Madagascar'], ['+230', 'Mauritius'], ['+248', 'Seychelles'], ['+269', 'Comoros'], ['+250', 'Rwanda'], ['+257', 'Burundi'], ['+211', 'South Sudan'],
+      ['+52', 'Mexico'], ['+55', 'Brazil'], ['+54', 'Argentina'], ['+56', 'Chile'], ['+57', 'Colombia'], ['+51', 'Peru'], ['+58', 'Venezuela'], ['+593', 'Ecuador'],
+      ['+591', 'Bolivia'], ['+595', 'Paraguay'], ['+598', 'Uruguay'], ['+592', 'Guyana'], ['+597', 'Suriname'], ['+594', 'French Guiana'],
+      ['+502', 'Guatemala'], ['+503', 'El Salvador'], ['+504', 'Honduras'], ['+505', 'Nicaragua'], ['+506', 'Costa Rica'], ['+507', 'Panama'], ['+53', 'Cuba'],
+      ['+1', 'Dominican Republic'], ['+509', 'Haiti'], ['+1', 'Jamaica'], ['+1', 'Bahamas'], ['+1', 'Barbados'], ['+1', 'Trinidad and Tobago'], ['+1', 'Antigua and Barbuda'], ['+1', 'Saint Lucia']
+    ];
 
     const I18N = {
       ar: {
@@ -1455,24 +1205,25 @@
         bookingCopy: 'اختر التاريخ المناسب من التقويم ادناه ثم اكمال البيانات لارسال طلب الحجز.',
         loadingTitle: 'جاري تحميل التقويم',
         loadingSub: 'يرجى الانتظار قليلاً',
-        calendarError: 'تعذر تحميل التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.',
+        calendarLibraryError: 'تعذر تحميل مكتبة التقويم. تأكد من رفع ملفات FullCalendar داخل مجلد libs/fullcalendar.',
+        calendarDataError: 'تعذر تحميل بيانات التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.',
         fieldDate: 'تاريخ الحجز',
         fieldResort: 'الشاليه',
-        fieldName: 'الاسم',
         fieldBookingType: 'نوع الحجز',
+        bookingTypeDay: 'بدون مبيت',
+        bookingTypeNight: 'مع مبيت',
+        fieldName: 'الاسم',
         fieldPhone: 'رقم الهاتف (واتساب)',
-        fieldNotes: 'ملاحظات إضافية',
-        fieldPriceDetails: 'تفاصيل سعر الحجز',
+        fieldNotes: 'ملاحظات',
+        notesPlaceholder: 'اكتب أي ملاحظات إضافية هنا',
+        priceSummaryTitle: 'تفاصيل السعر',
         bookingPriceLabel: 'سعر الحجز',
         depositLabel: 'الضمان المسترجع',
         totalLabel: 'إجمالي المبلغ',
         fieldReceipt: 'صورة إيصال الدفع',
         receiptPlaceholder: 'لم يتم اختيار ملف',
-        bookingTypeDay: 'بدون مبيت',
-        bookingTypeNight: 'مع مبيت',
         submitBooking: 'إرسال طلب الحجز',
-        notesPlaceholder: 'اكتب أي ملاحظات تود إضافتها',
-        selectDateFirst: 'يرجى اختيار تاريخ الحجز من التقويم أولاً.',
+        selectDateFirst: 'يرجى اختيار تاريخ الحجز أولًا.',
         unavailableDate: 'التاريخ غير متاح.',
         invalidPastDate: 'لا يمكن الحجز في تاريخ سابق.',
         requiredFields: 'يرجى تعبئة جميع الحقول المطلوبة.',
@@ -1510,40 +1261,41 @@
         bookingCopy: 'Choose a suitable date from the calendar below, then complete the details to send the booking request.',
         loadingTitle: 'Loading Calendar',
         loadingSub: 'Please wait a moment',
-        calendarError: 'Unable to load the calendar. Please check the service URL and your sheet data, then refresh the page.',
+        calendarLibraryError: 'Unable to load the calendar library. Make sure FullCalendar files are uploaded inside libs/fullcalendar.',
+        calendarDataError: 'Unable to load calendar data. Please check the service URL and sheet data, then refresh.',
         fieldDate: 'Booking Date',
         fieldResort: 'Chalet',
-        fieldName: 'Name',
         fieldBookingType: 'Booking Type',
+        bookingTypeDay: 'Without Overnight',
+        bookingTypeNight: 'With Overnight',
+        fieldName: 'Name',
         fieldPhone: 'Phone Number (WhatsApp)',
-        fieldNotes: 'Additional Notes',
-        fieldPriceDetails: 'Booking Price Details',
+        fieldNotes: 'Notes',
+        notesPlaceholder: 'Write any additional notes here',
+        priceSummaryTitle: 'Price Details',
         bookingPriceLabel: 'Booking Price',
         depositLabel: 'Refundable Deposit',
         totalLabel: 'Total Amount',
         fieldReceipt: 'Payment Receipt Image',
         receiptPlaceholder: 'No file selected',
-        bookingTypeDay: 'Without Overnight',
-        bookingTypeNight: 'With Overnight',
         submitBooking: 'Send Booking Request',
-        notesPlaceholder: 'Add any notes you would like to include',
-        selectDateFirst: 'Please choose the booking date from the calendar first.',
+        selectDateFirst: 'Please select a booking date first.',
         unavailableDate: 'This date is unavailable.',
-        invalidPastDate: 'Booking cannot be made for a past date.',
-        requiredFields: 'Please complete all required fields.',
-        submitError: 'Unable to send the request right now. Please try again.',
-        readingReceipt: 'Preparing the payment receipt...',
-        uploadingRequest: 'Uploading and sending the request...',
-        finishingRequest: 'Finishing the process...',
-        receiptRequired: 'Please attach the payment receipt image.',
-        fileTooLarge: 'The receipt image is too large. Maximum size is 5MB.',
+        invalidPastDate: 'You cannot book a past date.',
+        requiredFields: 'Please fill in all required fields.',
+        submitError: 'Unable to send the request now. Please try again.',
+        readingReceipt: 'Preparing payment receipt...',
+        uploadingRequest: 'Uploading and sending request...',
+        finishingRequest: 'Finishing process...',
+        receiptRequired: 'Please attach a payment receipt image.',
+        fileTooLarge: 'Receipt image is too large. Maximum size is 5MB.',
         invalidReceiptType: 'Please attach an image file only.',
-        termsRequired: 'You must agree to the terms and conditions before sending the request.',
-        agreePrefix: 'By clicking Send Booking Request, you agree to the ',
-        rulesLink: 'Terms & Conditions',
+        termsRequired: 'You must agree to the terms and rules before sending the request.',
+        agreePrefix: 'By sending the booking request, you agree to the ',
+        rulesLink: 'Terms & Rules',
         availableEvent: 'Available',
         bookedEvent: 'Unavailable',
-        bankTransferTitle: 'Please transfer the amount and attach the payment receipt image',
+        bankTransferTitle: 'Please transfer the amount and attach the payment receipt',
         bankAccountNumberLabel: 'Account Number:',
         bankMobileTransferLabel: 'Mobile Transfer:',
         bankAccountNameLabel: 'Account Name:',
@@ -1593,9 +1345,27 @@
     let bookingData = [];
     let calendar = null;
     let selectedDate = '';
+    let calendarDataLoaded = false;
+    let calendarDataRequest = null;
+    let fullCalendarAssetsLoaded = false;
+    let fullCalendarAssetsLoading = null;
 
     function t(key) {
       return I18N[currentLang][key] || key;
+    }
+
+    function getField(item, names) {
+      if (!item) return '';
+
+      for (let i = 0; i < names.length; i++) {
+        const name = names[i];
+
+        if (Object.prototype.hasOwnProperty.call(item, name)) {
+          return item[name];
+        }
+      }
+
+      return '';
     }
 
     function saveLanguagePreference() {
@@ -1619,6 +1389,69 @@
       document.body.classList.remove('menu-open');
     }
 
+    function loadExternalScript(src) {
+      return new Promise((resolve, reject) => {
+        if (document.querySelector('script[src="' + src + '"]')) {
+          resolve();
+          return;
+        }
+
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = false;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.body.appendChild(script);
+      });
+    }
+
+    async function loadFirstWorkingScript(urls) {
+      let lastError = null;
+
+      for (const url of urls) {
+        try {
+          await loadExternalScript(url);
+          return url;
+        } catch (error) {
+          lastError = error;
+        }
+      }
+
+      throw lastError || new Error('FullCalendar JS failed');
+    }
+
+    async function loadFullCalendarAssets() {
+      if (fullCalendarAssetsLoaded) return;
+
+      if (fullCalendarAssetsLoading) {
+        return fullCalendarAssetsLoading;
+      }
+
+      fullCalendarAssetsLoading = loadFirstWorkingScript(FULLCALENDAR_JS_URLS)
+        .then(async () => {
+          try {
+            await loadFirstWorkingScript(FULLCALENDAR_LOCALE_URLS);
+          } catch (localeError) {
+            console.warn('FullCalendar locale file failed, calendar will continue.', localeError);
+          }
+
+          fullCalendarAssetsLoaded = true;
+        })
+        .catch(error => {
+          fullCalendarAssetsLoading = null;
+          throw error;
+        });
+
+      return fullCalendarAssetsLoading;
+    }
+
+    function populateCountryCodes() {
+      countryCode.innerHTML = COUNTRY_CODES.map(([code, country]) => {
+        const selected = code === '+968' && country === 'Oman' ? ' selected' : '';
+        return `<option value="${code}"${selected}>${code} ${country}</option>`;
+      }).join('');
+    }
+
     function todayString() {
       const now = new Date();
       const year = now.getFullYear();
@@ -1630,36 +1463,72 @@
     function normalizeDate(value) {
       if (!value) return '';
       if (typeof value === 'string') return value.trim().slice(0, 10);
+
       const date = new Date(value);
       if (isNaN(date.getTime())) return '';
+
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
+
       return year + '-' + month + '-' + day;
     }
 
     function normalizeDigits(value) {
+      const arabicIndic = '٠١٢٣٤٥٦٧٨٩';
+      const easternArabicIndic = '۰۱۲۳۴۵۶۷۸۹';
+
       return String(value || '')
-        .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))
-        .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
-        .replace(/[^\d]/g, '');
+        .split('')
+        .map(ch => {
+          const idx1 = arabicIndic.indexOf(ch);
+          if (idx1 > -1) return String(idx1);
+
+          const idx2 = easternArabicIndic.indexOf(ch);
+          if (idx2 > -1) return String(idx2);
+
+          return ch;
+        })
+        .join('')
+        .replace(/\D/g, '');
+    }
+
+    function buildPhone() {
+      const code = String(countryCode.value || '').replace(/\D/g, '');
+      const number = normalizeDigits(phoneInput.value || '').replace(/^0+/, '');
+
+      if (!code || !number) return '';
+
+      return code + number;
     }
 
     function findResort(value) {
       const clean = String(value || '').trim();
+
       return RESORTS.find(item =>
         item.ar === clean ||
         item.en === clean ||
         item.key === clean
-      ) || RESORTS[0];
+      );
     }
 
     function getResortDisplayName(resort) {
       return currentLang === 'ar' ? resort.ar : resort.en;
     }
 
+    function setCalendarError(message) {
+      calendarError.textContent = message || t('calendarDataError');
+      calendarError.style.display = 'block';
+    }
+
+    function clearCalendarError() {
+      calendarError.textContent = t('calendarDataError');
+      calendarError.style.display = 'none';
+    }
+
     function formatMoney(value) {
       const num = Number(value || 0);
+
       return `
         ${num}
         <span class="omr-inline">
@@ -1676,8 +1545,10 @@
 
     function getPricingBucketFromDate(dateStr) {
       if (!dateStr) return 'weekday';
+
       const date = new Date(dateStr + 'T12:00:00');
       const day = date.getDay();
+
       return (day === 5 || day === 6) ? 'holiday' : 'weekday';
     }
 
@@ -1702,16 +1573,262 @@
 
       return {
         bookingPrice: Number(bookingPrice),
-        deposit: deposit,
-        total: total
+        deposit,
+        total
       };
     }
 
     function updatePriceSummary() {
       const priceData = getCurrentPriceData();
+
       bookingPriceValue.innerHTML = formatMoney(priceData.bookingPrice);
       depositValue.innerHTML = formatMoney(priceData.deposit);
       totalValue.innerHTML = formatMoney(priceData.total);
+    }
+
+    function updateSelectedResortUI() {
+      const name = getResortDisplayName(currentResort);
+
+      selectedResortHeading.textContent = name;
+      selectedResortInput.value = name;
+
+      updatePriceSummary();
+    }
+
+    function updateSelectedDateUI() {
+      bookingDateDisplay.value = selectedDate || '';
+      bookingDateValue.value = selectedDate || '';
+      updatePriceSummary();
+    }
+
+    function showError(text) {
+      alert(text);
+    }
+
+    function clearMessage() {}
+
+    function getDateStatus(dateStr) {
+      const record = bookingData.find(item => {
+        const resort = String(getField(item, ['الاستراحة', 'الشاليه', 'اسم الشاليه']) || '').trim();
+        const date = normalizeDate(getField(item, ['التاريخ', 'تاريخ الحجز']));
+
+        return resort === currentResort.ar && date === dateStr;
+      });
+
+      if (!record) return 'متاح';
+
+      return String(getField(record, ['الحالة', 'حالة الحجز']) || '').trim() || 'متاح';
+    }
+
+    function isSelectableDate(dateStr) {
+      if (!dateStr || dateStr < todayString()) return false;
+      return getDateStatus(dateStr) === 'متاح';
+    }
+
+    function chooseDate(dateStr) {
+      if (!dateStr) return;
+
+      selectedDate = dateStr;
+      updateSelectedDateUI();
+      clearMessage();
+
+      bookingFormSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function buildCalendarApiUrl() {
+      const query = new URLSearchParams();
+
+      query.set('fields', 'calendar');
+      query.set('resort', currentResort.ar);
+      query.set('v', API_VERSION);
+
+      return API_URL + '?' + query.toString();
+    }
+
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function fetchJsonWithRetry(url, attempts = 3) {
+      let lastError = null;
+
+      for (let attempt = 1; attempt <= attempts; attempt++) {
+        try {
+          const res = await fetch(url, { method: 'GET' });
+          const rawText = await res.text();
+
+          let json;
+
+          try {
+            json = JSON.parse(rawText);
+          } catch (e) {
+            console.error('Raw API response was not JSON:', rawText);
+            throw new Error('تعذر قراءة رد الخدمة.');
+          }
+
+          if (!res.ok || !json.success) {
+            throw new Error((json && json.message) || ('HTTP ' + res.status + ' failed'));
+          }
+
+          return json;
+        } catch (error) {
+          lastError = error;
+
+          if (attempt < attempts) {
+            await delay(600 * attempt);
+          }
+        }
+      }
+
+      throw lastError || new Error('Load error');
+    }
+
+    async function loadAllBookings() {
+      if (calendarDataLoaded) return;
+
+      if (calendarDataRequest) {
+        return calendarDataRequest;
+      }
+
+      calendarDataRequest = fetchJsonWithRetry(buildCalendarApiUrl(), 3)
+        .then(json => {
+          bookingData = Array.isArray(json.data) ? json.data : [];
+          calendarDataLoaded = true;
+
+          if (selectedDate && !isSelectableDate(selectedDate)) {
+            selectedDate = '';
+            updateSelectedDateUI();
+          }
+        })
+        .finally(() => {
+          calendarDataRequest = null;
+        });
+
+      return calendarDataRequest;
+    }
+
+    function buildCalendarEvents() {
+      return bookingData
+        .map(item => {
+          const resort = String(getField(item, ['الاستراحة', 'الشاليه', 'اسم الشاليه']) || '').trim();
+          const date = normalizeDate(getField(item, ['التاريخ', 'تاريخ الحجز']));
+          const status = String(getField(item, ['الحالة', 'حالة الحجز']) || '').trim() || 'متاح';
+
+          if (!date || !resort) return null;
+          if (resort !== currentResort.ar) return null;
+          if (date < todayString()) return null;
+
+          const available = status === 'متاح';
+
+          return {
+            title: available ? t('availableEvent') : t('bookedEvent'),
+            start: date,
+            allDay: true,
+            backgroundColor: available ? '#24a46d' : '#d45454',
+            borderColor: available ? '#24a46d' : '#d45454',
+            textColor: '#ffffff',
+            extendedProps: {
+              date,
+              resort,
+              status,
+              available
+            }
+          };
+        })
+        .filter(Boolean);
+    }
+
+    async function renderCalendar() {
+      const calendarEl = document.getElementById('calendar');
+
+      try {
+        await loadFullCalendarAssets();
+      } catch (e) {
+        console.error('FullCalendar assets failed:', e);
+        setCalendarError(t('calendarLibraryError'));
+        calendarLoading.classList.add('hidden');
+        return;
+      }
+
+      if (!window.FullCalendar) {
+        setCalendarError(t('calendarLibraryError'));
+        calendarLoading.classList.add('hidden');
+        return;
+      }
+
+      if (calendar) {
+        calendar.destroy();
+      }
+
+      calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: currentLang === 'ar' ? 'ar' : 'en',
+        direction: currentLang === 'ar' ? 'rtl' : 'ltr',
+        initialView: 'dayGridMonth',
+        initialDate: selectedDate || undefined,
+        height: 'auto',
+        headerToolbar: {
+          right: currentLang === 'ar' ? 'prev,next today' : 'today prev,next',
+          center: 'title',
+          left: ''
+        },
+        buttonText: currentLang === 'ar' ? { today: 'اليوم' } : { today: 'Today' },
+        editable: false,
+        selectable: false,
+
+        loading(isLoading) {
+          if (isLoading) {
+            clearCalendarError();
+            calendarLoading.classList.remove('hidden');
+          } else {
+            calendarLoading.classList.add('hidden');
+          }
+        },
+
+        events(fetchInfo, successCallback, failureCallback) {
+          loadAllBookings()
+            .then(() => {
+              clearCalendarError();
+              successCallback(buildCalendarEvents());
+            })
+            .catch(error => {
+              console.error('Calendar data failed:', error);
+
+              const details = error && error.message ? ' (' + error.message + ')' : '';
+
+              setCalendarError(t('calendarDataError') + details);
+              failureCallback(error);
+            });
+        },
+
+        dateClick(info) {
+          const clickedDate = normalizeDate(info.dateStr);
+
+          if (clickedDate < todayString()) return;
+
+          if (!isSelectableDate(clickedDate)) {
+            alert(t('unavailableDate'));
+            return;
+          }
+
+          chooseDate(clickedDate);
+        },
+
+        eventClick(info) {
+          info.jsEvent.preventDefault();
+
+          const props = info.event.extendedProps || {};
+          const date = normalizeDate(props.date);
+
+          if (!props.available) {
+            alert(t('unavailableDate'));
+            return;
+          }
+
+          chooseDate(date);
+        }
+      });
+
+      calendar.render();
     }
 
     function readFileAsDataUrlWithProgress(file, onProgress) {
@@ -1773,6 +1890,7 @@
       function step(now) {
         const progress = Math.min(1, (now - startTime) / duration);
         const value = Math.round(start + (end - start) * progress);
+
         submitProgressRing.style.setProperty('--progress', value);
         submitProgressPercent.textContent = value + '%';
 
@@ -1794,202 +1912,6 @@
       submitProgressRing.style.setProperty('--progress', 0);
       submitProgressPercent.textContent = '0%';
       submitProgressText.textContent = '';
-    }
-
-    function updateSelectedResortUI() {
-      const name = getResortDisplayName(currentResort);
-      selectedResortHeading.textContent = name;
-      selectedResortInput.value = name;
-      updatePriceSummary();
-    }
-
-    function updateSelectedDateUI() {
-      bookingDateDisplay.value = selectedDate || '';
-      bookingDateValue.value = selectedDate || '';
-      updatePriceSummary();
-    }
-
-    function showError(text) {
-      alert(text);
-    }
-
-    function clearMessage() {}
-
-    function getDateStatus(dateStr) {
-      const record = bookingData.find(item => {
-        return String(item['الاستراحة'] || '').trim() === currentResort.ar &&
-               normalizeDate(item['التاريخ']) === dateStr;
-      });
-
-      if (!record) return 'متاح';
-      return String(record['الحالة'] || '').trim() || 'متاح';
-    }
-
-    function isSelectableDate(dateStr) {
-      if (!dateStr || dateStr < todayString()) return false;
-      return getDateStatus(dateStr) === 'متاح';
-    }
-
-    function chooseDate(dateStr) {
-      if (!dateStr) return;
-      selectedDate = dateStr;
-      updateSelectedDateUI();
-      clearMessage();
-      bookingFormSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    function applyLanguage() {
-      document.documentElement.lang = currentLang;
-      document.documentElement.dir = I18N[currentLang].dir;
-      document.body.dir = I18N[currentLang].dir;
-
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        el.textContent = t(el.getAttribute('data-i18n'));
-      });
-
-      langToggle.textContent = t('langButton');
-      menuToggle.setAttribute('aria-label', currentLang === 'ar' ? 'فتح القائمة' : 'Open menu');
-      notesInput.placeholder = t('notesPlaceholder');
-
-      paymentReceiptName.textContent = (paymentReceipt.files && paymentReceipt.files[0])
-        ? paymentReceipt.files[0].name
-        : t('receiptPlaceholder');
-
-      saveLanguagePreference();
-      updateSelectedResortUI();
-      updateSelectedDateUI();
-      updatePriceSummary();
-      renderCalendar();
-    }
-
-    function presetFromQuery() {
-      const params = new URLSearchParams(window.location.search);
-      const resortParam = params.get('resort');
-      const dateParam = params.get('date');
-
-      currentResort = findResort(resortParam);
-
-      if (dateParam && dateParam >= todayString()) {
-        selectedDate = dateParam;
-      } else {
-        selectedDate = '';
-      }
-
-      updateSelectedResortUI();
-      updateSelectedDateUI();
-    }
-
-    function buildPhone() {
-      const number = normalizeDigits(phoneInput.value);
-      phoneInput.value = number;
-      return countryCode.value + number;
-    }
-
-    function buildCalendarEvents() {
-      return bookingData
-        .filter(item => String(item['الاستراحة'] || '').trim() === currentResort.ar)
-        .filter(item => !(normalizeDate(item['التاريخ']) < todayString()))
-        .map(item => {
-          const status = String(item['الحالة'] || '').trim() || 'متاح';
-          const date = normalizeDate(item['التاريخ']);
-          const available = status === 'متاح';
-
-          return {
-            title: available ? t('availableEvent') : t('bookedEvent'),
-            start: date,
-            allDay: true,
-            backgroundColor: available ? '#24a46d' : '#d45454',
-            borderColor: available ? '#24a46d' : '#d45454',
-            textColor: '#ffffff',
-            extendedProps: {
-              status: status,
-              date: date,
-              available: available
-            }
-          };
-        });
-    }
-
-    function renderCalendar() {
-      const calendarEl = document.getElementById('calendar');
-      const events = buildCalendarEvents();
-
-      if (calendar) calendar.destroy();
-
-      calendar = new FullCalendar.Calendar(calendarEl, {
-        locale: currentLang === 'ar' ? 'ar' : 'en',
-        direction: currentLang === 'ar' ? 'rtl' : 'ltr',
-        initialView: 'dayGridMonth',
-        height: 'auto',
-        headerToolbar: {
-          right: currentLang === 'ar' ? 'prev,next today' : 'today prev,next',
-          center: 'title',
-          left: ''
-        },
-        buttonText: currentLang === 'ar' ? { today: 'اليوم' } : { today: 'Today' },
-        editable: false,
-        selectable: false,
-        events: events,
-        dateClick(info) {
-          const clickedDate = normalizeDate(info.dateStr);
-
-          if (clickedDate < todayString()) return;
-
-          if (!isSelectableDate(clickedDate)) {
-            alert(t('unavailableDate'));
-            return;
-          }
-
-          chooseDate(clickedDate);
-        },
-        eventClick(info) {
-          info.jsEvent.preventDefault();
-          const props = info.event.extendedProps || {};
-          const date = normalizeDate(props.date);
-
-          if (!props.available) {
-            alert(t('unavailableDate'));
-            return;
-          }
-
-          chooseDate(date);
-        }
-      });
-
-      calendar.render();
-    }
-
-    async function loadBookings() {
-      try {
-        calendarError.style.display = 'none';
-        calendarLoading.classList.remove('hidden');
-
-        const res = await fetch(API_URL, { method: 'GET', cache: 'no-store' });
-        const rawText = await res.text();
-
-        let json;
-        try {
-          json = JSON.parse(rawText);
-        } catch (e) {
-          throw new Error('Invalid JSON');
-        }
-
-        if (!json.success) throw new Error(json.message || 'Load error');
-
-        bookingData = Array.isArray(json.data) ? json.data : [];
-
-        if (selectedDate && !isSelectableDate(selectedDate)) {
-          selectedDate = '';
-          updateSelectedDateUI();
-        }
-
-        renderCalendar();
-      } catch (error) {
-        console.error(error);
-        calendarError.style.display = 'block';
-      } finally {
-        calendarLoading.classList.add('hidden');
-      }
     }
 
     async function submitBooking(e) {
@@ -2028,6 +1950,7 @@
       }
 
       const receiptFile = paymentReceipt.files && paymentReceipt.files[0];
+
       if (!receiptFile) {
         showError(t('receiptRequired'));
         return;
@@ -2050,6 +1973,7 @@
         const priceData = getCurrentPriceData();
 
         showSubmitProgress(8, t('readingReceipt'));
+
         const receiptDataUrl = await readFileAsDataUrlWithProgress(receiptFile, (percent) => {
           showSubmitProgress(percent, t('readingReceipt'));
         });
@@ -2058,20 +1982,21 @@
         submitBtn.textContent = t('uploadingRequest');
 
         const payload = {
-          date: date,
+          date,
           resort: currentResort.ar,
           bookingType: bookingTypeValue,
           bookingPrice: String(priceData.bookingPrice),
           refundableDeposit: String(priceData.deposit),
-          name: name,
+          name,
           phone: fullPhone,
-          notes: notes,
+          notes,
           paymentReceiptFileName: receiptFile.name,
           paymentReceiptDataUrl: receiptDataUrl,
           status: 'بانتظار التأكيد'
         };
 
         showSubmitProgress(65, t('uploadingRequest'));
+
         await sendBookingRequest(payload);
 
         showSubmitProgress(92, t('finishingRequest'));
@@ -2082,7 +2007,7 @@
 
         const successParams = new URLSearchParams({
           resort: currentResort.ar,
-          date: date
+          date
         });
 
         setTimeout(() => {
@@ -2095,6 +2020,60 @@
         submitBtn.disabled = false;
         submitBtn.textContent = t('submitBooking');
         showError(error.message || t('submitError'));
+      }
+    }
+
+    function presetFromQuery() {
+      const params = new URLSearchParams(window.location.search);
+      const resortParam = params.get('resort');
+      const dateParam = params.get('date');
+
+      const foundResort = findResort(resortParam);
+
+      if (foundResort) {
+        currentResort = foundResort;
+      }
+
+      if (dateParam && /^\d{4}-\d{2}-\d{2}$/.test(dateParam)) {
+        selectedDate = dateParam;
+      }
+
+      updateSelectedResortUI();
+      updateSelectedDateUI();
+    }
+
+    function applyLanguageWithoutCalendar() {
+      document.documentElement.lang = currentLang;
+      document.documentElement.dir = I18N[currentLang].dir;
+      document.body.dir = I18N[currentLang].dir;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        el.textContent = t(el.getAttribute('data-i18n'));
+      });
+
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+      });
+
+      langToggle.textContent = t('langButton');
+      menuToggle.setAttribute('aria-label', currentLang === 'ar' ? 'فتح القائمة' : 'Open menu');
+      notesInput.placeholder = t('notesPlaceholder');
+
+      paymentReceiptName.textContent = (paymentReceipt.files && paymentReceipt.files[0])
+        ? paymentReceipt.files[0].name
+        : t('receiptPlaceholder');
+
+      saveLanguagePreference();
+      updateSelectedResortUI();
+      updateSelectedDateUI();
+      updatePriceSummary();
+    }
+
+    function applyLanguage() {
+      applyLanguageWithoutCalendar();
+
+      if (calendar || fullCalendarAssetsLoaded) {
+        renderCalendar();
       }
     }
 
@@ -2127,10 +2106,16 @@
 
     bookingForm.addEventListener('submit', submitBooking);
 
+    populateCountryCodes();
     loadLanguagePreference();
     presetFromQuery();
-    applyLanguage();
-    loadBookings();
+    applyLanguageWithoutCalendar();
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        renderCalendar();
+      }, 1200);
+    });
   </script>
 </body>
 </html>
