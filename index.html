@@ -748,6 +748,7 @@
       color: #992f2f;
       border: 1px solid rgba(212,84,84,0.16);
       font-size: 14px;
+      line-height: 1.8;
     }
 
     .fc {
@@ -1114,8 +1115,8 @@
           <div id="calendar"></div>
         </div>
 
-        <div class="fallback" id="calendarError" data-i18n="calendarError">
-          تعذر تحميل التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.
+        <div class="fallback" id="calendarError">
+          تعذر تحميل بيانات التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.
         </div>
       </div>
     </section>
@@ -1169,6 +1170,8 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbyamFBUqze5MVUYIVn813k8fEIAkI70JoTQNnomb9RSMp8MjT_zmMaGjOakA7cwdWgtFw/exec';
+    const API_VERSION = '2026-05-02-cache-compatible-v1';
+
     const GOOGLE_MAPS_URL = 'https://maps.google.com/?q=Nizwa,Oman';
     const CONTACT_WHATSAPP_URL = 'https://wa.me/96800000000';
     const CONTACT_INSTAGRAM_URL = 'https://instagram.com/youraccount';
@@ -1269,7 +1272,9 @@
         legendBooked: 'محجوز',
         loadingTitle: 'جاري تحميل التقويم',
         loadingSub: 'يرجى الانتظار قليلاً',
-        calendarError: 'تعذر تحميل التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.',
+        calendarLibraryError: 'تعذر تحميل مكتبة التقويم. تحقق من اتصال الإنترنت ثم أعد تحديث الصفحة.',
+        calendarDataError: 'تعذر تحميل بيانات التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.',
+        calendarEmpty: 'لا توجد بيانات متاحة للتقويم حاليًا.',
         locationTitle: 'موقعنا',
         locationPlace: 'نزوى، عمان',
         contactTitle: 'تواصل معنا',
@@ -1301,7 +1306,9 @@
         legendBooked: 'Booked',
         loadingTitle: 'Loading Calendar',
         loadingSub: 'Please wait a moment',
-        calendarError: 'Unable to load the calendar. Please check the service URL and sheet data, then refresh.',
+        calendarLibraryError: 'Unable to load the calendar library. Please check your internet connection and refresh.',
+        calendarDataError: 'Unable to load calendar data. Please check the service URL and sheet data, then refresh.',
+        calendarEmpty: 'No calendar data is currently available.',
         locationTitle: 'Our Location',
         locationPlace: 'Nizwa, Oman',
         contactTitle: 'Contact Us',
@@ -1351,6 +1358,24 @@
       } catch (e) {}
     }
 
+    function t(key) {
+      return I18N[currentLang][key] || key;
+    }
+
+    function getField(item, names) {
+      if (!item) return '';
+
+      for (let i = 0; i < names.length; i++) {
+        const name = names[i];
+
+        if (Object.prototype.hasOwnProperty.call(item, name)) {
+          return item[name];
+        }
+      }
+
+      return '';
+    }
+
     function normalizeDate(value) {
       if (!value) return '';
       if (typeof value === 'string') return value.trim().slice(0, 10);
@@ -1378,8 +1403,14 @@
       return dateStr < todayString();
     }
 
-    function t(key) {
-      return I18N[currentLang][key] || key;
+    function setCalendarError(message) {
+      calendarError.textContent = message || t('calendarDataError');
+      calendarError.style.display = 'block';
+    }
+
+    function clearCalendarError() {
+      calendarError.textContent = t('calendarDataError');
+      calendarError.style.display = 'none';
     }
 
     function goToBooking(params = {}) {
@@ -1400,16 +1431,6 @@
       if (code === 'A') window.location.href = 'chalet-a.html';
       if (code === 'B') window.location.href = 'chalet-b.html';
       if (code === 'C') window.location.href = 'chalet-c.html';
-    }
-
-    function setCalendarError(message) {
-      calendarError.textContent = message || t('calendarError');
-      calendarError.style.display = 'block';
-    }
-
-    function clearCalendarError() {
-      calendarError.textContent = t('calendarError');
-      calendarError.style.display = 'none';
     }
 
     function loadExternalCss(href) {
@@ -1489,7 +1510,7 @@
         try {
           await loadFirstWorkingScript(FULLCALENDAR_LOCALE_URLS);
         } catch (localeError) {
-          console.warn('FullCalendar locale file failed, calendar will continue without locale file.', localeError);
+          console.warn('FullCalendar locale file failed, calendar will continue.', localeError);
         }
 
         fullCalendarAssetsLoaded = true;
@@ -1513,6 +1534,10 @@
 
       langToggle.textContent = t('langButton');
       menuToggle.setAttribute('aria-label', currentLang === 'ar' ? 'فتح القائمة' : 'Open menu');
+
+      if (calendarError.style.display === 'block') {
+        calendarError.textContent = t('calendarDataError');
+      }
 
       saveLanguagePreference();
       renderChaletCards();
@@ -1722,6 +1747,7 @@
     function buildCalendarApiUrl() {
       const query = new URLSearchParams();
       query.set('fields', 'calendar');
+      query.set('v', API_VERSION);
       return API_URL + '?' + query.toString();
     }
 
@@ -1742,6 +1768,7 @@
           try {
             json = JSON.parse(rawText);
           } catch (e) {
+            console.error('Raw API response was not JSON:', rawText);
             throw new Error('تعذر قراءة رد الخدمة.');
           }
 
@@ -1753,7 +1780,7 @@
         } catch (error) {
           lastError = error;
           if (attempt < attempts) {
-            await delay(450 * attempt);
+            await delay(600 * attempt);
           }
         }
       }
@@ -1765,12 +1792,18 @@
       const map = new Map();
 
       bookingData.forEach(item => {
-        const key = normalizeDate(item['التاريخ']) + '|' + String(item['الاستراحة'] || '').trim();
+        const date = normalizeDate(getField(item, ['التاريخ', 'تاريخ الحجز']));
+        const resort = String(getField(item, ['الاستراحة', 'الشاليه', 'اسم الشاليه']) || '').trim();
+        const key = date + '|' + resort;
+
         if (key !== '|') map.set(key, item);
       });
 
       rows.forEach(item => {
-        const key = normalizeDate(item['التاريخ']) + '|' + String(item['الاستراحة'] || '').trim();
+        const date = normalizeDate(getField(item, ['التاريخ', 'تاريخ الحجز']));
+        const resort = String(getField(item, ['الاستراحة', 'الشاليه', 'اسم الشاليه']) || '').trim();
+        const key = date + '|' + resort;
+
         if (key !== '|') map.set(key, item);
       });
 
@@ -1789,6 +1822,10 @@
           const rows = Array.isArray(json.data) ? json.data : [];
           mergeBookingRows(rows);
           calendarDataLoaded = true;
+
+          if (!rows.length) {
+            console.warn('Calendar API returned success:true but data is empty.');
+          }
         })
         .finally(() => {
           calendarDataRequest = null;
@@ -1799,11 +1836,13 @@
 
     function buildCalendarEvents(data) {
       return data
-        .filter(item => !isPastDate(normalizeDate(item['التاريخ'])))
         .map(item => {
-          const status = String(item['الحالة'] || '').trim();
-          const resort = String(item['الاستراحة'] || '').trim();
-          const date = normalizeDate(item['التاريخ']);
+          const status = String(getField(item, ['الحالة', 'حالة الحجز']) || '').trim() || 'متاح';
+          const resort = String(getField(item, ['الاستراحة', 'الشاليه', 'اسم الشاليه']) || '').trim();
+          const date = normalizeDate(getField(item, ['التاريخ', 'تاريخ الحجز']));
+
+          if (!date || !resort) return null;
+          if (isPastDate(date)) return null;
 
           return {
             title: getResortShortName(resort),
@@ -1814,7 +1853,8 @@
             textColor: '#ffffff',
             extendedProps: { status, resort, date }
           };
-        });
+        })
+        .filter(Boolean);
     }
 
     async function renderCalendar() {
@@ -1824,21 +1864,13 @@
         await loadFullCalendarAssets();
       } catch (e) {
         console.error('FullCalendar assets failed:', e);
-        setCalendarError(
-          currentLang === 'ar'
-            ? 'تعذر تحميل مكتبة التقويم. تحقق من اتصال الإنترنت ثم أعد تحديث الصفحة.'
-            : 'Unable to load the calendar library. Please check your internet connection and refresh.'
-        );
+        setCalendarError(t('calendarLibraryError'));
         calendarLoading.classList.add('hidden');
         return;
       }
 
       if (!window.FullCalendar) {
-        setCalendarError(
-          currentLang === 'ar'
-            ? 'تعذر تشغيل مكتبة التقويم. أعد تحديث الصفحة.'
-            : 'Unable to start the calendar library. Please refresh.'
-        );
+        setCalendarError(t('calendarLibraryError'));
         calendarLoading.classList.add('hidden');
         return;
       }
@@ -1871,16 +1903,16 @@
         events(fetchInfo, successCallback, failureCallback) {
           loadAllBookings()
             .then(() => {
+              const events = buildCalendarEvents(bookingData);
               clearCalendarError();
-              successCallback(buildCalendarEvents(bookingData));
+              successCallback(events);
             })
             .catch(error => {
               console.error('Calendar data failed:', error);
-              setCalendarError(
-                currentLang === 'ar'
-                  ? 'تعذر تحميل بيانات التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.'
-                  : 'Unable to load calendar data. Please check the service URL and sheet data, then refresh.'
-              );
+
+              const details = error && error.message ? ' (' + error.message + ')' : '';
+
+              setCalendarError(t('calendarDataError') + details);
               failureCallback(error);
             });
         },
