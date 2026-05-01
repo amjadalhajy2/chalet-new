@@ -3,17 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="shortcut icon" href="logo.png">
-<link rel="apple-touch-icon" href="logo.png">
+
+  <link rel="icon" type="image/webp" href="logo.webp">
+  <link rel="shortcut icon" href="logo.webp">
+  <link rel="apple-touch-icon" href="logo.webp">
+
   <title>شاليه رافانا</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://script.google.com" crossorigin>
 
-  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/locales-all.global.min.js"></script>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  </noscript>
 
   <style>
     :root {
@@ -42,9 +46,7 @@
     body {
       font-family: "Segoe UI", Tahoma, Arial, sans-serif;
       color: var(--text);
-      background:
-        linear-gradient(rgba(250,248,244,0.78), rgba(245,242,236,0.82)),
-        url('images/background-main.jpg') center center / cover no-repeat fixed;
+      background: #f7f3ed;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
       padding-top: var(--header-h);
@@ -60,38 +62,12 @@
       font-family: "Tajawal", "Segoe UI", Tahoma, Arial, sans-serif;
     }
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.16;
-      background:
-        repeating-linear-gradient(
-          45deg,
-          rgba(139,106,72,0.035) 0px,
-          rgba(139,106,72,0.035) 1px,
-          transparent 1px,
-          transparent 28px
-        ),
-        repeating-linear-gradient(
-          -45deg,
-          rgba(95,70,48,0.025) 0px,
-          rgba(95,70,48,0.025) 1px,
-          transparent 1px,
-          transparent 28px
-        );
-    }
-
     body > * {
       position: relative;
       z-index: 1;
     }
 
-    body.menu-open {
-      overflow: hidden;
-    }
+    body.menu-open { overflow: hidden; }
 
     a { color: inherit; text-decoration: none; }
     button { font-family: inherit; }
@@ -109,8 +85,8 @@
       background: var(--surface);
       border: 1px solid var(--line);
       box-shadow: var(--shadow-xl);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
 
     .topbar {
@@ -130,8 +106,8 @@
       gap: 12px;
       padding: 12px 18px;
       background: rgba(255,255,255,0.84);
-      backdrop-filter: blur(18px) saturate(1.2);
-      -webkit-backdrop-filter: blur(18px) saturate(1.2);
+      backdrop-filter: blur(8px) saturate(1.2);
+      -webkit-backdrop-filter: blur(8px) saturate(1.2);
       border-bottom: 1px solid rgba(255,255,255,0.7);
       box-shadow: var(--shadow-md);
     }
@@ -237,8 +213,8 @@
       height: 100vh;
       padding: 26px 20px;
       background: rgba(255,255,255,0.96);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       transition: .25s ease;
       overflow-y: auto;
     }
@@ -257,9 +233,7 @@
       transform: translateX(100%);
     }
 
-    body.menu-open .side-menu {
-      transform: translateX(0);
-    }
+    body.menu-open .side-menu { transform: translateX(0); }
 
     body.menu-open .side-menu-overlay {
       opacity: 1;
@@ -314,9 +288,7 @@
       padding-inline-start: 6px;
     }
 
-    .menu-group {
-      padding: 8px 0 4px;
-    }
+    .menu-group { padding: 8px 0 4px; }
 
     .menu-group-title {
       display: block;
@@ -362,6 +334,11 @@
       font-size: clamp(32px, 5vw, 46px);
       letter-spacing: -0.03em;
       line-height: 1.2;
+    }
+
+    .section {
+      padding: 0;
+      margin-bottom: 16px;
     }
 
     .section-card {
@@ -452,9 +429,7 @@
       scroll-snap-type: x proximity;
     }
 
-    .thumbs-track::-webkit-scrollbar {
-      display: none;
-    }
+    .thumbs-track::-webkit-scrollbar { display: none; }
 
     .thumb-btn {
       flex: 0 0 102px;
@@ -580,9 +555,7 @@
       line-height: 1.6;
     }
 
-    .price-box {
-      padding-top: 4px;
-    }
+    .price-box { padding-top: 4px; }
 
     .prices-layout {
       display: grid;
@@ -591,9 +564,7 @@
       gap: 18px;
     }
 
-    .prices-column {
-      min-width: 0;
-    }
+    .prices-column { min-width: 0; }
 
     .prices-column.weekdays {
       order: 2;
@@ -808,6 +779,7 @@
       color: #992f2f;
       border: 1px solid rgba(212,84,84,0.16);
       font-size: 14px;
+      line-height: 1.8;
     }
 
     .fc {
@@ -981,14 +953,19 @@
     .instagram-link .contact-icon { color: #9b6a7f; }
     .call-link .contact-icon { color: #8b6a48; }
 
+    @supports (-webkit-touch-callout: none) {
+      .glass-card,
+      .topbar-inner,
+      .side-menu,
+      .gallery-main-btn,
+      .thumbs-hint span {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+    }
+
     @media (max-width: 720px) {
       :root { --header-h: 72px; }
-
-      body {
-        background:
-          linear-gradient(rgba(250,248,244,0.78), rgba(245,242,236,0.82)),
-          url('images/background-main.jpg') center center / cover no-repeat;
-      }
 
       .gallery-main {
         aspect-ratio: 16 / 10.5;
@@ -1129,22 +1106,14 @@
       .fc .fc-daygrid-day-frame { min-height: 78px; }
       .fc-daygrid-event { font-size: 10px; padding: 3px 5px; }
 
-      .side-menu {
-        width: min(90vw, 300px);
-      }
+      .side-menu { width: min(90vw, 300px); }
 
       .menu-link,
-      .menu-sub-link {
-        font-size: 16px;
-      }
+      .menu-sub-link { font-size: 16px; }
 
-      .map-thumb {
-        width: 50%;
-      }
+      .map-thumb { width: 50%; }
 
-      .contact-actions {
-        gap: 24px;
-      }
+      .contact-actions { gap: 24px; }
 
       .contact-icon,
       .contact-icon svg {
@@ -1152,18 +1121,17 @@
         height: 30px;
       }
 
-      .contact-label {
-        font-size: 13px;
-      }
+      .contact-label { font-size: 13px; }
     }
   </style>
 </head>
+
 <body>
   <div class="topbar">
     <div class="topbar-inner">
       <div class="brand-wrap">
         <div class="logo-box">
-          <img src="logo.png" alt="Ravana Chalets" onerror="this.style.display='none'; this.parentNode.innerHTML='🏡'">
+          <img src="logo.webp" alt="Ravana Chalets" onerror="this.style.display='none'; this.parentNode.innerHTML='🏡'">
         </div>
         <div class="brand-title" data-i18n="topbarBrand">شاليهات رافانا</div>
       </div>
@@ -1269,7 +1237,7 @@
             <div class="loading-overlay" id="calendarLoading">
               <div class="loading-box">
                 <div class="loading-logo">
-                  <img src="logo.png" alt="Ravana Chalets" onerror="this.style.display='none'; this.parentNode.innerHTML='🏡'">
+                  <img src="logo.webp" alt="Ravana Chalets" onerror="this.style.display='none'; this.parentNode.innerHTML='🏡'">
                 </div>
                 <div class="loading-spinner"></div>
                 <div class="loading-text" data-i18n="loadingTitle">جاري تحميل التقويم</div>
@@ -1280,20 +1248,20 @@
             <div id="calendar"></div>
           </div>
 
-          <div class="fallback" id="calendarError" data-i18n="calendarError">
-            تعذر تحميل التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.
+          <div class="fallback" id="calendarError">
+            تعذر تحميل بيانات التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.
           </div>
         </div>
       </section>
 
       <section class="location-section">
         <h2 class="section-title" data-i18n="locationTitle">موقعنا</h2>
-        <p class="location-place" data-i18n="locationPlace">نزوى، عمان</p>
+        <p class="detail-copy" data-i18n="locationPlace">نزوى، عمان</p>
 
         <div class="location-media">
           <a class="map-link" id="mapLink" href="https://maps.google.com/?q=Nizwa,Oman" target="_blank" rel="noopener noreferrer">
             <div class="map-thumb">
-              <img src="images/location-satellite.jpg" alt="Nizwa, Oman" onerror="this.src='https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1600&q=80'">
+              <img src="images/location-satellite.webp" alt="Nizwa, Oman" loading="lazy" decoding="async" onerror="this.style.display='none'">
             </div>
           </a>
         </div>
@@ -1335,108 +1303,94 @@
   </main>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbzd44ryrjWjqHaWdxb6jTbibFLoquNeSNA3EgaicAY2c_OkAjJFHkfEitDWvvzC6oo2zQ/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyamFBUqze5MVUYIVn813k8fEIAkI70JoTQNnomb9RSMp8MjT_zmMaGjOakA7cwdWgtFw/exec';
+    const API_VERSION = '2026-05-02-chalet-local-fullcalendar-v1';
+
+    const LANGUAGE_STORAGE_KEY = 'ravana_lang';
     const GOOGLE_MAPS_URL = 'https://maps.google.com/?q=Nizwa,Oman';
     const CONTACT_WHATSAPP_URL = 'https://wa.me/96800000000';
     const CONTACT_INSTAGRAM_URL = 'https://instagram.com/youraccount';
     const CONTACT_CALL_URL = 'tel:+96800000000';
-    const LANGUAGE_STORAGE_KEY = 'ravana_lang';
+
+    const FULLCALENDAR_JS_URLS = [
+      './libs/fullcalendar/index.global.min.js'
+    ];
+
+    const FULLCALENDAR_LOCALE_URLS = [
+      './libs/fullcalendar/locales-all.global.min.js'
+    ];
+
+    const COMMON_AMENITIES = [
+      { key: 'bedroom', icon: '🛏️', ar: 'غرفة نوم بسرير مزدوج', en: 'Bedroom with Double Bed' },
+      { key: 'bathroom', icon: '🚿', ar: 'حمام', en: 'Bathroom' },
+      { key: 'cinema', icon: '🎬', ar: 'سينما', en: 'Cinema' },
+      { key: 'kitchen', icon: '🍽️', ar: 'مطبخ', en: 'Kitchen' },
+      { key: 'pool', icon: '🏊', ar: 'مسبح', en: 'Swimming Pool' },
+      { key: 'coffee', icon: '☕', ar: 'مكينة قهوة', en: 'Coffee Machine' },
+      { key: 'bbq', icon: '🔥', ar: 'شواية', en: 'BBQ Grill' },
+      { key: 'outdoor', icon: '🌿', ar: 'جلسات خارجية', en: 'Outdoor Seating' },
+      { key: 'wifi', icon: '📶', ar: 'واي فاي', en: 'Wi-Fi' }
+    ];
 
     const CHALET_DATA = {
       A: {
-        resortValue: 'شاليه رافانا A',
         nameAr: 'شاليه رافانا A',
         nameEn: 'Ravana Chalet A',
-        descriptionAr: 'شاليه رافانا A يمنحكم أجواء هادئة ومساحة خاصة مصممة بعناية لتناسب الاسترخاء والخصوصية. تفاصيله الدافئة وتوزيع مساحاته المريح يجعلان منه خيارًا مثاليًا لقضاء وقت جميل بعيدًا عن ضغوط الحياة اليومية، سواء كانت الزيارة للراحة أو لتجربة إقامة مميزة مع من تحبون.',
-        descriptionEn: 'Ravana Chalet A offers a peaceful private atmosphere designed for relaxation and comfort. Its warm details and balanced layout make it a perfect choice for a memorable stay away from daily routine, whether for rest or quality time with the people you love.',
+        resortValue: 'شاليه رافانا A',
+        descriptionAr: 'شاليه رافانا A يمنحكم تجربة إقامة هادئة وخاصة بتصميم أنيق وأجواء دافئة تناسب الاسترخاء وقضاء أجمل الأوقات مع العائلة أو الأصدقاء. يجمع الشاليه بين الخصوصية والراحة، مع مرافق مختارة بعناية لتكون إقامتكم أكثر تميزًا.',
+        descriptionEn: 'Ravana Chalet A offers a calm and private stay with elegant design and a warm atmosphere, perfect for relaxing and enjoying memorable moments with family or friends. The chalet combines privacy, comfort, and carefully selected amenities for a refined stay.',
         images: [
-          './images/resort-a-1.jpg',
-          './images/resort-a-2.jpg',
-          './images/resort-a-3.jpg',
-          './images/resort-a-4.jpg',
-          './images/resort-a-5.jpg',
-          './images/resort-a-6.jpg'
+          './images/resort-a-1.webp',
+          './images/resort-a-2.webp',
+          './images/resort-a-3.webp',
+          './images/resort-a-4.webp'
         ],
-        amenities: [
-          { icon: '🛏️', key: 'bedroom', ar: 'غرفة نوم بسرير مزدوج', en: 'Double Bed Bedroom' },
-          { icon: '🚿', key: 'bathroom', ar: 'حمام', en: 'Bathroom' },
-          { icon: '🎬', key: 'cinema', ar: 'سينما', en: 'Cinema' },
-          { icon: '🍳', key: 'kitchen', ar: 'مطبخ', en: 'Kitchen' },
-          { icon: '🏊', key: 'pool', ar: 'مسبح', en: 'Pool' },
-          { icon: '☕', key: 'coffee', ar: 'مكينة قهوة', en: 'Coffee Machine' },
-          { icon: '🔥', key: 'bbq', ar: 'شواية', en: 'BBQ' },
-          { icon: '🌿', key: 'outdoor', ar: 'جلسات خارجية', en: 'Outdoor Seating' },
-          { icon: '📶', key: 'wifi', ar: 'واي فاي', en: 'Wi-Fi' }
-        ],
+        amenities: COMMON_AMENITIES,
         prices: {
           weekdaysDayUse: '35',
-          weekdaysOvernight: '55',
+          weekdaysOvernight: '50',
           holidaysDayUse: '45',
-          holidaysOvernight: '70'
+          holidaysOvernight: '60'
         }
       },
       B: {
-        resortValue: 'شاليه رافانا B',
         nameAr: 'شاليه رافانا B',
         nameEn: 'Ravana Chalet B',
-        descriptionAr: 'شاليه رافانا B يجمع بين التصميم العصري والراحة العملية في مساحة أنيقة مناسبة للأوقات الجميلة. يوفّر توازنًا رائعًا بين الخصوصية والهدوء مع جلسات مريحة وتفاصيل تمنح الإقامة طابعًا راقيًا ومميزًا، ليكون خيارًا مثاليًا لكل من يبحث عن تجربة مختلفة وممتعة.',
-        descriptionEn: 'Ravana Chalet B combines modern design with practical comfort in a stylish space made for memorable moments. It offers the right balance of privacy, calm, and refined details to create a premium and enjoyable stay.',
+        resortValue: 'شاليه رافانا B',
+        descriptionAr: 'شاليه رافانا B صُمم ليكون مساحة مريحة وراقية لمن يبحث عن الخصوصية والهدوء. أجواؤه العصرية وتفاصيله الدافئة تجعله خيارًا مناسبًا للإقامة القصيرة أو قضاء يوم مميز بعيدًا عن الروتين.',
+        descriptionEn: 'Ravana Chalet B is designed as a refined and comfortable private space for guests seeking calm and privacy. Its modern atmosphere and warm details make it ideal for short stays or a special day away from routine.',
         images: [
-          './images/resort-b-1.jpg',
-          './images/resort-b-2.jpg',
-          './images/resort-b-3.jpg',
-          './images/resort-b-4.jpg',
-          './images/resort-b-5.jpg',
-          './images/resort-b-6.jpg'
+          './images/resort-b-1.webp',
+          './images/resort-b-2.webp',
+          './images/resort-b-3.webp',
+          './images/resort-b-4.webp'
         ],
-        amenities: [
-          { icon: '🛏️', key: 'bedroom', ar: 'غرفة نوم بسرير مزدوج', en: 'Double Bed Bedroom' },
-          { icon: '🚿', key: 'bathroom', ar: 'حمام', en: 'Bathroom' },
-          { icon: '🎬', key: 'cinema', ar: 'سينما', en: 'Cinema' },
-          { icon: '🍳', key: 'kitchen', ar: 'مطبخ', en: 'Kitchen' },
-          { icon: '🏊', key: 'pool', ar: 'مسبح', en: 'Pool' },
-          { icon: '☕', key: 'coffee', ar: 'مكينة قهوة', en: 'Coffee Machine' },
-          { icon: '🔥', key: 'bbq', ar: 'شواية', en: 'BBQ' },
-          { icon: '🌿', key: 'outdoor', ar: 'جلسات خارجية', en: 'Outdoor Seating' },
-          { icon: '📶', key: 'wifi', ar: 'واي فاي', en: 'Wi-Fi' }
-        ],
+        amenities: COMMON_AMENITIES,
         prices: {
-          weekdaysDayUse: '38',
-          weekdaysOvernight: '58',
-          holidaysDayUse: '48',
-          holidaysOvernight: '74'
+          weekdaysDayUse: '35',
+          weekdaysOvernight: '50',
+          holidaysDayUse: '45',
+          holidaysOvernight: '60'
         }
       },
       C: {
-        resortValue: 'شاليه رافانا C',
         nameAr: 'شاليه رافانا C',
         nameEn: 'Ravana Chalet C',
-        descriptionAr: 'شاليه رافانا C صُمم ليمنحكم تجربة إقامة مريحة تجمع بين الرحابة والخصوصية في آن واحد. الأجواء الهادئة وتوزيع المرافق بشكل عملي يجعلان منه مكانًا مناسبًا للعائلة والأصدقاء، مع تجربة إقامة بسيطة وراقية تمنحكم لحظات جميلة لا تُنسى.',
-        descriptionEn: 'Ravana Chalet C is designed to offer a comfortable stay with both spaciousness and privacy. Its calm atmosphere and practical layout make it ideal for families and friends looking for a simple yet refined getaway.',
+        resortValue: 'شاليه رافانا C',
+        descriptionAr: 'شاليه رافانا C يوفر أجواء خاصة وهادئة تجمع بين الراحة والبساطة الراقية. المساحات مصممة لتمنحكم تجربة إقامة مريحة مع مرافق عملية تناسب العائلة والأصدقاء.',
+        descriptionEn: 'Ravana Chalet C provides a private and peaceful atmosphere that combines comfort with refined simplicity. Its spaces are designed to offer a relaxed stay with practical amenities for families and friends.',
         images: [
-          './images/resort-c-1.jpg',
-          './images/resort-c-2.jpg',
-          './images/resort-c-3.jpg',
-          './images/resort-c-4.jpg',
-          './images/resort-c-5.jpg',
-          './images/resort-c-6.jpg'
+          './images/resort-c-1.webp',
+          './images/resort-c-2.webp',
+          './images/resort-c-3.webp',
+          './images/resort-c-4.webp'
         ],
-        amenities: [
-          { icon: '🛏️', key: 'bedroom', ar: 'غرفة نوم بسرير مزدوج', en: 'Double Bed Bedroom' },
-          { icon: '🚿', key: 'bathroom', ar: 'حمام', en: 'Bathroom' },
-          { icon: '🎬', key: 'cinema', ar: 'سينما', en: 'Cinema' },
-          { icon: '🍳', key: 'kitchen', ar: 'مطبخ', en: 'Kitchen' },
-          { icon: '🏊', key: 'pool', ar: 'مسبح', en: 'Pool' },
-          { icon: '☕', key: 'coffee', ar: 'مكينة قهوة', en: 'Coffee Machine' },
-          { icon: '🔥', key: 'bbq', ar: 'شواية', en: 'BBQ' },
-          { icon: '🌿', key: 'outdoor', ar: 'جلسات خارجية', en: 'Outdoor Seating' },
-          { icon: '📶', key: 'wifi', ar: 'واي فاي', en: 'Wi-Fi' }
-        ],
+        amenities: COMMON_AMENITIES,
         prices: {
-          weekdaysDayUse: '36',
-          weekdaysOvernight: '56',
-          holidaysDayUse: '46',
-          holidaysOvernight: '72'
+          weekdaysDayUse: '35',
+          weekdaysOvernight: '50',
+          holidaysDayUse: '45',
+          holidaysOvernight: '60'
         }
       }
     };
@@ -1467,7 +1421,8 @@
         legendBooked: 'محجوز',
         loadingTitle: 'جاري تحميل التقويم',
         loadingSub: 'يرجى الانتظار قليلاً',
-        calendarError: 'تعذر تحميل التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.',
+        calendarLibraryError: 'تعذر تحميل مكتبة التقويم. تأكد من رفع ملفات FullCalendar داخل مجلد libs/fullcalendar.',
+        calendarDataError: 'تعذر تحميل بيانات التقويم. تأكد من رابط الخدمة وبيانات الجدول، ثم أعد تحديث الصفحة.',
         locationTitle: 'موقعنا',
         locationPlace: 'نزوى، عمان',
         contactTitle: 'تواصل معنا',
@@ -1500,7 +1455,8 @@
         legendBooked: 'Booked',
         loadingTitle: 'Loading Calendar',
         loadingSub: 'Please wait a moment',
-        calendarError: 'Unable to load the calendar. Please check the service URL and your sheet data, then refresh the page.',
+        calendarLibraryError: 'Unable to load the calendar library. Make sure FullCalendar files are uploaded inside libs/fullcalendar.',
+        calendarDataError: 'Unable to load calendar data. Please check the service URL and sheet data, then refresh.',
         locationTitle: 'Our Location',
         locationPlace: 'Nizwa, Oman',
         contactTitle: 'Contact Us',
@@ -1538,6 +1494,10 @@
     let calendar = null;
     let touchStartX = 0;
     let isAnimatingMainImage = false;
+    let calendarDataLoaded = false;
+    let calendarDataRequest = null;
+    let fullCalendarAssetsLoaded = false;
+    let fullCalendarAssetsLoading = null;
 
     function detectChaletCode() {
       const path = window.location.pathname.toLowerCase();
@@ -1554,6 +1514,19 @@
 
     function t(key) {
       return I18N[currentLang][key] || key;
+    }
+
+    function getField(item, names) {
+      if (!item) return '';
+
+      for (let i = 0; i < names.length; i++) {
+        const name = names[i];
+        if (Object.prototype.hasOwnProperty.call(item, name)) {
+          return item[name];
+        }
+      }
+
+      return '';
     }
 
     function saveLanguagePreference() {
@@ -1574,11 +1547,14 @@
     function normalizeDate(value) {
       if (!value) return '';
       if (typeof value === 'string') return value.trim().slice(0, 10);
+
       const date = new Date(value);
       if (isNaN(date.getTime())) return '';
+
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
+
       return year + '-' + month + '-' + day;
     }
 
@@ -1587,6 +1563,7 @@
       const year = now.getFullYear();
       const month = String(now.getMonth() + 1).padStart(2, '0');
       const day = String(now.getDate()).padStart(2, '0');
+
       return year + '-' + month + '-' + day;
     }
 
@@ -1602,13 +1579,82 @@
       document.body.classList.remove('menu-open');
     }
 
+    function setCalendarError(message) {
+      calendarError.textContent = message || t('calendarDataError');
+      calendarError.style.display = 'block';
+    }
+
+    function clearCalendarError() {
+      calendarError.textContent = t('calendarDataError');
+      calendarError.style.display = 'none';
+    }
+
     function goToBooking(params = {}) {
       saveLanguagePreference();
+
       const query = new URLSearchParams();
+
       if (params.date) query.set('date', params.date);
       if (params.resort) query.set('resort', params.resort);
+
       const qs = query.toString();
       window.location.href = 'booking.html' + (qs ? '?' + qs : '');
+    }
+
+    function loadExternalScript(src) {
+      return new Promise((resolve, reject) => {
+        if (document.querySelector('script[src="' + src + '"]')) {
+          resolve();
+          return;
+        }
+
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = false;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.body.appendChild(script);
+      });
+    }
+
+    async function loadFirstWorkingScript(urls) {
+      let lastError = null;
+
+      for (const url of urls) {
+        try {
+          await loadExternalScript(url);
+          return url;
+        } catch (error) {
+          lastError = error;
+        }
+      }
+
+      throw lastError || new Error('FullCalendar JS failed');
+    }
+
+    async function loadFullCalendarAssets() {
+      if (fullCalendarAssetsLoaded) return;
+
+      if (fullCalendarAssetsLoading) {
+        return fullCalendarAssetsLoading;
+      }
+
+      fullCalendarAssetsLoading = loadFirstWorkingScript(FULLCALENDAR_JS_URLS)
+        .then(async () => {
+          try {
+            await loadFirstWorkingScript(FULLCALENDAR_LOCALE_URLS);
+          } catch (localeError) {
+            console.warn('FullCalendar locale file failed, calendar will continue.', localeError);
+          }
+
+          fullCalendarAssetsLoaded = true;
+        })
+        .catch(error => {
+          fullCalendarAssetsLoading = null;
+          throw error;
+        });
+
+      return fullCalendarAssetsLoading;
     }
 
     function centerActiveThumb() {
@@ -1616,6 +1662,7 @@
       if (!activeThumb) return;
 
       const targetScroll = activeThumb.offsetLeft - (thumbTrack.clientWidth / 2) + (activeThumb.clientWidth / 2);
+
       thumbTrack.scrollTo({
         left: Math.max(0, targetScroll),
         behavior: 'smooth'
@@ -1624,76 +1671,51 @@
 
     function switchMainImage(src, altText) {
       if (isAnimatingMainImage) return;
-      isAnimatingMainImage = true;
 
+      isAnimatingMainImage = true;
       mainGalleryImage.classList.add('changing');
 
       setTimeout(() => {
         mainGalleryImage.src = src;
         mainGalleryImage.alt = altText;
+        mainGalleryImage.loading = 'eager';
+        mainGalleryImage.decoding = 'async';
+
         mainGalleryImage.onerror = function () {
-          this.src = 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80';
+          this.src = './images/resort-a-1.webp';
         };
 
-        const finish = () => {
+        requestAnimationFrame(() => {
           mainGalleryImage.classList.remove('changing');
           isAnimatingMainImage = false;
-        };
-
-        mainGalleryImage.onload = finish;
-        setTimeout(finish, 320);
-      }, 120);
+        });
+      }, 180);
     }
 
-    function renderGallery() {
-      const images = chalet().images || [];
-      if (!images.length) return;
+    function showGalleryImage(index) {
+      const data = chalet();
+      const total = data.images.length;
 
-      currentGalleryIndex = Math.max(0, Math.min(currentGalleryIndex, images.length - 1));
+      currentGalleryIndex = (index + total) % total;
 
-      thumbTrack.innerHTML = images.map((src, index) => `
-        <button class="thumb-btn ${index === currentGalleryIndex ? 'active' : ''}" type="button" data-thumb-index="${index}">
-          <img src="${src}" alt="Thumbnail ${index + 1}"
-               onerror="this.src='https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80'">
-        </button>
-      `).join('');
+      const src = data.images[currentGalleryIndex];
+      const altText = currentLang === 'ar' ? data.nameAr : data.nameEn;
 
-      const currentImageSrc = images[currentGalleryIndex];
-      const altText = currentLang === 'ar' ? chalet().nameAr : chalet().nameEn;
+      switchMainImage(src, altText);
 
-      if (!mainGalleryImage.getAttribute('src')) {
-        mainGalleryImage.src = currentImageSrc;
-        mainGalleryImage.alt = altText;
-        mainGalleryImage.onerror = function () {
-          this.src = 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80';
-        };
-      } else {
-        switchMainImage(currentImageSrc, altText);
-      }
-
-      thumbTrack.querySelectorAll('[data-thumb-index]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          currentGalleryIndex = Number(btn.getAttribute('data-thumb-index'));
-          renderGallery();
-          centerActiveThumb();
-        });
+      thumbTrack.querySelectorAll('.thumb-btn').forEach((btn, idx) => {
+        btn.classList.toggle('active', idx === currentGalleryIndex);
       });
 
-      setTimeout(centerActiveThumb, 30);
+      centerActiveThumb();
     }
 
     function nextGalleryImage() {
-      const images = chalet().images || [];
-      if (!images.length) return;
-      currentGalleryIndex = (currentGalleryIndex + 1) % images.length;
-      renderGallery();
+      showGalleryImage(currentGalleryIndex + 1);
     }
 
     function prevGalleryImage() {
-      const images = chalet().images || [];
-      if (!images.length) return;
-      currentGalleryIndex = (currentGalleryIndex - 1 + images.length) % images.length;
-      renderGallery();
+      showGalleryImage(currentGalleryIndex - 1);
     }
 
     function updateGalleryArrowDirection() {
@@ -1704,6 +1726,32 @@
         galleryPrevBtn.textContent = '‹';
         galleryNextBtn.textContent = '›';
       }
+    }
+
+    function renderGallery() {
+      const data = chalet();
+      const altText = currentLang === 'ar' ? data.nameAr : data.nameEn;
+
+      thumbTrack.innerHTML = data.images.map((src, index) => `
+        <button class="thumb-btn ${index === currentGalleryIndex ? 'active' : ''}" type="button" data-gallery-index="${index}">
+          <img src="${src}" alt="${altText}" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        </button>
+      `).join('');
+
+      const firstImage = data.images[currentGalleryIndex] || data.images[0];
+
+      mainGalleryImage.src = firstImage;
+      mainGalleryImage.alt = altText;
+      mainGalleryImage.loading = 'eager';
+      mainGalleryImage.decoding = 'async';
+
+      thumbTrack.querySelectorAll('[data-gallery-index]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          showGalleryImage(Number(btn.getAttribute('data-gallery-index')));
+        });
+      });
+
+      centerActiveThumb();
     }
 
     function renderAmenities() {
@@ -1752,33 +1800,124 @@
       `;
     }
 
-    function renderCalendar() {
-      const calendarEl = document.getElementById('calendar');
-      const events = bookingData
-        .filter(item => {
-          const resort = String(item['الاستراحة'] || '').trim();
-          const date = normalizeDate(item['التاريخ']);
-          return resort === chalet().resortValue && !isPastDate(date);
+    function buildCalendarApiUrl() {
+      const query = new URLSearchParams();
+
+      query.set('fields', 'calendar');
+      query.set('resort', chalet().resortValue);
+      query.set('v', API_VERSION);
+
+      return API_URL + '?' + query.toString();
+    }
+
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function fetchJsonWithRetry(url, attempts = 3) {
+      let lastError = null;
+
+      for (let attempt = 1; attempt <= attempts; attempt++) {
+        try {
+          const res = await fetch(url, { method: 'GET' });
+          const rawText = await res.text();
+
+          let json;
+
+          try {
+            json = JSON.parse(rawText);
+          } catch (e) {
+            console.error('Raw API response was not JSON:', rawText);
+            throw new Error('تعذر قراءة رد الخدمة.');
+          }
+
+          if (!res.ok || !json.success) {
+            throw new Error((json && json.message) || ('HTTP ' + res.status + ' failed'));
+          }
+
+          return json;
+        } catch (error) {
+          lastError = error;
+
+          if (attempt < attempts) {
+            await delay(600 * attempt);
+          }
+        }
+      }
+
+      throw lastError || new Error('Load error');
+    }
+
+    async function loadAllBookings() {
+      if (calendarDataLoaded) return;
+
+      if (calendarDataRequest) {
+        return calendarDataRequest;
+      }
+
+      calendarDataRequest = fetchJsonWithRetry(buildCalendarApiUrl(), 3)
+        .then(json => {
+          bookingData = Array.isArray(json.data) ? json.data : [];
+          calendarDataLoaded = true;
         })
+        .finally(() => {
+          calendarDataRequest = null;
+        });
+
+      return calendarDataRequest;
+    }
+
+    function buildCalendarEvents() {
+      return bookingData
         .map(item => {
-          const rawStatus = String(item['الحالة'] || '').trim();
+          const resort = String(getField(item, ['الاستراحة', 'الشاليه', 'اسم الشاليه']) || '').trim();
+          const date = normalizeDate(getField(item, ['التاريخ', 'تاريخ الحجز']));
+          const rawStatus = String(getField(item, ['الحالة', 'حالة الحجز']) || '').trim() || 'متاح';
+
+          if (!date || !resort) return null;
+          if (resort !== chalet().resortValue) return null;
+          if (isPastDate(date)) return null;
+
           const isAvailable = rawStatus === 'متاح';
+
           return {
             title: isAvailable ? t('legendAvailable') : t('legendBooked'),
-            start: normalizeDate(item['التاريخ']),
+            start: date,
             allDay: true,
             backgroundColor: isAvailable ? '#24a46d' : '#d45454',
             borderColor: isAvailable ? '#24a46d' : '#d45454',
             textColor: '#ffffff',
             extendedProps: {
               resort: chalet().resortValue,
-              date: normalizeDate(item['التاريخ']),
+              date: date,
               status: rawStatus
             }
           };
-        });
+        })
+        .filter(Boolean);
+    }
 
-      if (calendar) calendar.destroy();
+    async function renderCalendar() {
+      const calendarEl = document.getElementById('calendar');
+
+      try {
+        await loadFullCalendarAssets();
+      } catch (e) {
+        console.error('FullCalendar assets failed:', e);
+        setCalendarError(t('calendarLibraryError'));
+        calendarLoading.classList.add('hidden');
+        return;
+      }
+
+      if (!window.FullCalendar) {
+        setCalendarError(t('calendarLibraryError'));
+        calendarLoading.classList.add('hidden');
+        return;
+      }
+
+      if (calendar) {
+        calendar.destroy();
+      }
 
       calendar = new FullCalendar.Calendar(calendarEl, {
         locale: currentLang === 'ar' ? 'ar' : 'en',
@@ -1793,51 +1932,61 @@
         buttonText: currentLang === 'ar' ? { today: 'اليوم' } : { today: 'Today' },
         editable: false,
         selectable: false,
-        events,
+
+        loading(isLoading) {
+          if (isLoading) {
+            clearCalendarError();
+            calendarLoading.classList.remove('hidden');
+          } else {
+            calendarLoading.classList.add('hidden');
+          }
+        },
+
+        events(fetchInfo, successCallback, failureCallback) {
+          loadAllBookings()
+            .then(() => {
+              clearCalendarError();
+              successCallback(buildCalendarEvents());
+            })
+            .catch(error => {
+              console.error('Calendar data failed:', error);
+
+              const details = error && error.message ? ' (' + error.message + ')' : '';
+
+              setCalendarError(t('calendarDataError') + details);
+              failureCallback(error);
+            });
+        },
+
         dateClick(info) {
           const clickedDate = normalizeDate(info.dateStr);
+
           if (isPastDate(clickedDate)) return;
-          goToBooking({ date: clickedDate, resort: chalet().resortValue });
+
+          goToBooking({
+            date: clickedDate,
+            resort: chalet().resortValue
+          });
         },
+
         eventClick(info) {
           info.jsEvent.preventDefault();
+
           const date = normalizeDate(info.event.extendedProps.date);
+
           if (isPastDate(date)) return;
-          goToBooking({ date, resort: chalet().resortValue });
+
+          goToBooking({
+            date: date,
+            resort: chalet().resortValue
+          });
         }
       });
 
       calendar.render();
     }
 
-    async function loadBookings() {
-      try {
-        calendarError.style.display = 'none';
-        calendarLoading.classList.remove('hidden');
-
-        const res = await fetch(API_URL, { method: 'GET', cache: 'no-store' });
-        const rawText = await res.text();
-
-        let json;
-        try {
-          json = JSON.parse(rawText);
-        } catch (e) {
-          throw new Error('Invalid JSON');
-        }
-
-        if (!json.success) throw new Error(json.message || 'Load error');
-
-        bookingData = Array.isArray(json.data) ? json.data : [];
-        renderCalendar();
-      } catch (error) {
-        console.error(error);
-        calendarError.style.display = 'block';
-      } finally {
-        calendarLoading.classList.add('hidden');
-      }
-    }
-
-    function applyLanguage() {
+    function applyLanguageWithoutCalendar() {
       document.documentElement.lang = currentLang;
       document.documentElement.dir = I18N[currentLang].dir;
       document.body.dir = I18N[currentLang].dir;
@@ -1855,7 +2004,16 @@
       renderAmenities();
       renderPrices();
       renderGallery();
-      renderCalendar();
+    }
+
+    function applyLanguage() {
+      applyLanguageWithoutCalendar();
+
+      if (calendar || fullCalendarAssetsLoaded) {
+        calendarDataLoaded = false;
+        bookingData = [];
+        renderCalendar();
+      }
     }
 
     galleryPrevBtn.addEventListener('click', prevGalleryImage);
@@ -1867,6 +2025,7 @@
 
     galleryMain.addEventListener('touchend', (e) => {
       const deltaX = e.changedTouches[0].clientX - touchStartX;
+
       if (Math.abs(deltaX) > 40) {
         if (deltaX < 0) nextGalleryImage();
         if (deltaX > 0) prevGalleryImage();
@@ -1886,12 +2045,16 @@
     document.querySelectorAll('.menu-link').forEach(link => {
       link.addEventListener('click', e => {
         const targetId = link.getAttribute('data-scroll-target');
+
         if (targetId) {
           e.preventDefault();
+
           const target = document.getElementById(targetId);
+
           if (target) {
             target.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
+
           closeMenu();
         } else {
           saveLanguagePreference();
@@ -1912,8 +2075,13 @@
     contactCall.setAttribute('href', CONTACT_CALL_URL);
 
     loadLanguagePreference();
-    applyLanguage();
-    loadBookings();
+    applyLanguageWithoutCalendar();
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        renderCalendar();
+      }, 1500);
+    });
   </script>
 </body>
 </html>
