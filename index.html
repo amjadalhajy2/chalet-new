@@ -12,6 +12,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preconnect" href="https://unpkg.com" crossorigin>
   <link rel="preconnect" href="https://script.google.com" crossorigin>
@@ -1170,7 +1171,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbyamFBUqze5MVUYIVn813k8fEIAkI70JoTQNnomb9RSMp8MjT_zmMaGjOakA7cwdWgtFw/exec';
-    const API_VERSION = '2026-05-02-cache-compatible-v1';
+    const API_VERSION = '2026-05-02-no-fullcalendar-css-v2';
 
     const GOOGLE_MAPS_URL = 'https://maps.google.com/?q=Nizwa,Oman';
     const CONTACT_WHATSAPP_URL = 'https://wa.me/96800000000';
@@ -1178,17 +1179,14 @@
     const CONTACT_CALL_URL = 'tel:+96800000000';
     const LANGUAGE_STORAGE_KEY = 'ravana_lang';
 
-    const FULLCALENDAR_CSS_URLS = [
-      'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.css',
-      'https://unpkg.com/fullcalendar@6.1.19/index.global.min.css'
-    ];
-
     const FULLCALENDAR_JS_URLS = [
+      'https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.19/index.global.min.js',
       'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js',
       'https://unpkg.com/fullcalendar@6.1.19/index.global.min.js'
     ];
 
     const FULLCALENDAR_LOCALE_URLS = [
+      'https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.19/locales-all.global.min.js',
       'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/locales-all.global.min.js',
       'https://unpkg.com/fullcalendar@6.1.19/locales-all.global.min.js'
     ];
@@ -1433,22 +1431,6 @@
       if (code === 'C') window.location.href = 'chalet-c.html';
     }
 
-    function loadExternalCss(href) {
-      return new Promise((resolve, reject) => {
-        if (document.querySelector('link[href="' + href + '"]')) {
-          resolve();
-          return;
-        }
-
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = href;
-        link.onload = resolve;
-        link.onerror = reject;
-        document.head.appendChild(link);
-      });
-    }
-
     function loadExternalScript(src) {
       return new Promise((resolve, reject) => {
         if (document.querySelector('script[src="' + src + '"]')) {
@@ -1463,21 +1445,6 @@
         script.onerror = reject;
         document.body.appendChild(script);
       });
-    }
-
-    async function loadFirstWorkingCss(urls) {
-      let lastError = null;
-
-      for (const url of urls) {
-        try {
-          await loadExternalCss(url);
-          return url;
-        } catch (error) {
-          lastError = error;
-        }
-      }
-
-      throw lastError || new Error('FullCalendar CSS failed');
     }
 
     async function loadFirstWorkingScript(urls) {
@@ -1502,23 +1469,20 @@
         return fullCalendarAssetsLoading;
       }
 
-      fullCalendarAssetsLoading = Promise.all([
-        loadFirstWorkingCss(FULLCALENDAR_CSS_URLS),
-        loadFirstWorkingScript(FULLCALENDAR_JS_URLS)
-      ])
-      .then(async () => {
-        try {
-          await loadFirstWorkingScript(FULLCALENDAR_LOCALE_URLS);
-        } catch (localeError) {
-          console.warn('FullCalendar locale file failed, calendar will continue.', localeError);
-        }
+      fullCalendarAssetsLoading = loadFirstWorkingScript(FULLCALENDAR_JS_URLS)
+        .then(async () => {
+          try {
+            await loadFirstWorkingScript(FULLCALENDAR_LOCALE_URLS);
+          } catch (localeError) {
+            console.warn('FullCalendar locale file failed, calendar will continue.', localeError);
+          }
 
-        fullCalendarAssetsLoaded = true;
-      })
-      .catch(error => {
-        fullCalendarAssetsLoading = null;
-        throw error;
-      });
+          fullCalendarAssetsLoaded = true;
+        })
+        .catch(error => {
+          fullCalendarAssetsLoading = null;
+          throw error;
+        });
 
       return fullCalendarAssetsLoading;
     }
